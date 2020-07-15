@@ -14,6 +14,10 @@ This repository contains both lab materials and code examples for all the Electr
 1. [ELEC351 Advanced Embedded Programming (Level 6)](./level6/readme.md)
 
 
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
+
+
 
 
 
