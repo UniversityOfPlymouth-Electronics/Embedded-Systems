@@ -1,3 +1,4 @@
+// (c) 2020 University of Plymouth
 #include "mbed.h"
 
 //Pins
