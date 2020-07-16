@@ -1,0 +1,13 @@
+#include "uop_msb_1_0_0.h"
+
+DigitalOut greenLED(LED1);
+DigitalOut blueLED(LED2);
+DigitalOut redLED(LED3);
+
+DigitalOut TRAFFIC1_RED(TRAFFIC1_RED_PIN,0);
+DigitalOut TRAFFIC1_YEL(TRAFFIC1_YELL_PIN,0);
+DigitalOut TRAFFIC1_GRN(TRAFFIC1_GRN_PIN,0);
+DigitalOut TRAFFIC2_RED(TRAFFIC2_RED_PIN,0);
+DigitalOut TRAFFIC2_YEL(TRAFFIC2_YELL_PIN,0);
+DigitalOut TRAFFIC2_GRN(TRAFFIC2_GRN_PIN,0);
+
