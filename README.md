@@ -1,4 +1,4 @@
-![logo](/img/Icon-jpg.jpg)
+![logo](/img/Icon-jpg-small.jpg)
 
 # Embedded-Systems
 
