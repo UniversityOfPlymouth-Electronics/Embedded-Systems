@@ -132,7 +132,7 @@ At some point, the tutor will email you a link to obtain a copy of various proje
 
 
 ## Connecting and Updating your ST Development Board 
-
+**TO BE DONE**
 
 ## Testing Your Board
 Now you have all the key software tools, it's time to start testing the hardware.
@@ -144,7 +144,7 @@ Watch the following video to see how to test your board:
 
 https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=fca139f3-1931-4bb6-a22d-abfb00fa99a8
 
-
+<iframe src="https://plymouth.cloud.panopto.eu/Panopto/Pages/Embed.aspx?id=fca139f3-1931-4bb6-a22d-abfb00fa99a8&autoplay=false&offerviewer=true&showtitle=true&showbrand=false&start=0&interactivity=all" style="width: 720px; height: 405px; border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
 
 
 ---
