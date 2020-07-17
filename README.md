@@ -1,3 +1,5 @@
+![logo](/img/Icon-jpg.jpg)
+
 # Embedded-Systems
 
 ## Course materials for Embedded Systems at the University of Plymouth
