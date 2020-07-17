@@ -131,14 +131,19 @@ At some point, the tutor will email you a link to obtain a copy of various proje
 1. Click the `Code` button and select `Open with GitHub Desktop`
 
 
-
 ## Connecting and Updating your ST Development Board 
-Now you have all the key software tools, 
+
 
 ## Testing Your Board
+Now you have all the key software tools, it's time to start testing the hardware.
 
 1. [Download the test image here](https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems/raw/master/Hardware/ModuleSupportBoard/board-test.bin)
 1. Drag and Drop this onto your target board
+
+Watch the following video to see how to test your board:
+
+https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=fca139f3-1931-4bb6-a22d-abfb00fa99a8
+
 
 
 
