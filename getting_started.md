@@ -11,6 +11,11 @@ In this section, we will look at how to setup your own development environment s
 ## Hardware
 There are two pieces of hardware provided with this course:
 
+* **Target Board** - A small low-powered "microcontroller", typically _embedded_ into a larger electronic system, that we will be programming to monitor the external environment and control devices.
+ 
+* **Module Support Board** - This is a custom board containing sensors and output devices. You plug your Target Board into this in order to perform the various lab exercises.
+
+
 ### Target Board
 The computer you will be programming is a small low-cost microcontroller based on the [Arm Cortex M4](https://www.arm.com/products/silicon-ip-cpu/cortex-m/cortex-m4)
 
