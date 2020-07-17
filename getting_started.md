@@ -127,12 +127,19 @@ When you run this the first time, you make be asked for your GitHub username and
 ### Clone the Notes
 At some point, the tutor will email you a link to obtain a copy of various projects on GitHub. This link should launch use GitHub desktop automatically.
 
+1. [Navigate to this page](https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems)
+1. Click the `Code` button and select `Open with GitHub Desktop`
+
 
 
 ## Connecting and Updating your ST Development Board 
 Now you have all the key software tools, 
 
 ## Testing Your Board
+
+1. [Download the test image here](https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems/raw/master/Hardware/ModuleSupportBoard/board-test.bin)
+1. Drag and Drop this onto your target board
+
 
 
 ---
