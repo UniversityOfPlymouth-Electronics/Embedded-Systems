@@ -15,6 +15,7 @@ This repository contains both lab materials and code examples for all the Electr
 1. [ELEC240 Embedded Systems (Level 5)](./level5/readme.md)
 1. [ELEC241 Real Time Systems (Level 5)](./level5/readme.md)
 1. [ELEC351 Advanced Embedded Programming (Level 6)](./level6/readme.md)
+1. [Glossary](glossary/README.md)
 
 ---
 
