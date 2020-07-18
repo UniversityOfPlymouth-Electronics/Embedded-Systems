@@ -47,4 +47,4 @@ Your Nucleo board connects directly onto this board. Check the alignment using t
 
 ---
 
-[NWEXT - Software Tools](software-tools.md)
+[NEXT - Software Tools](software-tools.md)
