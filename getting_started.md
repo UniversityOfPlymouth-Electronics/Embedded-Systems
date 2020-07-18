@@ -40,29 +40,49 @@ The [Nucleo Target Board](#Target-Board) contains a few _peripherals_, including
 
 The Module Support Board contains a **lot** more peripherals you can communicate with. This will help you gain valuable experience interfacing to electronic devices as you go through the course. 
 
+<img src="img/msb/msb.jpg" width="600px">
+
+Your Nucleo board connects directly onto this board. Check the alignment using the following image and carefully connect your Nucleo to the module support board.
+
+ > Never force! The connectors need to be aligned carfully, and gentle pressure should be enough to get the Nucleo pins to seat into the sockets.
+
+ It is suggested that you do not remove the Nucleo from the module support board until instructed to do so.
+
+<img src="img/msb/msb+nucleo.jpg" width="600px">
+
 ## Software
 
-* All the software we use is free
+* All the software we use in this course is free
 * Where possible, software is supported cross platform
 
 1. [Microsoft Teams](#Microsoft-Teams)
-1. [Installing Mbed Studio](#Installing-Mbed-Studio)
+1. [Mbed Studio](#Mbed-Studio)
 1. [Installing Optional ST Software](#Installing-Optional-ST-Software)
 1. [Visual Studio Code](#Visual-Studio-Code)
 1. [GitHub Desktop](#GitHub-Desktop)
 1. [Connecting and Updating your Development Board](#Connecting-and-Updating-your-Development-Board)
 1. [Testing-Your-Board](Testing-Your-Board)
 
+We will now install each package in turn.
+
+<img src="img/icons/teams.png" width="80px" align="right" >
+
 ### Microsoft Teams
+
 For University of Plymouth students, this is essential!
 
-[Click this link to download and install Microsoft Teams](https://www.microsoft.com/microsoft-365/microsoft-teams/download-app)
+> [Click this link to download and install Microsoft Teams](https://www.microsoft.com/microsoft-365/microsoft-teams/download-app)
 
 Teams allows us to collaborate in many ways, including screen sharing and remote control. This has proven highly effective for supporting students with technical questions.
 
-Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you. 
+Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
-### Installing Mbed Studio
+When you run Teams for the first time, sign in with your university credentials. Then check your audio and video settings are set to your preferred devices.
+
+<img src="img/icons/mbed-studio.png" width="80px" align="right" >
+
+### Mbed Studio
+
 [Mbed](https://os.mbed.com/) is a framework for rapidly and easiy programming microcontrollers. It is used in most of our modules where microcontrollers are used. 
 
 > You may have heard of the [Arduino](https://www.arduino.cc/) system? It is similar in many ways. In fact, for the latest versions, Arduino is built on top of Mbed-os.
