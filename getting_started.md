@@ -63,7 +63,7 @@ Your Nucleo board connects directly onto this board. Check the alignment using t
 1. [Connecting and Updating your Development Board](#Connecting-and-Updating-your-Development-Board)
 1. [Testing-Your-Board](Testing-Your-Board)
 
-We will now install each package in turn.
+We will now install each package in turn. Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
 <img src="img/icons/teams.png" width="80px" align="right" >
 
@@ -74,8 +74,6 @@ For University of Plymouth students, this is essential!
 > [Click this link to download and install Microsoft Teams](https://www.microsoft.com/microsoft-365/microsoft-teams/download-app)
 
 Teams allows us to collaborate in many ways, including screen sharing and remote control. This has proven highly effective for supporting students with technical questions.
-
-Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
 When you run Teams for the first time, sign in with your university credentials. Then check your audio and video settings are set to your preferred devices.
 
@@ -101,18 +99,25 @@ This will help us better support you. Never disclose your password!
 #### Installing the Developer Tools
 The first step is to download and install the version of Mbed Studio for your computer.
 
-https://os.mbed.com/studio/
+> [Click this link to download Mbed-Studio](https://os.mbed.com/studio/)
 
-The installer is mostly self-explanatory. Since version `1.0`, many of the additional tools needed for this software come included.
+Run the installer and you will probably find it is mostly self-explanatory. You can choose default options. Since version `1.0`, many of the additional tools needed for this software come included.
 
-### Installing Optional ST Software
+### Connecting your Target Board
 The software that allows your PC to recognise your target board comes with Mbed Studio. The most important of these is the ST Link Driver.
+
+To test this, you should now connect your Nucleo Board to your host PC using the supplied USB cable
+
+<img src="img/nucleo/connect_usb.jpg" width="300px">
 
 For the Mac and Linux, there is nothing to do. For Microsoft Windows, you can run Device Manager and check to see if the drivers are correctly installed:
 
 <img src="img/DeviceManager.png" width="300px">
 
-If there are exclamation marks against any of the ST devices, you may need to install the driver manually. There are also some additional tools that you may need from time to time.
+If there are no exclaimation marks next to any of the ST devices, you can [skip the next section](#Visual-Studio-Code)
+
+### ST Link Drivers and Utilities
+If there are exclamation marks against any of the ST devices, you may need to install the driver manually.  There are also some additional tools that you may need from time to time.
 
 * ST Link Drivers ([STSW-LINK007](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-utilities/stsw-link009.html)) - the latest version of the ST Drivers for Windows
 * ST Link Update ([STSW-LINK007](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stsw-link007.html)) - used to upgrade the firmware on your Nucleo Board (all host platforms)
@@ -120,12 +125,16 @@ If there are exclamation marks against any of the ST devices, you may need to in
 
 To obtain these packages, you need to create an account on st.com first. Please speak with one of the staff members if you have trouble doing this.
 
+<img src="img/icons/vscode.png" width="80px" align="right" >
+
 ## Visual Studio Code
 This is a really useful piece of software. It can be obtained using the following address:
 
 https://code.visualstudio.com/
 
 This is one of the preferred methods for editing text files and programming source files outside of Mbed Studio. It can even be used as a complete developer environment (with the right plugins).
+
+<img src="img/icons/github.png" width="80px" align="right" >
 
 ## GitHub Desktop
 These notes and all the source code are hosted on a site known as [GitHub](https://github.com/), which is a web repository that leverages the powerful [git version control system](https://git-scm.com/).
@@ -161,10 +170,6 @@ At some point, the tutor will email you a link to obtain a copy of various proje
 1. [Navigate to this page](https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems)
 1. Click the `Code` button and select `Open with GitHub Desktop`
 
-
-## Connecting and Updating your ST Development Board 
-**TO BE DONE**
-
 ## Testing Your Board
 Now you have all the key software tools, it's time to start testing the hardware.
 
@@ -172,6 +177,18 @@ Now you have all the key software tools, it's time to start testing the hardware
 1. Drag and Drop this onto your target board
 
 [Click here to watch a video explaining how to do this](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=fca139f3-1931-4bb6-a22d-abfb00fa99a8)
+
+
+## Trouble Shooting
+
+If any of the steps above fail, it is best to contact a member of staff, either in person, or via Teams.
+
+* When you connect your ST Board, it should appear as an external storage device on your computer. Browsing this drive you should see two files. If not, inform the module staff and maybe use Teams to screenshare so they can diagnose the problem.
+
+* One of the most common issues is the "firmware" on the Nucleo Boards. This firmware is partly responsible to maintaining the connection between the host PC and the Target. You can update to the latest version using the [ST Link Update Tool](#ST-Link-Drivers-and-Utilities).
+
+* On the ST Link, check the power light is GREEN and not red. If Red, this suggests the USB port may not be able to supply sufficient power.
+
 
 
 ---
