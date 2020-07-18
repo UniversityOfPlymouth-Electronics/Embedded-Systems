@@ -12,8 +12,7 @@
 1. [Installing Optional ST Software](#Installing-Optional-ST-Software)
 1. [Visual Studio Code](#Visual-Studio-Code)
 1. [GitHub Desktop](#GitHub-Desktop)
-1. [Connecting and Updating your Development Board](#Connecting-and-Updating-your-Development-Board)
-1. [Testing-Your-Board](Testing-Your-Board)
+
 
 We will now install each package in turn. Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
@@ -48,14 +47,14 @@ Once you have created your account, please tell us what your username is:
 
 This will help us better support you. Never disclose your password!
 
-### Installing the Developer Tools
+### Installing Mbed Studio
 The first step is to download and install the version of Mbed Studio for your computer.
 
 > [Click this link to download Mbed-Studio](https://os.mbed.com/studio/)
 
 Run the installer and you will probably find it is mostly self-explanatory. You can choose default options. Since version `1.0`, many of the additional tools needed for this software come included.
 
-## Connecting your Target Board
+### Connecting your Target Board
 The software that allows your PC to recognise your target board comes with Mbed Studio. The most important of these is the ST Link Driver.
 
 To test this, you should now connect your Nucleo Board to your host PC using the supplied USB cable
@@ -66,16 +65,7 @@ For the Mac and Linux, there is nothing to do. For Microsoft Windows, you can ru
 
 <img src="../img/DeviceManager.png" width="300px">
 
-If there are no exclaimation marks next to any of the ST devices, you can [skip the next section](#Visual-Studio-Code)
-
-## ST Link Drivers and Utilities
-If there are exclamation marks against any of the ST devices, you may need to install the driver manually.  There are also some additional tools that you may need from time to time.
-
-* ST Link Drivers ([STSW-LINK007](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-utilities/stsw-link009.html)) - the latest version of the ST Drivers for Windows
-* ST Link Update ([STSW-LINK007](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stsw-link007.html)) - used to upgrade the firmware on your Nucleo Board (all host platforms)
-* STM32 ST-LINK utility ([STSW-LINK004](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stsw-link004.html)) - a useful tool for resetting and wiping boards. Rarely needed but sometimes useful
-
-To obtain these packages, you need to create an account on st.com first. Please speak with one of the staff members if you have trouble doing this.
+If there are exclaimation marks next to any of the ST devices, please refer to the [section on troubleshooting](troubleshooting.md).
 
 <img src="../img/icons/vscode.png" width="80px" align="right" >
 

@@ -5,6 +5,10 @@
 # Hardware Testing
 Now you have all the key software tools, it's time to start testing the hardware.
 
+1. [Connecting and Updating your Development Board](#Connecting-and-Updating-your-Development-Board)
+1. [Testing-Your-Board](Testing-Your-Board)
+
+## Connecting and Updating your Development Board
 1. [Download the test image here](https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems/raw/master/Hardware/ModuleSupportBoard/board-test.bin)
 1. Drag and Drop this onto your target board
 
