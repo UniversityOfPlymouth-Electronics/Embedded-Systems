@@ -3,16 +3,15 @@
 ---
 
 # Software
+During this course you will use a variety of software tools. This section includes the software tools needed to program your target board.
 
-* All the software we use in this course is free
+* All the software we use in this course is free for students
 * Where possible, software is supported cross platform
 
 1. [Microsoft Teams](#Microsoft-Teams)
 1. [Mbed Studio](#Mbed-Studio)
-1. [Installing Optional ST Software](#Installing-Optional-ST-Software)
 1. [Visual Studio Code](#Visual-Studio-Code)
 1. [GitHub Desktop](#GitHub-Desktop)
-
 
 We will now install each package in turn. Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
@@ -24,17 +23,20 @@ For University of Plymouth students, this is essential!
 
 > [Click this link to download and install Microsoft Teams](https://www.microsoft.com/microsoft-365/microsoft-teams/download-app)
 
-Teams allows us to collaborate in many ways, including screen sharing and remote control. This has proven highly effective for supporting students with technical questions.
+Teams allows us to collaborate in many ways, including screen sharing and even remote control. This has proven highly effective for supporting students with technical questions.
 
 When you run Teams for the first time, sign in with your university credentials. Then check your audio and video settings are set to your preferred devices.
 
 <img src="../img/icons/mbed-studio.png" width="80px" align="right" >
 
 ## Mbed Studio
+We use a software tool called Mbed-Studio that allows us to write code and program our target board.
 
-[Mbed](https://os.mbed.com/) is a framework for rapidly and easiy programming microcontrollers. It is used in most of our modules where microcontrollers are used. 
+The term [Mbed](https://os.mbed.com/) refers to a framework for rapidly and easily programming Arm based microcontrollers. It is used in most of our modules where microcontrollers are used. 
 
 > You may have heard of the [Arduino](https://www.arduino.cc/) system? It is similar in many ways. In fact, for the latest versions, Arduino is built on top of Mbed-os.
+
+Before installing Mbed-Studio, first you need a free account on mbed.com
 
 ### Creating an Account on mbed.com
 You cannot use Mbed without first creating an account on mbed.com. This is a requirement for many of our embedded modules.
@@ -55,26 +57,26 @@ The first step is to download and install the version of Mbed Studio for your co
 Run the installer and you will probably find it is mostly self-explanatory. You can choose default options. Since version `1.0`, many of the additional tools needed for this software come included.
 
 ### Connecting your Target Board
-The software that allows your PC to recognise your target board comes with Mbed Studio. The most important of these is the ST Link Driver.
+The software that allows your PC to recognize your target board comes with Mbed Studio. The most important of these is the ST Link Driver.
 
 To test this, you should now connect your Nucleo Board to your host PC using the supplied USB cable
 
 <img src="../img/nucleo/connect_usb.jpg" width="300px">
 
-For the Mac and Linux, there is nothing to do. For Microsoft Windows, you can run Device Manager and check to see if the drivers are correctly installed:
+For the Mac and Linux, there is nothing else to do at this stage. For Microsoft Windows, you can run Device Manager and check to see if the drivers are correctly installed:
 
 <img src="../img/DeviceManager.png" width="300px">
 
-If there are exclaimation marks next to any of the ST devices, please refer to the [section on troubleshooting](troubleshooting.md).
+If there are exclamation marks next to any of the ST devices, please refer to the [section on troubleshooting](troubleshooting.md).
 
 <img src="../img/icons/vscode.png" width="80px" align="right" >
 
 ## Visual Studio Code
-This is a really useful piece of software. It can be obtained using the following address:
+This is a really useful piece of software used for editing software and configuration files. It can be obtained using the following address:
 
 https://code.visualstudio.com/
 
-This is one of the preferred methods for editing text files and programming source files outside of Mbed Studio. It can even be used as a complete developer environment (with the right plugins).
+This is one of the preferred methods for editing text files and programming source files outside of Mbed Studio. It can even be used as a complete development environment (with the right plugins).
 
 <img src="../img/icons/github.png" width="80px" align="right" >
 
@@ -91,7 +93,7 @@ For this course, you will need to do two things:
 ### Create an Account on GitHub
 First of all, you can simply create an account using https://github.com/
 
-You might want to change your account to a student account in order to get additional benefits - https://education.github.com/pack
+> You might want to change your account to a student account in order to get additional benefits - https://education.github.com/pack
 
 Once you have done this, you must register this using the following form:
 

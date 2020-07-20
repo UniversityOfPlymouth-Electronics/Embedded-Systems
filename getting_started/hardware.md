@@ -37,11 +37,15 @@ The Module Support Board contains a **lot** more peripherals you can communicate
 
 <img src="../img/msb/msb.jpg" width="600px">
 
-Your Nucleo board connects directly onto this board. Check the alignment using the following image and carefully connect your Nucleo to the module support board.
+Your Nucleo board connects directly onto this board.
 
- > Never force! The connectors need to be aligned carfully, and gentle pressure should be enough to get the Nucleo pins to seat into the sockets.
+Before you connect the USB cable, connect your Nucleo board to the MSB.
 
- It is suggested that you do not remove the Nucleo from the module support board until instructed to do so.
+* Check the alignment using the image below and carefully connect your Nucleo to the module support board.
+
+* Never force! The connectors need to be aligned carefully such that only gentle pressure is needed to get the Nucleo pins to seat into the sockets.
+
+It is suggested that you do not remove the Nucleo from the module support board until instructed to do so.
 
 <img src="../img/msb/msb+nucleo.jpg" width="600px">
 

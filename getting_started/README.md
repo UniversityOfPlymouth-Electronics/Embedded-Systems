@@ -10,7 +10,7 @@ In this section, we will look at how to setup your own development environment s
 
 ## Contents
 
-1. [Familiarisation with the Hardware](hardware.md)
+1. [Familiarization with the Hardware](hardware.md)
 1. [Software Tools](software-tools.md)
 1. [Testing the Hardware](hardware-testing.md)
 1. [Testing the Software](software-testing.md)
