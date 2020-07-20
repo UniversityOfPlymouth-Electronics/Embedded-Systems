@@ -12,6 +12,8 @@ If any of the previous steps fail, it is best to contact a member of staff, eith
 
 * On the ST Link, check the power light is GREEN and not red. If Red, this suggests the USB port may not be able to supply sufficient power.
 
+* If the debug fails, ensure there are no syntax errors in your code. If now, try unplugging your USB cable from your host PC and reconnecting it. In some cases, I have had to reboot the host PC to get debugging to work.
+
 ## Board Not Detected in MS Windows
 
 For Microsoft Windows, run Device Manager and check to see if the drivers are correctly installed:
