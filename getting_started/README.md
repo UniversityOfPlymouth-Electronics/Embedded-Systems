@@ -18,4 +18,4 @@ In this section, we will look at how to setup your own development environment s
 
 ---
 
-[Next - Familiarisation with the Hardware](hardware.md)
+[Next - Familiarization with the Hardware](hardware.md)

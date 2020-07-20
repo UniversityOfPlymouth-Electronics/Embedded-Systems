@@ -2,7 +2,7 @@
 
 ---
 
-# Software
+# Software Tools
 During this course you will use a variety of software tools. This section includes the software tools needed to program your target board.
 
 * All the software we use in this course is free for students
@@ -113,6 +113,8 @@ At some point, the tutor will email you a link to obtain a copy of various proje
 
 1. [Navigate to this page](https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems)
 1. Click the `Code` button and select `Open with GitHub Desktop`
+
+[Click here to watch a video explaining how to do this](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e15dcb65-dbcc-404f-a4f1-abfe00ee6f33)
 
 ---
 

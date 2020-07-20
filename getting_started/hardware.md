@@ -3,7 +3,7 @@
 ---
 
 
-# Hardware
+# Familiarization with the Hardware
 There are two pieces of hardware provided with this course:
 
 * **Target Board** - A small low-powered "microcontroller", typically _embedded_ into a larger electronic system, that we will be programming to monitor the external environment and control devices.
