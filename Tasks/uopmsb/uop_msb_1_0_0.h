@@ -13,4 +13,4 @@
 #define TRAFFIC2_YELL_PIN PC_3
 #define TRAFFIC2_RED_PIN PC_6
 
-
+ 
