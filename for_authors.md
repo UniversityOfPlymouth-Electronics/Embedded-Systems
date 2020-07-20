@@ -22,3 +22,6 @@ I suggest you use HTML for images so that you can control the width. Here is an 
 
 <img src="img/Icon-jpg-small.jpg" width="80px">
 
+## LaTeX
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
