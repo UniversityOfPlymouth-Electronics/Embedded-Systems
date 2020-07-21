@@ -30,17 +30,18 @@ A powerful tool in Mbed Studio is the "debugger". Although this tool is primaril
 Now repeat the steps yourself.
 
 ## Clean up the files
-With version 1.0 of Mbed studio, once built,each project consumes over 1Gb data on the local disk. As we will be opening multiple projects and building them, this can quickly become problematic.
+With version 1.0 of Mbed studio, once built,each project consumes over 1Gb data on the local disk. Most of this is in the `mbed-os` folder within _each_ project. As we will be opening multiple projects and building them, this can quickly become problematic.
 
 > This is one reason why you should not set your `git` root folder inside the folder tree of OneDrive or any other cloud service.
 
-To clear some disk space, you can delete the BUILD and mbed-os folders.
+To clear some disk space, there is a work-around.
 
-Right click the `BUILD` folder, and click on `Delete`
+Using Explorer (Windows) or Finder (Mac), you can delete the `BUILD` and `mbed-os` folders. Do NOT delete the `mbed-os.lib` file
 
-<img src="../img/delete-BUILD.png" width="200">
+<img src="../img/delete-BUILD.png" width="400">
 
-Next, right click the `mbed-os` folder 
+It is suggested you do not do this from within Mbed Studio itself.
+
 ---
 
 [Contents](README.md) 
