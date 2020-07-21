@@ -30,3 +30,7 @@ If there are exclamation marks against any of the ST devices, you may need to in
 * STM32 ST-LINK utility ([STSW-LINK004](https://www.st.com/content/st_com/en/products/development-tools/software-development-tools/stm32-software-development-tools/stm32-programmers/stsw-link004.html)) - a useful tool for resetting and wiping boards. Rarely needed but sometimes useful
 
 To obtain these packages, you need to create an account on st.com first. Please speak with one of the staff members if you have trouble doing this.
+
+---
+
+[Table of Contents](README.md) 
