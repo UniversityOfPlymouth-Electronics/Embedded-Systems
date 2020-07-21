@@ -63,6 +63,18 @@ You may also be loaned other equipment, such as a "Picoscope". Further instructi
 1. [Task 108 - Bit Setting]()
 1. [Task 109 - Bit Shifting]()
 
+## Attending Labs
+Formal labs are scheduled at specific times in your timetable. Whether you are attending in person or remotely, you should use the Teams channel for that lab.
+
+<img src="../img/Teams143-Expand-Lab-Sessions.png" width="300">
+
+When you click this channel, you should see meeting links
+
+<img src="../img/Teams143-Lab-Meeting.png" width="600">
+
+Join the appropriate meeting by clicking the link. You can turn off your video and audio, and even the incoming video to save bandwidth.
+
+Labs will contain interactive elements. Participating in these is important.
 
 ---
 
