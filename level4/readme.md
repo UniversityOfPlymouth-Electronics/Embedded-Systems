@@ -17,7 +17,7 @@ As a guide, each section should take approximately 2 lab sessions (4-6 Hrs / sec
 
 | Wk | Section | Title |
 | --- | --- | --- |
-| 1-2 | 1 | Digital Outputs |
+| 1-2 | 1 | [Digital Outputs](Digital_Outputs.md) |
 | 3   | 2 | Potential Dividers |
 | 3-5 | 3 | Digital Inputs and Multiple Outputs |
 | 6-7 | 4 | Analogue Input |
@@ -52,16 +52,6 @@ You are provided with a Kit that enables you to work both in the lab and at home
 
 You may also be loaned other equipment, such as a "Picoscope". Further instructions will be given on how to use it.
 
-## Table of Contents
-1. [Task 101 - Blinky](TASK101.md)
-1. [Task 102 - SOS]()
-1. [Task 103 - Hello World]()
-1. [Task 104 - Traffic Lights 1]()
-1. [Task 105 - Flashing Traffic Lights]()
-1. [Task 106 - `BusOut`]()
-1. [Task 107 - `PortOut`](TASK107.md)
-1. [Task 108 - Bit Setting]()
-1. [Task 109 - Bit Shifting]()
 
 ## Attending Labs
 Formal labs are scheduled at specific times in your timetable. Whether you are attending in person or remotely, you should use the Teams channel for that lab.
@@ -75,6 +65,13 @@ When you click this channel, you should see meeting links
 Join the appropriate meeting by clicking the link. You can turn off your video and audio, and even the incoming video to save bandwidth.
 
 Labs will contain interactive elements. Participating in these is important.
+
+## First Lecture
+In the first part of the first lecture, an overview of the module is given.
+
+[Lecture Slides - week 1, part 1 - Overview](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EQr8Fd8RInhLmK6AyJGuqNUBb0N2JB6HZARS3H-vy1R_4Q?e=EiFhyy)
+
+If you did not manage to attend the first lecture, please ensure you do to the [DLE](https://dle.plymouth.ac.uk) and catch up.
 
 ---
 
