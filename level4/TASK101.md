@@ -57,3 +57,35 @@ int main()
 | `//DigitalOut redLED(LED3);` |
 | *Challenge*  -Your task is to make a sequence alternating between Green+Red and just Blue. [See this video as a demonstration](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b0ac1b2-56eb-4108-ae83-abff00ff02ae) |
 
+
+##  A Little bit of Electronics
+So what is going on here? Hopefully you can see the connection between the lines of code and the effect, but what you might now be aware of is the electronics.
+
+In electronics, we mostly work with one (or both) of the following signal types :
+
+* Analogue - where voltages and currents can take any value, typically between and upper and lower limit
+* Digital - where signal voltages can only be one of two possible values
+
+For this section, the signals are all going to be digital. Let’s start with a simple circuit diagram, or schematic as it’s also known, as shown below:
+
+<img src="../img/SimpleLEDCircuit.png" width="300">
+
+Consider the following circuit diagram (also known as a **schematic**):
+
+1. **Constant Voltage Source**. Think of this as the “perfect battery”. What ever the current `I` flowing in the circuit, the voltage across this device is ALWAYS V<sub>out</sub>. In our circuit, this will be typically be 3.3 Volts
+1. **Resistor**. This is used to limit the current `I` that flows through the LED (to avoid damaging it and to save power). Resistors have a resistance property measured in Ohms (symbol &Omega; ).
+1. **Light Emitting Diode (LED)** - A non-linear device that emits photons of light when an electrical current passes through it. Current can only flow in one direction. Different LEDs have different characteristics.
+
+| **TASK 101-2** |
+| --- |
+| Read more about the LED [here](/glossary/led.md) |
+| Now calculate a suitable current limiting resistor value for the RED and AMBER LEDs in your kit. The data is below || Enter your answers in the form |
+
+| Colour | current (approx.)	| Voltage |
+| --- | --- | --- |
+| RED |	2mA	| 1.7V |
+| AMBER | 2mA | 1.85V |
+
+
+
+
