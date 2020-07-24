@@ -28,7 +28,10 @@ The lectures for this week cover some basic concepts
 | Microcontrollers |
 | Basic Electrical Principles and Ohms Law |
 | The LED and current limiting resistor |
-
+| Transistor as a switch - first look |
+| `DigitalOut` and GPIO pins |
+| While loops - first look |
+| Building and debugging code |
 
 
 ### Tasks
