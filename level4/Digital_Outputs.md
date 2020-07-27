@@ -42,8 +42,6 @@ Now attempt each of the following tasks in sequence.
  1. [Task 102 - SOS]()
  1. [Task 103 - Hello World]()
 
-
-
 ## Week 2
 
 ### Lectures
@@ -51,7 +49,7 @@ The lectures for this week cover some basic programming concepts
 
 | Slides |
 | --- |
-| [Session 02+01 -  Computer Architecture](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EWx7TU3xAZJCsiP7IRQwRO0B4SmFZjx-_P15x9a2ErUPag) |
+| [Session 02+01 -  Computer Architecture and Number Systems](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EWx7TU3xAZJCsiP7IRQwRO0B4SmFZjx-_P15x9a2ErUPag) |
 | [Session 03+01 - Variables + printf + scanf](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/ET-lZkT0siJEp6p10C06lxYBYltE1AaFuhY6dRLyHyBcTg?e=uJ3PK4) |
 | [Session 03+02 - Iteration](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EehKTtTJ5ahPg7nl395kuuEBnFX4gvgVrEQLRLGAeVRn5A) |
 
@@ -59,7 +57,10 @@ The lectures for this week cover some basic programming concepts
 
 | Topic |
 | --- |
-| TBC |
+| Computer Architecture |
+| Number Representation |
+| Computer Memory |
+
 
 ### Tasks
 Now attempt each of the following tasks in sequence.
