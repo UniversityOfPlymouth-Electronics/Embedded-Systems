@@ -31,6 +31,11 @@ If there are exclamation marks against any of the ST devices, you may need to in
 
 To obtain these packages, you need to create an account on st.com first. Please speak with one of the staff members if you have trouble doing this.
 
+## Cannot Start A Debug Session
+If you are trying to start a debug session, and you are getting error messages about the debugger timing out, you might need to restart the debug service on your PC.
+
+https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=54f0b0ff-eb0f-41d7-bc19-ac0600e5f949
+
 ---
 
 [Table of Contents](README.md) 
