@@ -13,14 +13,26 @@ int main()
 
     //Write pattern
     ledData = 0b11111111;
+    //ledData = 0xFF;
 
     //Wait
     wait_us(1000000);
 
-    //Write pattern
-    ledData = 0b11110000;
+    //Write pattern - least significant bit set to 1
+    ledData = 0b00000001;
+    wait_us(1000000);
 
-    //Wait
+    ledData = 0b00000010;
+    wait_us(1000000);
+
+    ledData = 0b00000100;
+    wait_us(1000000);
+
+    // most significant bit set to 1
+    ledData = 0b10000000;
+    wait_us(1000000);
+
+    ledData = 0b11110000;
     wait_us(1000000);
 
     //Green Bar
