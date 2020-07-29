@@ -1,5 +1,5 @@
 //This is known as a “header file”. In short, this copies and pastes the text file mbed.h into this code
-#include "../uopmsb/uop_msb_1_0_0.h"
+#include "../lib/uopmsb/uop_msb_1_0_0.h"
 
 // Create a DigitalOut “object” called greenLED. Pass constant LED1 as a “parameter”
 DigitalOut greenLED(LED1);
