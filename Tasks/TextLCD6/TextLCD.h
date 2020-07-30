@@ -59,7 +59,8 @@ public:
      * @param d4-d7 Data lines for using as a 4-bit interface
      * @param type  Sets the panel size/addressing mode (default = LCD16x2)
      */
-    TextLCD(PinName rs, PinName e, PinName d4, PinName d5, PinName d6, PinName d7, LCDType type = LCD16x2);
+    TextLCD(PinName rs, PinName e, PinName rw, PinName d0, PinName d1, PinName d2, PinName d3, PinName d4, PinName d5, PinName d6, PinName d7, LCDType type = LCD16x2);     
+    TextLCD(PinName rs, PinName e, PinName rw, PinName d4, PinName d5, PinName d6, PinName d7, LCDType type = LCD16x2);
 
 #if DOXYGEN_ONLY
     /** Write a character to the LCD
@@ -101,7 +102,7 @@ protected:
     void writeCommand(int command);
     void writeData(int data);
 
-    DigitalOut _rs, _e;
+    DigitalOut _rs, _e, _rw;
     BusOut _d;
     LCDType _type;
 

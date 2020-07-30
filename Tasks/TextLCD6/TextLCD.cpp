@@ -18,31 +18,46 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ *
  */
 
+ /*
+ * Modified by noutram to support 8-bit mode on Mbed-OS 6
+*/
+
 #include "TextLCD.h"
-#include "mbed.h"
-#define WAIT_SCALE 1
 
-TextLCD::TextLCD(PinName rs, PinName e, PinName d4, PinName d5,
-                 PinName d6, PinName d7, LCDType type) : _rs(rs),
-        _e(e), _d(d4, d5, d6, d7),
-        _type(type) {
+// 8-bit mode constructor
+TextLCD::TextLCD(PinName rs, PinName e, PinName rw, 
+    PinName d0, PinName d1, PinName d2, PinName d3,
+    PinName d4, PinName d5, PinName d6, PinName d7, 
+    LCDType type) : _rs(rs), _e(e), _rw(rw), _d(d0, d1, d2, d3, d4, d5, d6, d7), _type(type)
+{
+    //Power on wait
+    wait_us(100000);
 
+    
+}
+// 4-bit mode constructor
+TextLCD::TextLCD(PinName rs, PinName e, PinName rw, 
+                PinName d4, PinName d5, PinName d6, PinName d7, 
+                LCDType type) : _rs(rs), _e(e), _rw(rw), _d(d4, d5, d6, d7),
+                _type(type) 
+{
     _e  = 1;
     _rs = 0;            // command mode
 
-    wait_us(40 << WAIT_SCALE);     // Wait for more than 40ms for power up
-    //wait(0.015);        // Wait 15ms to ensure powered up
+    //Initial wait
+    wait_us(40000);     // Wait for more than 40ms for power up
 
     // send "Display Settings" 3 times (Only top nibble of 0x30 as we've got 4-bit bus)
     for (int i=0; i<3; i++) {
         writeByte(0x3);
-        wait_us(40 << WAIT_SCALE);
+        wait_us(40);
         //wait(0.00164);  // this command takes 1.64ms, so wait for it
     }
     writeByte(0x2);     // 4-bit mode
-    wait_us(40 << WAIT_SCALE);
+    wait_us(40);
     //wait(0.000040f);    // most instructions take 40us
 
     writeCommand(0x28); // Function set 001 BW N F - -
@@ -59,7 +74,7 @@ void TextLCD::character(int column, int row, int c) {
 
 void TextLCD::cls() {
     writeCommand(0x01); // cls, and set cursor to 0
-    wait_us(1640 << WAIT_SCALE);
+    wait_us(1640);
     //wait(0.00164f);     // This command takes 1.64 ms
     locate(0, 0);
 }
@@ -96,17 +111,17 @@ int TextLCD::_getc() {
 
 void TextLCD::writeByte(int value) {
     _d = value >> 4;
-    wait_us(41 << WAIT_SCALE);
+    wait_us(41);
     //wait(0.000040f); // most instructions take 40us
     _e = 0;
-    wait_us(41 << WAIT_SCALE);
+    wait_us(41);
     //wait(0.000040f);
     _e = 1;
     _d = value >> 0;
-    wait_us(41 << WAIT_SCALE);
+    wait_us(41);
     //wait(0.000040f);
     _e = 0;
-    wait_us(41 << WAIT_SCALE);
+    wait_us(41);
     //wait(0.000040f);  // most instructions take 40us
     _e = 1;
 }
