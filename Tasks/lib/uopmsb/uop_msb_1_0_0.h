@@ -3,6 +3,7 @@
 // another edit 16 07 2020
 
 #include "mbed.h"
+#include "Stream.h"
 
 // *****************************
 // Traffic Lights (individual) *
@@ -47,111 +48,248 @@
 #define LCD_E_PIN PD_13
 #define LCD_BKL_PIN PD_14
 
-class LCD_16X2_DISPLAY {
+class LCD_16X2_DISPLAY : public Stream {
 public:
-    enum CURSOR_MOVE_DIR { DECREMENT=0, INCREMENT=1 }; 
-    enum DISPLAY_SHIFT {OFF=0, ON=1};
+    typedef enum {INSTRUCTION=0, DATA=1} REGISTER_SELECT;   // RS
+    typedef enum {WRITE=0, READ=1} READWRITE;               // R/W
+    typedef enum {DISABLE=0, ENABLE=1} ENABLE_STATE;        // E
+
+    typedef enum {DECREMENT=0, INCREMENT=1} ENTRY_MODE_DIR;                             // I/D
+    typedef enum {CURSOR_MOVE_ON_ENTRY=0, DISPLAY_SHIFT_ON_ENTRY=1} ENTRY_MODE_SHIFT;   // S
+    typedef enum {DISP_OFF=0, DISP_ON=1} DISPLAY_STATUS;                        // D
+    typedef enum {CURSOR_VISIBLE_OFF=0, CURSOR_VISIBLE_ON=1} CURSOR_VISIBLE;    // C
+    typedef enum {BLINK_OFF=0, BLINK_ON=1} BLINK_STATUS;                        // B
+    typedef enum {CURSOR_MOVE=0, DISPLAY_SHIFT=1} CURSOR_OR_DISPLAY_SHIFT;      // S/C
+    typedef enum {SHIFT_LEFT=0, SHIFT_RIGHT} CURSOR_OR_DISPLAY_SHIFT_DIR;       // R/L
+    typedef enum { FOURBIT=0, EIGHTBIT=1 } INTERFACE_DATA_LENGTH;               // DL
+    typedef enum { ONELINE=0, TWOLINES=1 } INTERFACE_NUM_LINES;                 // N
+    typedef enum { FONT_5X8=0, FONT_5X10=1} INTERFACE_FONT_SIZE;                // F
+
+    enum LCDType {
+        LCD16x2     /**< 16x2 LCD panel (default) */
+        , LCD16x2B  /**< 16x2 LCD panel alternate addressing */
+        , LCD20x2   /**< 20x2 LCD panel */
+        , LCD20x4   /**< 20x4 LCD panel */
+    };
 
     // 8-bit constructor
     LCD_16X2_DISPLAY(PinName rs=LCD_RS_PIN, PinName rw=LCD_RW_PIN, PinName e=LCD_E_PIN, PinName bkl=LCD_BKL_PIN, 
     PinName d0=LCD_D0_PIN, PinName d1=LCD_D1_PIN, PinName d2=LCD_D2_PIN, PinName d3=LCD_D3_PIN, 
-    PinName d4=LCD_D4_PIN, PinName d5=LCD_D5_PIN, PinName d6=LCD_D6_PIN, PinName d7=LCD_D7_PIN) : _rs(rs), _e(e), _rw(rw), _bkl(bkl), _data(d0, d1, d2, d3, d4, d5, d6, d7) 
+    PinName d4=LCD_D4_PIN, PinName d5=LCD_D5_PIN, PinName d6=LCD_D6_PIN, PinName d7=LCD_D7_PIN,
+    LCDType type=LCD16x2) : _rs(rs), _e(e), _rw(rw), _bkl(bkl), _data(d0, d1, d2, d3, d4, d5, d6, d7),_type(type) 
     {
         //Power on wait
         wait_us(100000);
 
         //Function set
-        functionSet(1,1,0);
+        functionSet(EIGHTBIT, TWOLINES, FONT_5X8);
         
         //Display ON
-        displayOnOffControl(1,1,0);
+        displayOnOffControl(DISP_ON, CURSOR_VISIBLE_OFF, BLINK_OFF);
 
         //CLS
         cls();
 
         //Entry Mode
-        setEntryMode(1, 0);
+        setEntryMode(INCREMENT, CURSOR_MOVE_ON_ENTRY);
+
+        //Cursor moves right
+        //cursorOrDisplayShift(CURSOR_MOVE, SHIFT_RIGHT);        
     }
 
 protected:
+    LCDType _type;
     DigitalOut _rs;
     DigitalOut _e;
     DigitalOut _rw;
     DigitalOut _bkl;
     BusOut _data;
-    
+    uint8_t _row;
+    uint8_t _column;
+
+    uint8_t address(int row, int column) {
+        switch (_type) {
+            case LCD20x4:
+                switch (row) {
+                    case 0:
+                        return 0x80 + column;
+                    case 1:
+                        return 0xc0 + column;
+                    case 2:
+                        return 0x94 + column;
+                    case 3:
+                        return 0xd4 + column;
+                }
+            case LCD16x2B:
+                return 0x80 + (row * 40) + column;
+            case LCD16x2:
+            case LCD20x2:
+            default:
+                return 0x80 + (row * 0x40) + column;
+        }
+    }
+
+
 public:
-    void write_lcd(uint8_t rs, uint8_t b)
+    void character(int row, int column, uint8_t c) {
+        volatile int a = address(row, column);
+        set_DDRAM_Address(a);
+        write(DATA, c);
+    }
+
+    void write(REGISTER_SELECT rs, uint8_t b)
     {
         _rs = rs;
-        _rw = 0;
+        _rw = WRITE;
         wait_ns(5);
-        _e = 1;
+        _e = ENABLE;
         wait_ns(25);    //Rising edge
         wait_ns(100);   //Setup
         _data = b;
         wait_ns(40);    //Data setup time
-        _e = 0;
+        _e = DISABLE;
         wait_ns(25);    //Falling edge
         wait_ns(10);    //Hold time
 
         //Prevent premature write
-        wait_us(1);
+        wait_us(50);
     }
 
+uint8_t read(REGISTER_SELECT rs=INSTRUCTION)
+{
+    _rs = rs;
+    _rw = 1;
+    wait_ns(5);
+    _e = 1;
+    wait_ns(25);    //Rise time
+    wait_ns(100);   //T_DDR
+    uint8_t data = _data;    //Read
+    wait_ns(40);
+    _e = 0;
+    wait_ns(25);    //Fall time
+    wait_ns(10);    //t_H
+    _rw = 0;
+    wait_us(1);     //Final wait to prevent early trans
+    return data;
+}
+
     void cls() {
-        write_lcd(0, 0b00000001);
+        write(INSTRUCTION, 0b00000001);
         wait_us(1600); 
     }
 
     void home() {
-        write_lcd(0, 0b00000010);
+        write(INSTRUCTION, 0b00000010);
         wait_us(1600);    
     }
 
-    void setEntryMode(CURSOR_MOVE_DIR ID=INCREMENT, DISPLAY_SHIFT SH=OFF)
+    void setEntryMode(ENTRY_MODE_DIR id=INCREMENT, ENTRY_MODE_SHIFT sh=CURSOR_MOVE_ON_ENTRY)
     {
         uint8_t dat = 0b00000100;
-        dat |= (ID ? 2 : 0);
-        dat |= (SH ? 1 : 0);
-        write_lcd(0, dat);
-        wait_us(50);          
-    }
-    void setEntryMode(uint8_t ID, uint8_t SH)
-    {
-        uint8_t dat = 0b00000100;
-        dat |= (ID ? 2 : 0);
-        dat |= (SH ? 1 : 0);
-        write_lcd(0, dat);
-        wait_us(50);    
+        dat |= (id ? 2 : 0);
+        dat |= (sh ? 1 : 0);
+        write(INSTRUCTION, dat);          
     }
 
-    void displayOnOffControl(uint8_t Disp, uint8_t Cursor, uint8_t Blink)
+    void displayOnOffControl(DISPLAY_STATUS d=DISP_ON, CURSOR_VISIBLE c=CURSOR_VISIBLE_OFF, BLINK_STATUS b=BLINK_OFF)
     {
         uint8_t dat = 0b00001000;
-        dat |= (Disp ? 4 : 0);
-        dat |= (Cursor ? 2 : 0);
-        dat |= (Blink ? 1 : 0);
-        write_lcd(0, dat);
-        wait_us(50);       
+        dat |= (d ? 4 : 0);
+        dat |= (c ? 2 : 0);
+        dat |= (b ? 1 : 0);
+        write(INSTRUCTION, dat);      
     }
 
-    void cursorOrDisplayShift(uint8_t SC, uint8_t RL)
+    void cursorOrDisplayShift(CURSOR_OR_DISPLAY_SHIFT sc=CURSOR_MOVE, CURSOR_OR_DISPLAY_SHIFT_DIR rl=SHIFT_RIGHT)
     {
         uint8_t dat = 0b00010000;
-        dat |= (SC ? 8 : 0);
-        dat |= (RL ? 4 : 0);
-        write_lcd(0, dat);
-        wait_us(50);  
+        dat |= (sc ? 8 : 0);
+        dat |= (rl ? 4 : 0);
+        write(INSTRUCTION, dat); 
     }
 
-    void functionSet(uint8_t DL=1, uint8_t N=1, uint8_t F=0)
+    void functionSet(INTERFACE_DATA_LENGTH dl=EIGHTBIT, INTERFACE_NUM_LINES n=TWOLINES, INTERFACE_FONT_SIZE f=FONT_5X8)
     {
         uint8_t dat = 0b00100000;
-        dat |= (DL ? 16 : 0);   //Data lines (0: 4 bit; 1: 8 bit)
-        dat |= (N ? 8 : 0);     //Number of display lines (0: 1 line; 1: 2 lines)
-        dat |= (F ? 4 : 0);     //Font: (0: 5x8; 1: 5x10)
-        write_lcd(0, dat);
-        wait_us(50);     
+        dat |= (dl ? 16 : 0);   //Data lines (0: 4 bit; 1: 8 bit)
+        dat |= (n ? 8 : 0);     //Number of display lines (0: 1 line; 1: 2 lines)
+        dat |= (f ? 4 : 0);     //Font: (0: 5x8; 1: 5x10)
+        write(INSTRUCTION, dat);     
     }    
+
+    void set_CGRAM_Address(uint8_t Addr)
+    {
+        uint8_t dat =  0b01000000;
+        dat |= (Addr & 0b00111111);
+        write(INSTRUCTION, dat);
+    }
+
+    void set_DDRAM_Address(uint8_t Addr)
+    {
+        uint8_t dat =  Addr & 0b01111111;
+        dat |= 0b10000000;
+        write(INSTRUCTION, dat);
+    }
+
+    bool isBusy()
+    {
+        return (read(INSTRUCTION) & 0b10000000) ? true : false;
+    }
+
+    void locate(uint8_t row, uint8_t column) {
+        _column = column;
+        _row = row;
+    }
+
+    uint8_t columns() {
+        switch (_type) {
+            case LCD20x4:
+            case LCD20x2:
+                return 20;
+            case LCD16x2:
+            case LCD16x2B:
+            default:
+                return 16;
+        }
+    }
+
+    uint8_t rows() {
+        switch (_type) {
+            case LCD20x4:
+                return 4;
+            case LCD16x2:
+            case LCD16x2B:
+            case LCD20x2:
+            default:
+                return 2;
+        }
+    }
+
+    // STDIO
+    virtual int _putc(int value) {
+        if (value == '\n') {
+            _column = 0;
+            _row++;
+            if (_row >= rows()) {
+                _row = 0;
+            }
+        } else {
+            character(_row, _column, value);
+            _column++;
+            if (_column >= columns()) {
+                _column = 0;
+                _row++;
+                if (_row >= rows()) {
+                    _row = 0;
+                }
+            }
+        }
+        return value;
+    }
+
+    virtual int _getc() {
+        return -1;
+    }
+
+
 };
