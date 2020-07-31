@@ -1,5 +1,4 @@
-//This is known as a “header file”. In short, this copies and pastes the text file mbed.h into this code
-#include "../lib/uopmsb/uop_msb_1_0_0.h"
+#include "mbed.h"
 
 // Create a DigitalOut “object” called greenLED. Pass constant LED1 as a “parameter”
 DigitalOut greenLED(LED1);
@@ -12,9 +11,6 @@ DigitalOut greenLED(LED1);
 //The main function - all executable C / C++ applications have a main function. This is our entry point in the software
 int main() 
 {
-    //Write a welcome message to the terminal
-    puts("Welcome to the University of Plymouth");
-
     // ALL the repeating code is contained in a  “while loop”
     while(true) 
     { 

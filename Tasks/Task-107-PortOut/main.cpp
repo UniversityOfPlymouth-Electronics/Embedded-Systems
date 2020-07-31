@@ -1,6 +1,7 @@
-#include "../uopmsb/uop_msb_1_0_0.h"
+#include "../lib/uopmsb/uop_msb_1_0_0.h"
+using namespace uop_msb_100;
 
-PwmOut Buzzer(BUZZER);
+PwmOut buzz(BUZZER_PIN);
 
 PortOut LED_PORTE(PortE, LED_MASK);
 
@@ -20,8 +21,8 @@ BusOut ledData(PE_2, PE_3, PE_4, PE_5, PE_6, PE_7, PE_8, PE_9);
 int main()
 {
     // Buzzer
-    Buzzer.period(0.001);   //1kHz
-    Buzzer = 0.5;           //50% Duty
+    buzz.period(0.001);   //1kHz
+    buzz = 0.5;           //50% Duty
     
     /********
      LED BAR
@@ -77,7 +78,7 @@ int main()
 
     //Wait for the button press
     while (BlueButton == 0);
-    Buzzer.suspend();
+    buzz = 0.0;
 
 
     volatile unsigned int pattern = 0b00000001;

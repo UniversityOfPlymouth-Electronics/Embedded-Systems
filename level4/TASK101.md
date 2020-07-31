@@ -24,9 +24,6 @@ DigitalOut greenLED(LED1);
 //The main function - all executable C / C++ applications have a main function. This is our entry point in the software
 int main() 
 {
-    //Write a welcome message to the terminal
-    puts("Welcome to the University of Plymouth");
-
     // ALL the repeating code is contained in a  “while loop”
     while(true) 
     { 
