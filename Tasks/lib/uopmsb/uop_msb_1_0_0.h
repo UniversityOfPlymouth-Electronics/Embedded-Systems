@@ -28,11 +28,11 @@
 
 
 // BUZZER
-#define BUZZER PB_13
+#define BUZZER_PIN PB_13
 
 // THE MATRIX
-#define MATRIX_LATCH PB_6
-#define MATRIX_OE PB_12
+#define MATRIX_LATCH_PIN PB_6
+#define MATRIX_OE_PIN PB_12
 
 // LCD
 #define LCD_D0_PIN PD_0
