@@ -29,7 +29,7 @@ A powerful tool in Mbed Studio is the "debugger". Although this tool is primaril
 
 Now repeat the steps yourself.
 
-## Clean up the files
+## Clean up the files (Option 1)
 With version 1.0 of Mbed studio, once built,each project consumes over 1Gb data on the local disk. Most of this is in the `mbed-os` folder within _each_ project. As we will be opening multiple projects and building them, this can quickly become problematic.
 
 > This is one reason why you should not set your `git` root folder inside the folder tree of OneDrive or any other cloud service.
@@ -41,6 +41,13 @@ Using Explorer (Windows) or Finder (Mac), you can delete the `BUILD` and `mbed-o
 <img src="../img/delete-BUILD.png" width="400">
 
 It is suggested you do not do this from within Mbed Studio itself.
+
+## Shared Libraries (Option 2 - preferred)
+If you have a lot of projects, each will consume in excess of 1Gb of disk space. Since Mbed Studio v1.2, there is an option to share library files between projects.
+
+[Click Here](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e0f201b1-5d95-4ee3-9584-ac330103b49e) to watch a video showing how this is done.
+
+It is suggested you use shared library files for your own work.
 
 ---
 
