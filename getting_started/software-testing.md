@@ -45,7 +45,7 @@ It is suggested you do not do this from within Mbed Studio itself.
 ## Shared Libraries (Option 2 - preferred)
 If you have a lot of projects, each will consume in excess of 1Gb of disk space. Since Mbed Studio v1.2, there is an option to share library files between projects.
 
-[Click Here](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e0f201b1-5d95-4ee3-9584-ac330103b49e) to watch a video showing how this is done.
+[Click Here](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=328ab29c-8301-4423-b905-ac33010f1f2a) to watch a video showing how this is done.
 
 It is suggested you use shared library files for your own work.
 
