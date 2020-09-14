@@ -232,7 +232,7 @@ The code between the curly-braces `{ }` is repeated forever. In general, you use
     { 
         ...
 
-        //CODE STATEMENTS GO HERE 
+        //REPEATING CODE STATEMENTS GO HERE 
 
         ...
     }
