@@ -96,9 +96,155 @@ In this video, we saw how the current was controlled by )_mechanical_ means.
 <img src="../img/components/switch.jpg" height="100">
 <figcaption>Mechanical push switch</figcaption>
 </figure>
+
 ## Controlling and LED with an electronic switch
 Watch the following video. This demonstrates a _transistor_, the electronic equivalent of a mechanical switch
 
 https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ec363cc0-3c20-427b-894c-ac0200f5595c
 
+Some key points from this video:
+
+* We use a device called a transistor to electronically control the current flow through the LED 
+* There are two types of transistor, the Field Effect Transistor (FET) and the Bi-Polar
+   * For the FET, the state of the transistor (ON or OFF) is controlled by a voltage (electrical field). Almost zero current flows into the device
+   * For the Bipolar, the state of the transistor is controlled by the input _current_
+
+For the software in [TASK101-1](TASK101-1), we controlled an LED with software.
+
+* A microcontroller pin can be switched ON (3.3V) or OFF (0V) through software, thus becomes a voltage source. However, it has a very limited capacity to source any current
+
+### General Purpose Input Output (GPIO)
+The microcontroller has many pins. Some of these can be configured for digital input or output. Such pins are known as General Purpose Input Output pins, or GPIO.
+
+When configured as an output, a GPIO pin acts as a voltate source and can adopt one of two possile values:
+
+* OFF - 0V
+* ON - 3.3V
+
+On the Nucleo board, there are 3 LEDs provided (LED1, LED2, LED3) each with a different colour (Green, Blue and Red). LED2 and LED3 are driven directly by the microcontroller using a circuit similar to the following:
+
+<figure>
+<img src=../img/circuit/directly_driving_led.bmp height=300/>
+<figcaption>Using a microcontroller pin (GPIO_PIN) to directly drive a the current through an LED</figcaption>
+</figure>
+
+This is a common thing to do as it is simple, but does not scale to many devices. On the module support board, there are many more LEDs, so transistors are used the reduce the current demands on the microcontroller:
+
+<figure>
+<img src=../img/circuit/transistor_as_switch.bmp height=400/>
+<figcaption>Using a microcontroller pin (GPIO_PIN) to control the current through an LED using a transistor</figcaption>
+</figure>
+
+Either way, using software to control the state of `GPIO_PIN` allows us to switch current on and off through the LED.
+
+Let's now look at the code:
+
+### Controlling a GPIO through software
+On modern microcontrollers, there are many on-chip devices. It is not common to use all these devices. In fact, there are rarely enough pins to use all devices at once. Therefore, pins support multiple functions. 
+
+For example, a single pin might be able to support ONE of the following:
+
+* Digital Input / Output
+* PWM Output
+* Serial Interface Clock Output
+
+Don't worry about what these devices are (yet). All we need to now is that we need to select which function we wish to use. In Mbed, this is made very simple. In our code, we saw the following line:
+
+```C++
+DigitalOut greenLED(LED1);
+```
+
+where `LED1` is the pin name. Actually, `LED1` is synonamous with pin `PB_0` (try hovering the mouse over `LED1` in Mbed Studio and read the pop-up).
+
+> We say the pin PB_0 is located on PORTB, pin 0
+
+It is labelled `LED1` to make the code more readable. We could equally have written:
+
+```C++
+DigitalOut greenLED(PB_0);
+```
+
+> The effect of this line is to configure pin PB_0 as a GPIO pin, _configured as an output_ (also known as a digital output).
+
+Having done this, we can the **control** the state of this pin. To switch it to the ON state (3.3V), we can write the following:
+
+```C++
+greenLED = 1;
+```
+> NOTE
+> 
+> This is using a little bit of "C++ Magic" to make code look pretty. Another way to write the exact same thing would be:
+>
+> `greenLED.write(1);`
+> 
+> but this is less readable.
+
+To switch it to the OFF state (0V), we can write the following:
+
+```C++
+greenLED = 0;
+```
+
+If we were to switch the pin ON and OFF in successsion:
+
+```C++
+greenLED = 1;
+greenLED = 0;
+```
+
+we would never see the LED light up. This is because it happens so fast. Therefore, we need to add a delay between these actions:
+
+```C++
+greenLED = 1; 
+
+// Wait 1 second (1 million microseconds)
+wait_us(1000000); 
+
+greenLED = 0;
+```
+
+The line `wait_us(1000000);` adds a pause of 1s (1,000,000 microseconds). In fact, under the hood, this engages another on-chip device known as a **hardware timer**. We will meet timers again later in the course.
+
+### Repeating Forever with a while-loop
+Of course, this example switches the LED ON and OFF until the power is turned off. We say it loops.
+
+> This is bit like saying you "play a song on loop", whereby you play the same song (or collcetion of songs over and over again). My kids like to do this :)
+
+To see this, we step out a bit, and look at the `while-loop`
+
+```C++
+    while(true) 
+    { 
+        ...
+
+        //CODE STATEMENTS GO HERE 
+
+        ...
+    }
+```
+
+We will meet these loops more formally later, but for now, we can hopefully get some insight into what this does. 
+
+The code between the curly-braces `{ }` is repeated forever. In general, you use a while-loop with a condition (somethat that is resolved as `true` or `false`)
+
+```C++
+    while(<condition>) 
+    { 
+        ...
+
+        //CODE STATEMENTS GO HERE 
+
+        ...
+    }
+
+    ...
+
+    // Code here can only be run once the condition is false
+
+    ...
+
+```
+
+* If the condition is true, the code between the braces is run, then the condition is tested again. It will keep repeating as long as the condition is true.
+* If the condition ever becomes false, then the whole loop is skipped.
 
