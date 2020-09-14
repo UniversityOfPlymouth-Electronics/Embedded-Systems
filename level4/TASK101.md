@@ -225,7 +225,7 @@ To see this, we step out a bit, and look at the `while-loop`
 
 We will meet these loops more formally later, but for now, we can hopefully get some insight into what this does. 
 
-The code between the curly-braces `{ }` is repeated forever. In general, you use a while-loop with a condition (somethat that is resolved as `true` or `false`)
+The code between the curly-braces `{ }` is repeated forever. In general, you use a `while-loop` with a **condition** (something that is resolved as `true` or `false`)
 
 ```C++
     while(<condition>) 
@@ -245,6 +245,30 @@ The code between the curly-braces `{ }` is repeated forever. In general, you use
 
 ```
 
-* If the condition is true, the code between the braces is run, then the condition is tested again. It will keep repeating as long as the condition is true.
-* If the condition ever becomes false, then the whole loop is skipped.
+* If the condition is `true`, the code between the braces is run, then the condition is tested again. It will keep repeating as long as the condition is `true`.
+* If the condition ever becomes `false`, then the whole loop is skipped.
 
+> **EXPERIMENT**
+>
+> Try changing the condition to the keyword `false`
+>
+> Using the debug mode, step through the code line by line. How often does the code between the braces { } run?
+>
+> Do you understand why?
+>
+> Now replace `false` with the condition `1<2`, such that you write:
+>
+> ```C++
+> while (1<2)
+> {
+>    ...`
+>
+> Again, test by stepping through your code.
+
+## Quiz
+Click the following link and answer the questions as best you can. This is purely formative (just for feedback). You  are not being assessed!
+
+
+[CLICK THIS LINK](https://forms.office.com/Pages/ResponsePage.aspx?id=6-c3VPuDGk2_07skfgYb8XOZulv_kVlCjUXVUJQ1RZVUMUpTODYzMUlXTzNMWEdETjNLUVcyMkJEOS4u)
+
+Note that these quizzes are used to monitor student engagement and to help the tutor provide feedback when required.
