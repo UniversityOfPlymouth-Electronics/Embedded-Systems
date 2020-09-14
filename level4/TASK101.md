@@ -54,14 +54,15 @@ int main()
 | `//DigitalOut redLED(LED3);` |
 | *Challenge*  -Your task is to make a sequence alternating between Green+Red and just Blue. [See this video as a demonstration](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b0ac1b2-56eb-4108-ae83-abff00ff02ae) |
 
+Before we write any more code, let's step away and look at the electronics.
 
 ##  A Little bit of Electronics
-So what is going on here? Hopefully you can see the connection between the lines of code and the effect, but what you might now be aware of is the electronics.
+So what is going on here? Hopefully you can see the connection between the lines of code and the effect, but what you might not be aware of is the electronics.
 
 In electronics, we mostly work with one (or both) of the following signal types :
 
-* Analogue - where voltages and currents can take any value, typically between and upper and lower limit
-* Digital - where signal voltages can only be one of two possible values
+* **Analogue** - where voltages and currents can take any value, typically between and upper and lower limit
+* **Digital** - where signal voltages can only be one of two possible values
 
 For this section, the signals are all going to be digital. Let’s start with a simple circuit diagram, or schematic as it’s also known, as shown below:
 
@@ -69,14 +70,14 @@ For this section, the signals are all going to be digital. Let’s start with a 
 
 Consider the following circuit diagram (also known as a **schematic**):
 
-1. **Constant Voltage Source**. Think of this as the “perfect battery”. What ever the current `I` flowing in the circuit, the voltage across this device is ALWAYS V<sub>out</sub>. In our circuit, this will be typically be 3.3 Volts
+1. **Constant Voltage Source**. Think of this as the “perfect battery”. What ever the current `I` flowing in the circuit, the voltage across this device is **always** V<sub>out</sub>. In our circuit, this will be typically be 3.3 Volts
 1. **Resistor**. This is used to limit the current `I` that flows through the LED (to avoid damaging it and to save power). Resistors have a resistance property measured in Ohms (symbol &Omega; ).
 1. **Light Emitting Diode (LED)** - A non-linear device that emits photons of light when an electrical current passes through it. Current can only flow in one direction. Different LEDs have different characteristics.
 
 | **TASK 101-2** |
 | --- |
 | Read more about the LED [here](/glossary/led.md) |
-| Now calculate a suitable current limiting resistor value for the RED and AMBER LEDs in your kit. The data is below || Enter your answers in the form |
+| Now calculate a suitable current limiting resistor value for the RED and AMBER LEDs in your kit. The data is below: 
 
 | Colour | current (approx.)	| Voltage |
 | --- | --- | --- |
@@ -84,8 +85,20 @@ Consider the following circuit diagram (also known as a **schematic**):
 | AMBER | 2mA | 1.85V |
 
 
-## Controlling an LED
-
+## Controlling an LED with a mechanical switch
+Watch the following video. This explains how a mechanical switch can be used to control a current through an LED, causing it to light up:
 
 https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2cba4d8a-123a-4fd0-bf4f-ac0200f2b66b
+
+In this video, we saw how the current was controlled by )_mechanical_ means.
+
+<figure>
+<img src="../img/components/switch.jpg" height="100">
+<figcaption>Mechanical push switch</figcaption>
+</figure>
+## Controlling and LED with an electronic switch
+Watch the following video. This demonstrates a _transistor_, the electronic equivalent of a mechanical switch
+
+https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ec363cc0-3c20-427b-894c-ac0200f5595c
+
 

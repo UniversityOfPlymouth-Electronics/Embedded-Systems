@@ -5,10 +5,11 @@ This content has been migrated from [a previous version](http://blogs.plymouth.a
 
 Changes for 2020:
 
-* Adoption of Mbed Studio v1.0
+* Adoption of Mbed Studio v1.X
 * Adoption of Mbed-os 6.X
 * More content on the fundamentals of C and C++ programming
 * The [existing glossary](http://blogs.plymouth.ac.uk/embedded-systems/glossary-2/) is being migrated to a [new version](/glossary/README.md) 
+* Blended delivery model
 
 # Level 4 Course
 If you are a student at the University of Plymouth, welcome to the first lab!
@@ -17,7 +18,7 @@ As a guide, each section should take approximately 2 lab sessions (4-6 Hrs / sec
 
 | Wk | Section | Title |
 | --- | --- | --- |
-| 1-2 | 1 | [Digital Outputs](Digital_Outputs.md) |
+| 1-2 | 1 | [Digital Outputs](Digital_Outputs_1.md) |
 | 3   | 2 | Potential Dividers |
 | 3-5 | 3 | Digital Inputs and Multiple Outputs |
 | 6-7 | 4 | Analogue Input |
@@ -83,4 +84,4 @@ There you will find links to recorded lectures. You can also subscribe to these 
 
 ---
 
-[NEXT - Digital Outputs](Digital_Outputs.md)
+[NEXT - Digital Outputs: Week 1](Digital_Outputs_1.md)
