@@ -164,9 +164,13 @@ It is labelled `LED1` to make the code more readable. We could equally have writ
 DigitalOut greenLED(PB_0);
 ```
 
-> The effect of this line is to configure pin PB_0 as a GPIO pin, _configured as an output_ (also known as a digital output).
+> In C++, we say we have created a software _object_ `greenLED` of _type_ `DigitalOut`. We have pass the pin name `PB_0` as a _parameter_ so that the electronics inside the chip can be set up accordingly. The code to do this is cleverly hidden from us.
+>
+> Note the jargon in _italics_. These are terms we will keep meeting.
+>
+> The effect of this line is to configure pin PB_0 as a GPIO pin, _configured as a digital output_.
 
-Having done this, we can the **control** the state of this pin. To switch it to the ON state (3.3V), we can write the following:
+Having done this, we can now easily **control** the state of this pin using the _object_ `greenLED`. To switch it to the ON state (3.3V), we can write the following:
 
 ```C++
 greenLED = 1;
@@ -185,6 +189,7 @@ To switch it to the OFF state (0V), we can write the following:
 greenLED = 0;
 ```
 
+#### Flashing the LED
 If we were to switch the pin ON and OFF in successsion:
 
 ```C++
@@ -256,19 +261,40 @@ The code between the curly-braces `{ }` is repeated forever. In general, you use
 >
 > Do you understand why?
 >
-> Now replace `false` with the condition `1<2`, such that you write:
+> Now replace `false` with the condition `1<2`, such that you replace:
+>
+> ```C++
+> while (true)
+> ```
+> with
 >
 > ```C++
 > while (1<2)
-> {
->    ...`
+> ```
 >
 > Again, test by stepping through your code.
 
-## Quiz
-Click the following link and answer the questions as best you can. This is purely formative (just for feedback). You  are not being assessed!
+## A word about objects
+In the text above, there was a mention of software _ojects_. These are part of the C++ language. 
+
+> NOTE that the concept of an object does **not** feature in the C language (which is a subset of C++)
+
+C++ is said to be an "object orientated programming" (OOP) language". The Mbed-OS framework relies heavily on OOP to make it so easy and quick to write applications.
+
+> Just writing `DigitalOut led(PB_0);` invokes many lines of (hidden) code.
+
+We will be reusing many of the objects in Mbed OS over the coming weeks, but not writing any until much later in the course. OOP is a subject which needs further study.
+
+## Quiz (required)
+Click the following link and answer the questions as best you can. This is purely formative (just for feedback). You  are not being assessed! However, it is used to inform staff about student progress so they can help you. It is also evidence of engagement / attendance.
 
 
-[CLICK THIS LINK](https://forms.office.com/Pages/ResponsePage.aspx?id=6-c3VPuDGk2_07skfgYb8XOZulv_kVlCjUXVUJQ1RZVUMUpTODYzMUlXTzNMWEdETjNLUVcyMkJEOS4u)
+[CLICK THIS LINK](https://dle.plymouth.ac.uk/mod/quiz/view.php?id=943383)
 
 Note that these quizzes are used to monitor student engagement and to help the tutor provide feedback when required.
+
+Next, we are going to build on what you have learned so far and try to write some simple code.
+
+---
+
+[NEXT - Task 102 - SOS](TASK102.md)
