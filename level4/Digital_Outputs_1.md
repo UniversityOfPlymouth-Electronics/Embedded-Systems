@@ -41,8 +41,8 @@ Now attempt each of the following tasks in sequence. Before you start, it is sug
 
  1. [Getting Started](../getting_started/README.md)
  1. [Task 101 - Blinky](TASK101.md) 
- 1. [Task 102 - SOS]()
- 1. [Task 103 - Hello World]()
+ 1. [Task 102 - SOS](TASK102.md)
+ 1. [Task 103 - Hello World](TASK103.md)
 
 ---
 

@@ -1,3 +1,7 @@
+[Up - Digital Outputs: Week 1](Digital_Outputs_1.md)
+
+--- 
+
 # Task101 Blinky
 This is the first application which you will download and build. 
 
@@ -291,7 +295,7 @@ Click the following link and answer the questions as best you can. This is purel
 
 [CLICK THIS LINK](https://dle.plymouth.ac.uk/mod/quiz/view.php?id=943383)
 
-Note that these quizzes are used to monitor student engagement and to help the tutor provide feedback when required.
+> **Note** that these quizzes are used to monitor student engagement and to help the tutor provide feedback when required. *Please ensure you complete them before moving to the next task*.
 
 Next, we are going to build on what you have learned so far and try to write some simple code.
 
