@@ -7,8 +7,14 @@ DigitalOut greenLED(TRAFFIC1_GRN_PIN);
 Buzzer buzz;
 Buttons buttons;
 
+// TIP: (I suggest you read this!)
+//
+// Press the black reset button to restart the code (and stop the sound)
+// Otherwise, the noise can be "distracting" :)
+
 int main()
 {
+    //Wait for the BLUE button to be pressed (otherwise this becomes super annoying!)
     while (buttons.BlueButton == 0);
     
     //Repeat everything "forever" (until the power is removed or the chip is reset)

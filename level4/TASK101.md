@@ -135,7 +135,7 @@ On the Nucleo board, there are 3 LEDs provided (LED1, LED2, LED3) each with a di
 This is a common thing to do as it is simple, but does not scale to many devices. On the module support board, there are many more LEDs, so transistors are used the reduce the current demands on the microcontroller:
 
 <figure>
-<img src=../img/circuit/transistor_as_switch.bmp height=400/>
+<img src=../img/circuit/micro_driving_bipolar.jpg>
 <figcaption>Using a microcontroller pin (GPIO_PIN) to control the current through an LED using a transistor</figcaption>
 </figure>
 

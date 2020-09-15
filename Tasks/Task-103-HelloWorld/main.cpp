@@ -1,8 +1,13 @@
 #include "../lib/uopmsb/uop_msb_1_0_0.h"
 using namespace uop_msb_100;
 
-#define WAIT_TIME_MS 500 
-DigitalOut led1(LED1);
+#define WAIT_TIME_MS 2000
+
+//Initialise the DigitalOut objects with a default value of 1
+DigitalOut ledGreen(LED1,1);
+DigitalOut ledBlue(LED2,1);
+DigitalOut ledRed(LED3,1);
+
 LCD_16X2_DISPLAY lcd;
 
 int main()
@@ -10,17 +15,37 @@ int main()
     // Write to serial terminal on host PC
     printf("Hello World\n");
 
+    // Clear the LCD screen
+    lcd.cls();
+
+    //Small pause for 1s
+    wait_us(1000 * WAIT_TIME_MS);
+
+    //Turn off all the LEDs
+    ledRed = 0;
+    ledGreen = 0;
+    ledBlue = 0;
+
     // Write to LCD using the LCD_16X2_DISPLAY driver class
     lcd.printf("Hello World");
     lcd.locate(1, 0);   //Row 1, Col 0
     lcd.printf("ELEC143");
 
-    // printf can do a lot more
-    printf("This is the bare metal blinky example running on Mbed OS %d.%d.%d.\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+    // This is a variable (not an oject as it has no functions) that stores a whole number (integer)
+    int counter = 0;
 
     while (true)
     {
-        led1 = !led1;
+        //Toggle the LED
+        ledBlue = !ledBlue;
+
+        //Add 1 to the counter "variable"
+        counter = counter + 1;
+
+        //Display in the terminal
+        printf("Count: %d\n", counter);
+
+        //Wait
         wait_us(WAIT_TIME_MS * 1000);
     }
 }
