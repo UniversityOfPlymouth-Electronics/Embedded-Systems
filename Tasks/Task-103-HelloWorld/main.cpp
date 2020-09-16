@@ -35,24 +35,18 @@ int main()
     // (I used the keyword volatile to force it to use memory... long story and one for later)
     volatile int counter = 0;
 
-    while (counter < 10)
+    while (true)
     {
         //Toggle the LED
         ledBlue = !ledBlue;
+
+        //Add 1 to the counter "variable"
+        counter = counter + 1;
 
         //Display in the terminal
         printf("Count: %d\n", counter);
 
         //Wait
         wait_us(WAIT_TIME_MS * 1000);
-
-        //Add 1 to the counter "variable"
-        counter = counter + 1;        
     }
-
-    ledRed = 1;
-    ledGreen = 1;
-    ledBlue = 1;
-
-    wait_us(osWaitForever);
 }
