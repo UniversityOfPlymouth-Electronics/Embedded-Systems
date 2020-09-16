@@ -7,13 +7,13 @@ In this task, you are going to try and write some code for yourself, using code 
 
 | TASK | Details |
 | --- | --- |
-| 1 | Set TASK-102-SOS as the active project |
+| 1 | Set `TASK-102-SOS` as the active project |
 | 2 | Build the project |
 | 3 | Run the code. Press the BLUE button the Nucleo board to start |
 | 4 | Press the BLACK reset button to reset the Nucleo board |
 | 5 | Now debug the code, stepping line by line to understand the flow of the code |
 | 6 | Modify the code to repeatedly play a major scale (C,D,E,F,G,A,B,C). Each note should last 250 ms (250,000 &micro;S)
- 
+|| 
 
 ## Task102 - 2 SOS
 Next, we are going to take the idea above and extend it to something closer to a real-world application. The task is to get the board to output the morse-code for SOS (both with light and sound):
@@ -21,6 +21,7 @@ Next, we are going to take the idea above and extend it to something closer to a
 | TASK | Details |
 | --- | --- |
 | 7 | Modify the code to repeatedly output the morse code for SOS (details below). Ensure the LED is ON while a tone is playing and OFF during a pause |
+|| 
 
 <figure>
 <img src="../img/sos.png" width=300>
