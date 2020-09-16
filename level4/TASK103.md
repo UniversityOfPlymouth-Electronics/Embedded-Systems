@@ -31,7 +31,7 @@ There is a lot more going on in this example. To try and see what you've underst
 | | d. | Describe the function/purpose of the statement `counter = counter + 1;` **Tip**: Hover your mouse over `counter` in Mbed Studio to watch it's value before and after. | <p title="It increments the value of counter by 1">Answer</p> |
 | | e. | The following outputs some text: `printf("Count: %d\n", counter);`. Is this the same text every time? | <p title="No. It includes a variable quantity derived from counter">Answer</p> |
 | 8 | | Modify the code inside the while-loop to flash all the LEDs (hint: you only need to add two lines) | - |
-||
+
 
 > The answers to the questions can be revlealed by hovering your mouse over the word `Answer`.
 
@@ -138,7 +138,6 @@ In the example above, the LEDs flash forever. The microcontroller will keep doin
 | --- | --- | --- | 
 | 11 |  | Modify the code to count from 0 to 4, then stop. You only need to modify one thing to achieve this |
 | 12 |  | Modify the code to count from 10 to 15, then stop. <p title="Change the initial value of counter">Hover the mouse here for a hint</p> |
-|  |
 
 ## Quiz
 Before you complete this section, please ensure you complete the quiz.
