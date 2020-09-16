@@ -1,5 +1,5 @@
 ![](./resources/official_armmbed_example_badge.png)
-# Base don the Bare metal blinky Mbed OS example
+# Based on the Bare metal blinky Mbed OS example
 
 ## Description
 This application simply flashes the LED on and off. Every 1s we "toggle" the LED.
