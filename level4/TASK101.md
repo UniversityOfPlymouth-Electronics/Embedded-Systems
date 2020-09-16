@@ -113,7 +113,7 @@ Some key points from this video:
    * For the FET, the state of the transistor (ON or OFF) is controlled by a voltage (electrical field). Almost zero current flows into the device
    * For the Bipolar, the state of the transistor is controlled by the input _current_
 
-For the software in [TASK101-1](TASK101-1), we controlled an LED with software.
+For the software in [TASK101-1](#TASK101-1), we controlled an LED with software.
 
 * A microcontroller pin can be switched ON (3.3V) or OFF (0V) through software, thus becomes a voltage source. However, it has a very limited capacity to source any current
 
