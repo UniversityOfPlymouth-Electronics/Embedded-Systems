@@ -1,28 +1,27 @@
-#include "../lib/uopmsb/uop_msb_1_0_0.h"
-using namespace uop_msb_100;
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
-PwmOut buzz(BUZZER_PIN);
+Buzzer buzz;
 
 PortOut LED_PORTE(PortE, LED_MASK);
 
-DigitalOut LED_BAR_OE(PE_0,1);      //Off by default
-DigitalOut LED_DIGIT_OE(PE_15,1);   //Off by default
+DigitalOut LED_BAR_OE(LED_BAR_OE_PIN,1);      //Off by default
+DigitalOut LED_DIGIT_OE(LED_DIGIT_OE_PIN,1);   //Off by default
 
-DigitalOut LED_D1_LE(PE_10,0);
-DigitalOut LED_D2_LE(PE_11,0);
-DigitalOut LED_RED_LE(PE_12,0);
-DigitalOut LED_GRN_LE(PE_13,0);
-DigitalOut LED_BLUE_LE(PE_14,0);
+DigitalOut LED_D1_LE(LED_D1_LE_PIN,0);
+DigitalOut LED_D2_LE(LED_D2_LE_PIN,0);
+DigitalOut LED_RED_LE(LED_RED_LE_PIN,0);
+DigitalOut LED_GRN_LE(LED_GRN_LE_PIN,0);
+DigitalOut LED_BLUE_LE(LED_BLUE_LE_PIN,0);
 
 DigitalIn BlueButton(USER_BUTTON);
 
-BusOut ledData(PE_2, PE_3, PE_4, PE_5, PE_6, PE_7, PE_8, PE_9);
+BusOut ledData(LED_D0_PIN, LED_D1_PIN, LED_D2_PIN, LED_D3_PIN, LED_D4_PIN, LED_D5_PIN, LED_D6_PIN, LED_D7_PIN);
 
 int main()
 {
     // Buzzer
-    buzz.period(0.001);   //1kHz
-    buzz = 0.5;           //50% Duty
+    buzz.playTone("C",Buzzer::HIGHER_OCTAVE);
     
     /********
      LED BAR
@@ -78,7 +77,7 @@ int main()
 
     //Wait for the button press
     while (BlueButton == 0);
-    buzz = 0.0;
+    buzz.rest();
 
 
     volatile unsigned int pattern = 0b00000001;

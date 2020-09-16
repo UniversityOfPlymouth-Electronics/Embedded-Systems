@@ -1,11 +1,11 @@
-#include "../lib/uopmsb/uop_msb_1_0_0.h"
-using namespace uop_msb_100;
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
 #define WAIT_TIME_MS 500 
 
-DigitalOut red(TRAFFIC1_RED_PIN,1);         //Note the initial state
-DigitalOut amber(TRAFFIC1_YELL_PIN,0);
-DigitalOut green(TRAFFIC1_GRN_PIN,0);
+DigitalOut red(TRAF_RED1_PIN,1);         //Note the initial state
+DigitalOut amber(TRAF_YEL1_PIN,0);
+DigitalOut green(TRAF_GRN1_PIN,0);
 
 LCD_16X2_DISPLAY lcd;
 
