@@ -94,9 +94,10 @@ int main()
 ## More on while-loops
 In the example above, the LEDs flash forever. The microcontroller will keep doing this as long as power is provided. To explore this a little deeper, let's make a simple change to the code. 
 
-| TASK | | DETAILS |
+| TASK | | DETAILS | Answer |
 | --- | --- | --- | --- |
-| 9 |  | Replace the while-loop with the code shown below |
+| 9 | - | Replace the while-loop with the code shown below: | - |
+
 
 ```C++
     while (counter < 10)
