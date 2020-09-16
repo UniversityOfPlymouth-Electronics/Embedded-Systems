@@ -15,10 +15,24 @@ So far we have seen two types of output, light (GPIO connected to an LED) and so
 | 3 | In Mbed Studio, click the View menu and select `Serial Monitor` |
 | 4 | Run the code |
 | 5 | Verify you can read the text on the LCD screen |
-| 6 | Verify you can see the text output in the serial monitor (a tab called something such as _NUCLEO-F429ZI) 
+| 6 | Verify you can see the text output in the serial monitor (usually a tab called _NUCLEO-F429ZI) |
+| 7 | Watch the following video: |
 
+https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e32836bc-ecdf-40f4-9ed3-ac37011155fb
 
-There is a lot more going on in this example!
+There is a lot more going on in this example. To try and see what you've understood, attempt the following tasls:
+
+| TASK | | DETAILS |
+| --- | --- | --- |
+| 7 | - | Using the debugging mode, step through the code line by line and try to work out the following: |
+| | a. | Note what the statement `printf("Hello World\n");` does. On which computer does the output appear? |
+| | b. | Same for `lcd.printf("Hello World");`. On which computer does the output appear? |
+| | c. | Describe the function/purpose of the statement `ledBlue = !ledBlue;` |
+| | d. | Describe the function/purpose of the statement `counter = counter + 1;` **Tip**: Hover your mouse over `counter` to watch it's value before and after. |
+| | e. | The following outputs some text: `printf("Count: %d\n", counter);`. Is this the same text every time? |
+||
+
+That's quite a lot, and don't feel bad if you're not sure.
 
 ```C++
 #include "../lib/uopmsb/uop_msb_1_0_0.h"
@@ -55,7 +69,7 @@ int main()
     lcd.printf("ELEC143");
 
     // This is a variable (not an oject as it has no functions) that stores a whole number (integer)
-    int counter = 0;
+    volatile int counter = 0;
 
     while (true)
     {
@@ -73,9 +87,8 @@ int main()
     }
 }
 ```
-
-
 ## Quiz
+
 
 ---
 

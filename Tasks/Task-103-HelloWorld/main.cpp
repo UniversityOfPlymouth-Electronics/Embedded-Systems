@@ -31,8 +31,9 @@ int main()
     lcd.locate(1, 0);   //Row 1, Col 0
     lcd.printf("ELEC143");
 
-    // This is a variable (not an oject as it has no functions) that stores a whole number (integer)
-    int counter = 0;
+    // This is a variable (not an oject as it has no functions) that stores a whole number (integer) in memory
+    // (I used the keyword volatile to force it to use memory... long story and one for later)
+    volatile int counter = 0;
 
     while (true)
     {
