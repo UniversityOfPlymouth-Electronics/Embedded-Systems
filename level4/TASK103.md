@@ -20,7 +20,7 @@ So far we have seen two types of output, light (GPIO connected to an LED) and so
 
 https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e32836bc-ecdf-40f4-9ed3-ac37011155fb
 
-There is a lot more going on in this example. To try and see what you've understood, attempt the following tasls:
+There is a lot more going on in this example. To try and see what you've understood, attempt the following tasks:
 
 | TASK | | DETAILS | Answer |
 | --- | --- | --- | --- |
@@ -33,7 +33,7 @@ There is a lot more going on in this example. To try and see what you've underst
 | 8 | | Modify the code inside the while-loop to flash all the LEDs (hint: you only need to add two lines) | - |
 
 
-> The answers to the questions can be revlealed by hovering your mouse over the word `Answer`.
+> The answers to the questions can be revealed by hovering your mouse over the word `Answer`.
 
 That's quite a lot, and don't feel bad if you're not sure. For reference, the code for this exercise is shown below:
 

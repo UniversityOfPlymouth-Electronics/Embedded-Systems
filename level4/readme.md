@@ -73,7 +73,7 @@ Join the appropriate meeting by clicking the link. You can turn off your video a
 Labs will contain interactive elements. Participating in these is important.
 
 ## Lectures
-Each week there is a lecture, which often includes live recorded demos. By the time you read this, the first lecture will have been delivered and recorded.
+Each week there is a lecture, which often includes live recorded demo's. By the time you read this, the first lecture will have been delivered and recorded.
 
 If you did not manage to attend the lecture for this week, please ensure you catch up via the video hosted on the [DLE](https://dle.plymouth.ac.uk).
 
@@ -81,7 +81,7 @@ If you did not manage to attend the lecture for this week, please ensure you cat
 
 <img src="../img/PanoptoBlock.png" width=300>
 
-There you will find links to recorded lectures. You can also subscribe to these if you have a RSS on your computer or smartdevice.
+There you will find links to recorded lectures. You can also subscribe to these if you have a RSS on your computer or smart-device.
 
 > Panopto is our University video streaming service. It supports multiple video streams, closed captions and chapter points. This makes it much easier for students to find content within a video.
 >

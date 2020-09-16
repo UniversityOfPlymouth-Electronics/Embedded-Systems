@@ -120,7 +120,7 @@ For the software in [TASK101-1](TASK101-1), we controlled an LED with software.
 ### General Purpose Input Output (GPIO)
 The microcontroller has many pins. Some of these can be configured for digital input or output. Such pins are known as General Purpose Input Output pins, or GPIO.
 
-When configured as an output, a GPIO pin acts as a voltate source and can adopt one of two possile values:
+When configured as an output, a GPIO pin acts as a voltage source and can adopt one of two possible values:
 
 * OFF - 0V
 * ON - 3.3V
@@ -158,7 +158,7 @@ Don't worry about what these devices are (yet). All we need to now is that we ne
 DigitalOut greenLED(LED1);
 ```
 
-where `LED1` is the pin name. Actually, `LED1` is synonamous with pin `PB_0` (try hovering the mouse over `LED1` in Mbed Studio and read the pop-up).
+where `LED1` is the pin name. Actually, `LED1` is synonymous with pin `PB_0` (try hovering the mouse over `LED1` in Mbed Studio and read the pop-up).
 
 > We say the pin PB_0 is located on PORTB, pin 0
 
@@ -194,7 +194,7 @@ greenLED = 0;
 ```
 
 #### Flashing the LED
-If we were to switch the pin ON and OFF in successsion:
+If we were to switch the pin ON and OFF in succession:
 
 ```C++
 greenLED = 1;
@@ -217,7 +217,7 @@ The line `wait_us(1000000);` adds a pause of 1s (1,000,000 microseconds). In fac
 ### Repeating Forever with a while-loop
 Of course, this example switches the LED ON and OFF until the power is turned off. We say it loops.
 
-> This is bit like saying you "play a song on loop", whereby you play the same song (or collcetion of songs over and over again). My kids like to do this :)
+> This is bit like saying you "play a song on loop", whereby you play the same song (or collection of songs over and over again). My kids like to do this :)
 
 To see this, we step out a bit, and look at the `while-loop`
 
@@ -279,7 +279,7 @@ The code between the curly-braces `{ }` is repeated forever. In general, you use
 > Again, test by stepping through your code.
 
 ## A word about objects
-In the text above, there was a mention of software _ojects_. These are part of the C++ language. 
+In the text above, there was a mention of software _objects_. These are part of the C++ language. 
 
 > NOTE that the concept of an object does **not** feature in the C language (which is a subset of C++)
 
