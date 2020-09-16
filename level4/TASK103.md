@@ -94,9 +94,9 @@ int main()
 ## More on while-loops
 In the example above, the LEDs flash forever. The microcontroller will keep doing this as long as power is provided. To explore this a little deeper, let's make a simple change to the code. 
 
-| TASK | | DETAILS | Answer |
-| --- | --- | --- | --- |
-| 9 | - | Replace the while-loop with the code shown below: | - |
+| TASK | | DETAILS |
+| --- | --- | --- |
+| 9 | - | Replace the while-loop with the code shown below: |
 
 
 ```C++
@@ -122,12 +122,13 @@ In the example above, the LEDs flash forever. The microcontroller will keep doin
     wait_us(osWaitForever);
 ```
 
-| TASK | | DETAILS | Answer |
+| TASK |  | DETAILS | Answer |
 | --- | --- | --- | --- |
 | 10  | a. | Use the debugger to step through this code to ensure you fully understand it. Pay particular attention on the value of `counter` and the behaviour of the `while` statement | - |
 |  | b. | How many times does the value of `counter` get written to the serial console? | <p title="10 times"> Answer </p> |
 |   | c. | What are the first and last values of `counter` that are displayed? | <p title="0 and 9"> Answer </p> |
 |   | d. | Use the debugger to find out the final value of `counter` (not necessarily the same as the last displayed value) | <p title="10"> Answer </p> |
+
 
 > Checking your answers:
 > 
