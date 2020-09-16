@@ -1,6 +1,6 @@
 //#include "mbed.h"
-#include "../lib/uopmsb/uop_msb_1_0_0.h"
-using namespace uop_msb_100;
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
 DigitalOut led1(LED1);
 DigitalOut led2(LED2);
