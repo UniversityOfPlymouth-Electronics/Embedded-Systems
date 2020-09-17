@@ -40,7 +40,7 @@ Next, we are going to take the idea above and extend it to something closer to a
 
 Assume SOS is one word.
 
-## A closer look a t sound output
+## A closer look at sound output
 Let's look at the code to see what is new. First of all, a new object _type_ is created in the code:
 
 ```C++
