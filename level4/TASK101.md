@@ -125,7 +125,7 @@ When configured as an output, a GPIO pin acts as a voltage source and can adopt 
 * OFF - 0V
 * ON - 3.3V
 
-On the Nucleo board, there are 3 LEDs provided (LED1, LED2, LED3) each with a different colour (Green, Blue and Red). LED2 and LED3 are driven directly by the microcontroller using a circuit similar to the following:
+On the Nucleo board, there are 3 LEDs provided (LED1, LED2, LED3) each with a different colour (Green, Blue and Red). These LEDs are driven directly by the microcontroller using a circuit similar to the following:
 
 <figure>
 <img src=../img/circuit/directly_driving_led.bmp height=300/>
