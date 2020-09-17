@@ -2,7 +2,7 @@
 
 ---
 
-# Digital Outputs (week 2)
+# Digital Outputs (Week 2)
 We continue from last week still focusing on digital output and more aspects of the C/C++ programming language.
 
 ## Lectures
