@@ -22,7 +22,7 @@ As a guide, each section should take approximately 2 lab sessions (4-6 Hrs / sec
 
 | Wk | Section | Title |
 | --- | --- | --- |
-| 1-2 | 1 | Digital Outputs: [Week 1](Digital_Outputs_1.md), [Week 2](Digital_Outputs_1.md) |
+| 1-2 | 1 | Digital Outputs: [Week 1](Digital_Outputs_1.md), [Week 2](Digital_Outputs_2.md) |
 | 3   | 2 | Potential Dividers |
 | 3-5 | 3 | Digital Inputs and Multiple Outputs |
 | 6-7 | 4 | Analogue Input |
