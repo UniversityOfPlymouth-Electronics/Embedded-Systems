@@ -31,6 +31,7 @@ You will use this board throughout your course. It is surprisingly capable for s
 ## University of Plymouth Module Support Board
 The [Nucleo Target Board](#Target-Board) contains a few _peripherals_, including a push switch, three [Light Emitting Diodes (LEDs)](/glossary/led.md). 
 
+
 > Peripherals refer to external devices connected (interfaced) to the microcontroller chip. These are either input devices (such as a switch, or a temperature sensor) or output devices (such as an LED or motor controller). Some devices, such as storage cards and memory chips, are both input and output devices.
 
 The Module Support Board contains a **lot** more peripherals you can communicate with. This will help you gain valuable experience interfacing to electronic devices as you go through the course. 
@@ -48,6 +49,14 @@ Before you connect the USB cable, connect your Nucleo board to the MSB.
 It is suggested that you do not remove the Nucleo from the module support board until instructed to do so.
 
 <img src="../img/msb/msb+nucleo.jpg" width="600px">
+
+### Schematics
+You are encouraged to study the schematics of the module support board.
+
+[A direct link to the schematics is here](/Hardware/ModuleSupportBoard/msb_schematics.pdf)
+
+
+The PDF file is located in the folder `Hardware\ModuleSupportBoard`
 
 ---
 
