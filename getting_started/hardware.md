@@ -53,7 +53,7 @@ It is suggested that you do not remove the Nucleo from the module support board 
 ### Schematics
 You are encouraged to study the schematics of the module support board.
 
-[A direct link to the schematics is here](../Hardware/ModuleSupportBoard/msb_schematics.pdf)
+![A direct link to the schematics is here](../Hardware/ModuleSupportBoard/msb_schematics.pdf)
 
 
 The PDF file is located in the folder `Hardware\ModuleSupportBoard`
