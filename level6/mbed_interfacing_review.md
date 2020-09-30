@@ -162,7 +162,13 @@ int main()
 | 1. Build and run the code. |
 | 2. Now run the code in debug mode and step through each line |
 | 3. Determine the state of the leds when the code enters main? |
-| 4. Which bits in LEDMASK are set to `1` 
+| 4. Which bits in LEDMASK are set to `1` and why? (see the documentation on `PortOut`) |
+| 5. Change `LEDMASK` to `0b0000000001001000`. What effect does this have and why? |
+| 6. Now modify the code to also flash the on-board LEDs. The pin labels are `PB_0`, `PB_7` and `PB_14`. _hint_: You will need another instance of `PortOut` | 
+| 7. Modify the code to flash the LEDs using the XOR operator `^` |
+| |
+
+We saw in this exercise that `PortOut` is used to set outputs bits on a particular port
 
 Now we look at another GPIO configuration, _Open Drain_.
 
