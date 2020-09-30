@@ -55,11 +55,9 @@ You are encouraged to study the schematics of the module support board.
 
 [A direct link to the schematics is here](../Hardware/ModuleSupportBoard/msb_schematics.pdf)
 
-or here
-
-<a href="../Hardware/ModuleSupportBoard/msb_schematics.pdf" target="_blank">Download the Schematics</a>
-
-The PDF file is located in the folder `Hardware\ModuleSupportBoard`
+> To open this link in a separate windows, hold down CTRL and click. 
+>
+> Alternatively, the PDF file is located in the folder `Hardware\ModuleSupportBoard`
 
 ---
 
