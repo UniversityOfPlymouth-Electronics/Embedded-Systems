@@ -165,14 +165,112 @@ int main()
 | 4. Which bits in LEDMASK are set to `1` and why? (see the documentation on `PortOut`) |
 | 5. Change `LEDMASK` to `0b0000000001001000`. What effect does this have and why? |
 | 6. Now modify the code to also flash the on-board LEDs. The pin labels are `PB_0`, `PB_7` and `PB_14`. _hint_: You will need another instance of `PortOut` | 
-| 7. Modify the code to flash the LEDs using the XOR operator `^` |
+| 7. Modify the code to flash the LEDs using the XOR operator `^`. Your while-loop should only need two lines of code within the code block. **<p title="leds = leds ^ LEDMASK; wait_us(500000);">Hover here to see the solution</p>** |
 | |
 
-We saw in this exercise that `PortOut` is used to set outputs bits on a particular port
+We saw in this exercise that `PortOut` is used to set outputs bits on a particular port. All pins will change simultaneously.
 
 Now we look at another GPIO configuration, _Open Drain_.
 
-### Open Drain - `DigitalInOut`
+### TASK-304 - Open Drain with `DigitalInOut`
+The module support board you are using has two set of "Traffic Lights", purposely configured in a slightly different way. Let us first consider Traffic Light Set 1:
+
+<figure>
+<img src="../img/circuit/traffic1.png" width="300px">
+<figcaption>Traffic Light Set 1. Note the use of the NPN transistor.</figcaption>
+</figure>
+
+We can write a truth table for this circuit where `TRAF_RED1` is the input and the LED state is the output.
+
+| `TRAF_RED1` | TRANSISTOR STATE | LED STATE |
+| --- | --- | --- |
+| LOW | OFF | OFF |
+| HIGH | ON | ON |
+| FLOATING | ? | ? |
+| |
+
+This is your standard "push-pull" configuration. We used this circuit in a previous exercise. Now compare and contrast to Traffic Light Set 2:
+
+<figure>
+<img src="../img/circuit/traffic2.png" width="300px">
+<figcaption>Traffic Light Set 2. Note the use of a PNP transistor.</figcaption>
+</figure>
+
+This circuit is different. Study it carefully, then consider the following question.
+
+> **Question**
+>
+> For Traffic Light Set 2, try and complete the table. Hover the mouse over the `?` to reveal the answers.
+>
+> | `TRAF_RED2` | TRANSISTOR STATE | LED STATE |
+> | --- | --- | --- |
+> | LOW | <p title="ON">?</p> | <p title="ON">?</p> |
+> | HIGH | <p title="OFF">?</p> | <p title="OFF">?</p> |
+> | FLOATING | <p title="OFF">?</p> | <p title="OFF">?</p> |
+> | |
+>
+
+To better understand this, it is helpful to look at the electronics for a GPIO pin:
+
+<figure>
+<img src="https://os.mbed.com/media/uploads/tbjazic/05outputs.png" width="400px">
+<figcaption>Digital outputs of a microcontroller can be configured as standard (typically push-pull) or open-drain outputs. Source: https://os.mbed.com/media/uploads/tbjazic/05outputs.png</figcaption>
+</figure>
+
+Note how in the open-drain configuration, there is no "push" transistor (in reality, both transistors would be present with the upper one held off). 
+
+It should be stated that different devices can offer different configurations. You should always check the device documentation. 
+
+> **NOTE**
+>
+> Some devices also include the option to include internal Pull-Up and Pull-Down Resistors. This can save external circuitry, although we need to be careful about current limits. We will not be using this and not all devices provide this option.
+
+In the sample code below, the output pin is initialised as `OpenDrainNoPull`:
+
+```C++
+#define TRAF_GRN2_PIN PC_9
+#define TRAF_YEL2_PIN PC_8
+#define TRAF_RED2_PIN PC_7
+
+#define TRAF_WHITE_PIN PF_10
+
+//BusInOut Traffic_Lights_2(PC_7,PC_8,PC_9);
+DigitalInOut grnLED(TRAF_GRN2_PIN, PinDirection::PIN_OUTPUT, PinMode::OpenDrainNoPull, 0);
+
+int main()
+{
+    //Note the logic
+    while (true) {
+        grnLED = 1;
+        wait_us(1000000);
+        grnLED = 0;
+        wait_us(1000000);
+    }
+}
+```
+
+Note the following:
+
+The `grnLED` object is initialised with 4 parameters. 
+```C++
+DigitalInOut grnLED(TRAF_GRN2_PIN, PinDirection::PIN_OUTPUT, PinMode::OpenDrainNoPull, 0);
+```
+
+* `TRAF_GRN2_PIN` is the pin label
+* `PinDirection::PIN_OUTPUT` specified this is in output mode (you can also configure it for input mode).
+* `PinMode::OpenDrainNoPull` sets the output configuration to OPEN DRAIN, with no internal pull-up or pull-down resistors
+* The default output state is LOW
+
+| **TASK 304** |
+| --- |
+| 1. Build and run the code. |
+| 2. Now run the code in debug mode and step through each line |
+| 3. Determine the state of the leds when the code enters main. Explain. |
+| 4. Without using copy and paste, add another open-drain output for `TRAF_GRN2_PIN` and make it flash in the opposite state to the green. 
+It is important you type this in yourself (slowly) and note how the autocomplete helps you see all the options available |
+| 5. In your source code, right click `PinMode` and select "Go to Definition". This will open the header file with the definition of this type.
+
+Learning to use autocomplete and to explore the Mbed sources is a valuable skill.
 
 ## Digital Inputs
 

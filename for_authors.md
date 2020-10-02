@@ -17,6 +17,9 @@ Also:
 
 https://github.github.com/gfm/
 
+## Pop-up text
+<p title="Hello World">Hover over this</p>
+
 ## Inserting an image
 I suggest you use HTML for images so that you can control the width. Here is an example:
 
@@ -24,7 +27,10 @@ I suggest you use HTML for images so that you can control the width. Here is an 
 <img src="img/Icon-jpg-small.jpg" width="80px">
 ```
 
+<figure>
 <img src="img/Icon-jpg-small.jpg" width="80px">
+<figcaption>Course Icon</figcaption>
+</figure>
 
 ## LaTeX
 
