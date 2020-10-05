@@ -38,8 +38,8 @@ There is a lot more going on in this example. To try and see what you've underst
 That's quite a lot, and don't feel bad if you're not sure. For reference, the code for this exercise is shown below:
 
 ```C++
-#include "../lib/uopmsb/uop_msb_1_0_0.h"
-using namespace uop_msb_100;
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
 #define WAIT_TIME_MS 2000
 
@@ -71,7 +71,8 @@ int main()
     lcd.locate(1, 0);   //Row 1, Col 0
     lcd.printf("ELEC143");
 
-    // This is a variable (not an oject as it has no functions) that stores a whole number (integer)
+    // This is a variable (not an oject as it has no functions) that stores a whole number (integer) in memory
+    // (I used the keyword volatile to force it to use memory... long story and one for later)
     volatile int counter = 0;
 
     while (true)
@@ -142,7 +143,7 @@ In the example above, the LEDs flash forever. The microcontroller will keep doin
 ## Quiz
 Before you complete this section, please ensure you complete the quiz.
 
-https://dle.plymouth.ac.uk/mod/quiz/view.php?id=946086
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=970323
 
 
 ---
