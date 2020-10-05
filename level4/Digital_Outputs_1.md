@@ -2,7 +2,7 @@
 
 ---
 
-# Digital Outputs (Week 1)
+# Digital Outputs (Week 2)
 This topic is designed to get you exposed to writing embedded C/C++ and hopefully, give you a feel for the wider subject of embedded systems. This includes familiarization with the hardware, software tools and some basics of C/C++
 
 In week 1, we will take some time to familiarize ourselves with the equipment and software. We don't want to be overly ambitious at this stage. It is better to invest some time learning to use the tools so we can focus on the coding aspects in subsequent weeks. 
@@ -19,7 +19,7 @@ The lectures for this week cover some basic concepts
 | [Session 01+01 - Introduction and module overview](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EQr8Fd8RInhLmK6AyJGuqNUBb0N2JB6HZARS3H-vy1R_4Q) |
 | [Session 01+02 - Logic Signals](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EWL1r0D6Bs1CsFf-qOfHye0B293XNr9nbkrQm9ErGwUAKA) |
 
-## Topics Covered in Week 1
+## Topics Covered in Week 2
 A brief outline of the topics covers are summarised below:
 
 | Topic |
@@ -46,5 +46,5 @@ Now attempt each of the following tasks in sequence. Before you start, it is sug
 
 ---
 
-[Next - Digital Outputs: Week 2](Digital_Outputs_2.md)
+[Next - Digital Outputs: Week 3](Digital_Outputs_2.md)
 

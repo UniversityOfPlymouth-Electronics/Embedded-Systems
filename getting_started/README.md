@@ -4,7 +4,7 @@
 
 ---
 
-# Getting Started
+# Getting Started (Week 1)
 
 In this section, we will look at how to set-up your own development environment so that you can work on your own computer. 
 
