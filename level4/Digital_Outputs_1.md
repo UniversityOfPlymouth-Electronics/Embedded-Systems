@@ -27,8 +27,8 @@ Now attempt each of the following tasks in sequence. Before you start, it is sug
  1. [Task 101 - Blinky](TASK101.md) 
  1. [Task 102 - SOS](TASK102.md)
  1. [Task 103 - Hello World](TASK103.md)
- 1. [Task 104 - Traffic Lights 1]()
- 1. [Task 105 - Flashing Traffic Lights]()
+ 1. [Task 104 - Traffic Lights](TASK104.md)
+
 
 ---
 

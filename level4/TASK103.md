@@ -1,4 +1,4 @@
-[Up - Digital Outputs: Week 1](Digital_Outputs_1.md)
+[Up - Digital Outputs: Week 2](Digital_Outputs_1.md)
 
 --- 
 
