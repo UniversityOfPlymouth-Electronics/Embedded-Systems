@@ -19,11 +19,11 @@ Changes for 2020:
 # Level 6 Course
 This course is divided into two blocks:
 
-| Block | Content | Weeks |
-| --- | --- | --- |
-| 1. | Review of Mbed-OS, C++, OOP and Interfacing | 1-3 |
-| 2. | Multi-tasking: Blocking, polling, interrupts,  multi-threaded programming and networking | 4 - 8 |
-| 3. | Coursework | 9 - 13 |
+| Block | Content | - | Weeks |
+| --- | --- | --- | --- |
+| 1. | Review of Mbed-OS, C++, OOP and Interfacing | [Lab1-DigitalIO](DigitalIO.md), [Lab2-C++ and OOP](Cplusplus.md) | 1-3 |
+| 2. | Multi-tasking: Blocking, polling, interrupts,  multi-threaded programming and networking | | 4 - 8 |
+| 3. | Coursework | | 9 - 13 |
 | |
 
 
