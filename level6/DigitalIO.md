@@ -218,6 +218,10 @@ To better understand this, it is helpful to look at the electronics for a GPIO p
 
 Note how in the open-drain configuration, there is no "push" transistor (in reality, both transistors would be present with the upper one held off). 
 
+> V<sub>out</sub> would need to be pulled high with a pull up resistor.
+>
+> V<sub>out</sub> would default to the HIGH state. When switched on (V<sub>in</sub>=HIGH), the transistor Q3 pull the output LOW.
+
 It should be stated that different devices can offer different configurations. You should always check the device documentation. 
 
 > **NOTE**
@@ -401,15 +405,31 @@ Similarly, for digital inputs, there are three types:
 
 Using the online documentation, you can read about these types.
 
-| **TASK 306** |
-| --- |
-| 1. Watch [this video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=409e91ba-e2ef-42b1-8cc8-ac4e010b2022) to see how to create a new bare-metal project |
-| 2. Create a new project Task 306. |
-| 3. Now run the code in debug mode and step through each line |
-| 4. Modify the code to use SW4 and SW5 |
-| 5. Explain why the parameter PullDown is needed for SW4 and SW5 |
-| |
+| **TASK 306** | - |
+| --- | --- |
+| 1. | Watch [this video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=409e91ba-e2ef-42b1-8cc8-ac4e010b2022) to see how to create a new bare-metal project |
+| 2. | Create a new project Task 306. |
+| 3. | Now run the code in debug mode and step through each line |
+| 4. | Modify the code to use SW4 and SW5 |
+| 5. | Explain why the parameter PullDown is needed for SW4 and SW5 |
+| 6. | Modify the code such that when both SW4 and SW5 are held down, all three LEDs light. |
+| 7. | Modify the solution in 6 to use BusOut in place of DigitalOut |
+| 8. | Modify the solution in 7 to use [BusInOut](https://os.mbed.com/docs/mbed-os/v6.3/apis/businout.html) in place of DigitalInOut. Remember to configure it as an input |
+| 9. | Did you manage to make your code shorter? |
+| | |
+
 ## Timers
+One of the most important and commonly used on-chip peripherals is the **hardware timer**. Different devices have a different number of timers, and they are not standard. However, Mbed-os _abstracts_ us from the hardware specifics and allows us to use Timers with ease.
+
+> Hardware abstraction clearly has benefits in terms of making code simple, but can you think of disadvantages?
+
+There are a few notable types that use hardware timers, including the following:
+
+* `Timer` - Creates a timer object which can be started, stopped and read (among other things).
+* `Ticker` - Used to create a timer that fires an interrupt on specific intervals. This is an important topic which we will cover these in more detail later in the course.
+* `PwmOut` - A digital output that autonomously pulses high and low at a specified rate and duty cycle.
+
+
 
 ## Blocking
 
