@@ -93,5 +93,5 @@ There you will find links to recorded lectures. You can also subscribe to these 
 > Some videos are restricted to a specific cohort of students, where others may be public. Please do not distribute these videos elsewhere.  
 
 ---
+[NEXT - Lab1-DigitalIO](DigitalIO.md)
 
-[NEXT - Review of Interfacing in Mbed: Week 1](mbed_interfacing_review.md)
