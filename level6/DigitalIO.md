@@ -393,26 +393,26 @@ Either method works thanks to some neat C++ code under the hood. We will learn h
 ### `BusIn`
 in the case of digital outputs (push-pull), we saw there were three types:
 
-* DigitalOut
-* BusOut
-* PortOut
+* `DigitalOut`
+* `BusOut`
+* `PortOut`
 
 Similarly, for digital inputs, there are three types:
 
-* DigitalIn
-* BusIn
-* PortIn
+* `DigitalIn`
+* `BusIn`
+* `PortIn`
 
 Using the online documentation, you can read about these types.
 
 | **TASK 306** | - |
 | --- | --- |
-| 1. | Watch [this video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=409e91ba-e2ef-42b1-8cc8-ac4e010b2022) to see how to create a new bare-metal project |
+| 1. | Watch [this video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=409e91ba-e2ef-42b1-8cc8-ac4e010b2022) to see how to create a new "bare-metal" project |
 | 2. | Create a new project Task 306. |
 | 3. | Now run the code in debug mode and step through each line |
 | 4. | Modify the code to use SW4 and SW5 |
-| 5. | Explain why the parameter PullDown is needed for SW4 and SW5 |
-| 6. | Modify the code such that when both SW4 and SW5 are held down, all three LEDs light. |
+| 5. | Explain why the parameter _PullDown_ is needed for SW4 and SW5 |
+| 6. | Modify the code such that when BOTH SW4 and SW5 are held down, all three LEDs light. |
 | 7. | Modify the solution in 6 to use BusOut in place of DigitalOut |
 | 8. | Modify the solution in 7 to use [BusInOut](https://os.mbed.com/docs/mbed-os/v6.3/apis/businout.html) in place of DigitalInOut. Remember to configure it as an input |
 | 9. | Did you manage to make your code shorter? |
@@ -421,7 +421,7 @@ Using the online documentation, you can read about these types.
 ## Timers
 One of the most important and commonly used on-chip peripherals is the **hardware timer**. Different devices have a different number of timers, and they are not standard. However, Mbed-os _abstracts_ us from the hardware specifics and allows us to use hardware timers with ease.
 
-> Hardware abstraction clearly has benefits in terms of making code simple and portable, but can you think of disadvantages?
+> Hardware abstraction clearly has benefits in terms of making code simple and portable, but can you think of any disadvantages?
 
 There are a few notable types that use hardware timers, including the following:
 
@@ -429,7 +429,54 @@ There are a few notable types that use hardware timers, including the following:
 * `Ticker` - Used to create a timer that fires an interrupt on specific intervals. This is an important topic which we will cover these in more detail later in the course.
 * `PwmOut` - A digital output that autonomously pulses high and low at a specified rate and duty cycle.
 
-[ INSERT CODE EXAMPLE HERE]
+Let's look at the `Timer` type:
+
+```C++
+#include "mbed.h"
+using namespace std::chrono;
+
+// Hardware Definitions
+#define TRAF_RED1_PIN PC_2
+
+// Inputs
+DigitalIn SW_BLUE(USER_BUTTON);
+
+// Outputs
+DigitalOut ledRed(TRAF_RED1_PIN);
+
+// Timer
+Timer tmr1;
+
+int main()
+{
+    //Time how long it takes to perform a printf
+    tmr1.start();
+    printf("Hello World!\n");
+    tmr1.stop();
+
+    //Print out how long it took
+    unsigned long long dur = duration_cast<milliseconds>(tmr1.elapsed_time()).count();
+    printf("The time taken was %llu milliseconds\n", dur);    
+
+    //Now to use a timer to implement a delay
+    tmr1.start();
+    while (true) {
+        //Wait for switch press
+        while (SW_BLUE == 0);
+
+        //Turn on LED
+        ledRed = 1;
+
+        //Wait for 500ms
+        tmr1.reset();
+        while (tmr1.elapsed_time() < 500ms); 
+        //How about this for C++ magic :)
+
+        //Turn off LED
+        ledRed = 0;
+    }
+}
+```
 
 ## Blocking
 One of the most important concepts to grasp with the notion of **blocking**.
@@ -459,9 +506,14 @@ Your challenge is as follows:
 * The first switch controls the red LED
 * The second switch controls the green LED
 * When a switch is pressed and released, it's LED toggles state (ONE->OFF or OFF->ON).
-You should debounce
+* You should debounce the switches
+* Both switches must be responsive at all times. Neither is permitted to be ignored.
 
-> Start this task with just one switch and one LED. Note the complexity / simplicity
+> Start this task with just one switch and one LED. Note the complexity / simplicity of the code.
+>
+> Then add a second switch. Note any difficulties you may have.
+> 
+> 
 
 As we will discover later, we can simplify our code again with some new techniques.
 
