@@ -419,9 +419,9 @@ Using the online documentation, you can read about these types.
 | | |
 
 ## Timers
-One of the most important and commonly used on-chip peripherals is the **hardware timer**. Different devices have a different number of timers, and they are not standard. However, Mbed-os _abstracts_ us from the hardware specifics and allows us to use Timers with ease.
+One of the most important and commonly used on-chip peripherals is the **hardware timer**. Different devices have a different number of timers, and they are not standard. However, Mbed-os _abstracts_ us from the hardware specifics and allows us to use hardware timers with ease.
 
-> Hardware abstraction clearly has benefits in terms of making code simple, but can you think of disadvantages?
+> Hardware abstraction clearly has benefits in terms of making code simple and portable, but can you think of disadvantages?
 
 There are a few notable types that use hardware timers, including the following:
 
@@ -429,11 +429,41 @@ There are a few notable types that use hardware timers, including the following:
 * `Ticker` - Used to create a timer that fires an interrupt on specific intervals. This is an important topic which we will cover these in more detail later in the course.
 * `PwmOut` - A digital output that autonomously pulses high and low at a specified rate and duty cycle.
 
-
+[ INSERT CODE EXAMPLE HERE]
 
 ## Blocking
+One of the most important concepts to grasp with the notion of **blocking**.
 
-## Two Switch Challenge?
+> _A process that is blocked is one that is waiting for some event, such as a resource becoming available or the completion of an I/O operation._
+
+We will look at a couple examples of blocking:
+
+* Waiting for a timer
+* Waiting for a switch press and release (with debounce)
+
+[ INSERT CODE CHALLENGE HERE ]
+
+Note how these examples are simple. They follow the basic principle of a sequential machine, with code running in a strict sequence. However, this can soon lead to problems when more devices are added to the task.
+
+### Using `wait`
+We have a convenient group of functions in Mbed to simplify the process of blocking on a timer.
+
+[ CODE EXAMPLES HERE ]
+
+## Two Switch Challenge
+Given what we now know about blocking, let us now see how it can cause significant complexity in out software.
+
+Your challenge is as follows:
+
+* You have two switches and two LEDs
+* The first switch controls the red LED
+* The second switch controls the green LED
+* When a switch is pressed and released, it's LED toggles state (ONE->OFF or OFF->ON).
+You should debounce
+
+> Start this task with just one switch and one LED. Note the complexity / simplicity
+
+As we will discover later, we can simplify our code again with some new techniques.
 
 ## Terminal Input and Output
 
