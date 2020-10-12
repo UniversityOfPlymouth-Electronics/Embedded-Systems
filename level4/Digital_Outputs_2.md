@@ -17,21 +17,22 @@ The lectures for this week cover some basic programming concepts
 
 | Topic |
 | --- |
-| Computer Architecture |
-| Number Representation |
-| Computer Memory |
+| Variables, variable types and literals |
+| String output |
+| Digital outputs with `DigitalOut` and `BusOut` |
+| do-while loops |
+| while loops |
+| for loops |
+| Terminal Input |
 
 
 ## Tasks
 Now attempt each of the following tasks in sequence.
 
- 1. [Task 106 - `BusOut`](TASK106.md)
- 1. [Task 107 - `PortOut`](TASK107.md)
- 1. [Task 108 - Bit Setting]()
- 1. [Task 109 - Bit Shifting]()
- 1. [Task 115 - Terminal output]()
- 1. [Task 116 - Terminal input]()
- 1. [Task - Iteration]()
+1. [TASK 110 - Variables and Terminal Output](TASK110.md)
+1. [Task 112 - Variables and Terminal Input](TASK112.md)
+1. [Task 114 - `GPIO Outputs`](TASK114.md)
+1. [TASK 116 - loops ](TASK116.md)
 
 ---
 
