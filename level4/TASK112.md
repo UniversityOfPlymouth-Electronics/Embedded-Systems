@@ -4,6 +4,8 @@
 
 # Variables and Terminal Input
 
+[ COMING SOON ]
+
 ---
 
 [Next - GPIO Outputs](TASK114.md)
