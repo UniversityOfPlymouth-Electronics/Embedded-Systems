@@ -554,35 +554,46 @@ Hopefully, you code is a little shorter and easier to read now.
 Already it was noted that blocking on busy-wait loops are wasteful of CPU cycles and power, but there is another problem with blocking in this way, and the next exercise should hopefully highlight this:
 
 ## Two Switch Challenge
-Note how these examples are simple. They follow the basic principle of a sequential machine, with code running in a strict sequence. However, this can soon lead to problems when more devices are added to the task.
+Note how these examples are simple. They follow the basic principle of a sequential machine, with code running in a strict sequence. However, this can soon lead to problems when blocking devices are added to the task.
 
 Given what we now know about blocking, let us now see how it can cause significant complexity in out software.
 
 Your challenge is as follows:
 
-* You have two switches and two LEDs
+* You have two switches and three LEDs
 * The first switch controls the red LED
 * The second switch controls the green LED
-* When a switch is pressed and released, it's LED toggles state (ONE->OFF or OFF->ON).
-* You should debounce the switches
+* When a switch is pressed and released, its respective LED toggles state (ONE->OFF or OFF->ON).
+* The yellow LED should flash on and off every 500ms. No switches are involved with this LED
+
+This may seem simple, but there are some additional requirements you must meet:
+
+* You must debounce the switches
 * Both switches must be responsive at all times. Neither is permitted to be ignored.
+* For those that remember how, you cannot use interrupts or PWM (sorry!)
 
 > Start this task with just one switch and one LED. Note the complexity / simplicity of the code.
 >
-> Then add a second switch. Note any difficulties you may have.
+> Then add a second switch. Note any difficulties you may have. Hint - try using `BusIn` to simplify the code.
 > 
-> 
+> Finally, consider how you will keep the yellow LED flashing.
+
+Don't spend too much time on this. If you can find a way to solve it great. If you end up with a tangled mess, that's ok as well.
 
 As we will discover later, we can simplify our code again with some new techniques.
 
-| **TASK 308** | The two switch challenge |
+| **TASK 308** | The Two Switch Challenge |
 | --- | --- |
-| 1. | Create a new project based on Task 307 and call it Task-308-Challenge |
-| 2. | You will need to be able to read two switches. Use  |
+| 1. | Set the project Task-308-Challenge as the active program |
+| 2. | Modify the code to solve the problem  |
+| 3. | A number of solutions will be presented to you as we progress through the course |
+| |
 
 ## Terminal Input and Output
+Another commonly used peripheral is the UART (also known as a Serial Port). Mbed compliant boards connect one of the serial ports to the host PC via a "serial over USB" link. This is very useful for data logging and debugging applications.
 
----
+[ TO BE COMPLETED ]
+
 
 ---
 
