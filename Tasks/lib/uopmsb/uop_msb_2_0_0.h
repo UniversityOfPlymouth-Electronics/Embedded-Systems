@@ -6,6 +6,7 @@
 #include "Stream.h"
 
 //#include <iostream>
+#include <chrono>
 #include <map>
 //#include <string>
 //#include <iostream>
@@ -407,5 +408,19 @@ namespace uop_msb_200 {
 
 
     };
+
+    // Mbed os 5 like Timer
+    using namespace std::chrono;
+    class TimerCompat : public Timer {
+
+        public:
+        long long read_ms() {
+            return duration_cast<milliseconds>(elapsed_time()).count();
+        }
+
+        long long read_us() {
+            return duration_cast<microseconds>(elapsed_time()).count();
+        }
+    };    
 
 }

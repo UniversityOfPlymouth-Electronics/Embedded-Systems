@@ -29,13 +29,13 @@ DigitalOut ledGrn(TRAF_GRN1_PIN);
 int main()
 {
     while (true) {
-        if (SW4 == 1) {
+        if (SW2 == 1) {
             ledRed = 1;
         } else {
             ledRed = 0;
         }
 
-        if (SW5.read() == 1) {
+        if (SW3.read() == 1) {
             ledYel = 1;
         } else {
             ledYel = 0;

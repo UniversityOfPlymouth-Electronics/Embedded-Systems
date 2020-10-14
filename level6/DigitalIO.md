@@ -391,7 +391,7 @@ Either method works thanks to some neat C++ code under the hood. We will learn h
 | |
 
 ### `BusIn`
-in the case of digital outputs (push-pull), we saw there were three types:
+In the case of digital outputs (push-pull), we saw there were three types:
 
 * `DigitalOut`
 * `BusOut`
@@ -408,14 +408,13 @@ Using the online documentation, you can read about these types.
 | **TASK 306** | - |
 | --- | --- |
 | 1. | Watch [this video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=409e91ba-e2ef-42b1-8cc8-ac4e010b2022) to see how to create a new "bare-metal" project |
-| 2. | Create a new project Task 306. |
-| 3. | Now run the code in debug mode and step through each line |
-| 4. | Modify the code to use SW4 and SW5 |
-| 5. | Explain why the parameter _PullDown_ is needed for SW4 and SW5 |
-| 6. | Modify the code such that when BOTH SW4 and SW5 are held down, all three LEDs light. |
-| 7. | Modify the solution in 6 to use BusOut in place of DigitalOut |
-| 8. | Modify the solution in 7 to use [BusInOut](https://os.mbed.com/docs/mbed-os/v6.3/apis/businout.html) in place of DigitalInOut. Remember to configure it as an input |
+| 2. | Create a new project Task 306 and copy the code from the previous task. |
+| 3. | Now run the code in debug mode and check you can step through each line |
+| 4. | Modify the code such that when BOTH SW4 and SW5 are held down, all three LEDs light. |
+| 5. | Now modify the solution in 4 to use `BusOut` for the LEDs (in place of DigitalOut). Test to ensure it works. |
+| 8. | Modify the solution in 5 to use [BusInOut](https://os.mbed.com/docs/mbed-os/v6.3/apis/businout.html) in place of DigitalInOut (for the switches). Remember to configure it as an input. Again, test. |
 | 9. | Did you manage to make your code shorter? |
+| 10. | Now compare your code to the solution provided | 
 | | |
 
 ## Timers
@@ -429,11 +428,15 @@ There are a few notable types that use hardware timers, including the following:
 * `Ticker` - Used to create a timer that fires an interrupt on specific intervals. This is an important topic which we will cover these in more detail later in the course.
 * `PwmOut` - A digital output that autonomously pulses high and low at a specified rate and duty cycle.
 
-Let's look at the `Timer` type:
+> Before Mbed-OS 6, the `Timer` type was much simpler to use. To keep that simplicity (for now), we will use a custom `Timer` type called `TimerCompat`. This is just Timer with some extra functions added.
+>
+> You will find the code for this in the header file (in case you are curious). 
+
+Let's look at the `TimerCompat` type:
 
 ```C++
-#include "mbed.h"
-using namespace std::chrono;
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
 // Hardware Definitions
 #define TRAF_RED1_PIN PC_2
@@ -444,8 +447,8 @@ DigitalIn SW_BLUE(USER_BUTTON);
 // Outputs
 DigitalOut ledRed(TRAF_RED1_PIN);
 
-// Timer
-Timer tmr1;
+// Timer(modified version from Timer)
+TimerCompat tmr1;
 
 int main()
 {
@@ -455,7 +458,7 @@ int main()
     tmr1.stop();
 
     //Print out how long it took
-    unsigned long long dur = duration_cast<milliseconds>(tmr1.elapsed_time()).count();
+    unsigned long long dur = tmr1.read_ms();
     printf("The time taken was %llu milliseconds\n", dur);    
 
     //Now to use a timer to implement a delay
@@ -469,8 +472,7 @@ int main()
 
         //Wait for 500ms
         tmr1.reset();
-        while (tmr1.elapsed_time() < 500ms); 
-        //How about this for C++ magic :)
+        while (tmr1.elapsed_time() < 500ms); //How about this for C++ magic :)
 
         //Turn off LED
         ledRed = 0;
@@ -478,26 +480,82 @@ int main()
 }
 ```
 
-## Blocking
-One of the most important concepts to grasp with the notion of **blocking**.
+Study the code above carefully. The code is not yet complete. 
 
-> _A process that is blocked is one that is waiting for some event, such as a resource becoming available or the completion of an I/O operation._
+Now then attempt the following tasks:
 
-We will look at a couple examples of blocking:
+| **TASK 307 (Part 1)** | |
+| --- | --- |
+| 1. | Make the project `Task-307-Timer` the active program and click the View->Serial Monitor menu item. |
+| 2. | Build and run the code, noting the serial output from `printf` statements. Note how long the `printf("Hello World")` statement takes |
+| 3. | Change the string from `Hello World\n` to `Hello World How Are You\n` |
+| 4. | Run the code again and compare the times. |
+| |
 
-* Waiting for a timer
-* Waiting for a switch press and release (with debounce)
+You might be surprised how long a `printf` takes! You can also see how a hardware timer can be used to measure elapsed time.
 
-[ INSERT CODE CHALLENGE HERE ]
+Further down in the main while-loop, we see some code that waits for a switch press:
 
-Note how these examples are simple. They follow the basic principle of a sequential machine, with code running in a strict sequence. However, this can soon lead to problems when more devices are added to the task.
+```C++
+while (SW_BLUE == 0);
+```
+The switch has no memory / buffering capacity, so we created this **busy-wait loop** and **blocked** the program until the switch was pressed. By doing this at such speed, the chance of missing a switch press/release is extremely small!
+
+The code then waits on a timer (to create a delay)
+
+```C++
+tmr1.reset();
+while (tmr1.elapsed_time() < 500ms);
+```
+
+### Busy-waiting and BLOCKING
+Both of these are examples of [busy-wait loops](https://en.wikipedia.org/wiki/Busy_waiting). This is characterised by a very rapid and repeated polling of a single hardware device until a specific state has been reached.
+
+> Busy-waiting, also known as **spinning**, is something that is generally avoided if possible partly because it wastes CPU cycles and power. 
+
+Busy-waiting / spinning is _one_ of the ways our code can become **blocked**. In fact, one of the most important concepts to grasp is the notion of **blocking**
+
+> _A process/program that is **blocked** is one that is waiting for some event, such as a resource becoming available or the completion of an I/O operation, before proceeding further instructions._
+
+In the examples above, the I/O operations were related to a GPIO input (connected to a switch) and a hardware timer. 
+
+| **TASK 307 (Part 2)** | |
+| --- | --- |
+| 5. | Now you are to complete the program. |
+| | The intention is that each time the BLUE switch is pressed and released, the LED toggles (ON->OFF or OFF->ON) |
+| | You must debounce both the press and release of the switch. i.e. After a press _or_ release, you must add a delay. |
+| | You are to implement a delay using the `TimerCompat` type as shown in the example above. |
+| |
 
 ### Using `wait`
-We have a convenient group of functions in Mbed to simplify the process of blocking on a timer.
+Implementing delays is a very common requirement in embedded software development. Instead of writing code to read Timers, we have a convenient group of functions in Mbed to simplify the process of blocking on a timer.
 
-[ CODE EXAMPLES HERE ]
+```C++
+wait_us(1000);    //1000 uS == 1ms
+```  
+
+There is also a `wait_ns` function for even more fine-grained timing.
+
+| **TASK 307 (Part 3)** | |
+| --- | --- |
+| 6. | Replace the timer loops with a suitable wait function |
+| |
+
+Hopefully, you code is a little shorter and easier to read now.
+
+> **A note about wait functions in Mbed-OS**. 
+>
+>Currently, we are using "bare-metal" Mbed, which is a smaller and more lightweight version of the full implementation.
+>
+> Later in the course we will switch to the full implementation and begin to use the Real Time Operating System (RTOS) features, where some different wait functions will be used. These work quite differently. 
+
+### Brief Reflection
+
+Already it was noted that blocking on busy-wait loops are wasteful of CPU cycles and power, but there is another problem with blocking in this way, and the next exercise should hopefully highlight this:
 
 ## Two Switch Challenge
+Note how these examples are simple. They follow the basic principle of a sequential machine, with code running in a strict sequence. However, this can soon lead to problems when more devices are added to the task.
+
 Given what we now know about blocking, let us now see how it can cause significant complexity in out software.
 
 Your challenge is as follows:
@@ -516,6 +574,11 @@ Your challenge is as follows:
 > 
 
 As we will discover later, we can simplify our code again with some new techniques.
+
+| **TASK 308** | The two switch challenge |
+| --- | --- |
+| 1. | Create a new project based on Task 307 and call it Task-308-Challenge |
+| 2. | You will need to be able to read two switches. Use  |
 
 ## Terminal Input and Output
 
