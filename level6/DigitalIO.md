@@ -640,7 +640,9 @@ In the previous example, we observed the blocking nature of the serial port (UAR
 ## Quiz
 Please click the following link and answer all questions as best you can.
 
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=980380
 
+It is very important you complete the quiz. These are formative, and do not contribute to your module mark. However, they provide valuable feedback for both students and tutors. They are also used as evidence of engagement. 
 
 ---
 
