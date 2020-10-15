@@ -558,7 +558,18 @@ Note how these examples are simple. They follow the basic principle of a sequent
 
 Given what we now know about blocking, let us now see how it can cause significant complexity in out software.
 
-Your challenge is as follows:
+A video demonstrating the challenge is here.
+
+| **TASK 308** | The Two Switch Challenge |
+| --- | --- |
+| 1. | [CLICK THIS LINK TO SEE A VIDEO DEMONSTRATION OF THE CHALLENGE](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=71f9b678-4c7a-49fb-9229-ac5500a53879) |
+| | + Read the key points below |
+| 2. | Set the project Task-308-Challenge as the active program |
+| 3. | Modify the code to solve the problem  |
+| 4. | A number of solutions will be presented to you as we progress through the course |
+| |
+
+**Key points to observe**:
 
 * You have two switches and three LEDs
 * The first switch controls the red LED
@@ -572,27 +583,63 @@ This may seem simple, but there are some additional requirements you must meet:
 * Both switches must be responsive at all times. Neither is permitted to be ignored.
 * For those that remember how, you cannot use interrupts or PWM (sorry!)
 
+Tips:
+
 > Start this task with just one switch and one LED. Note the complexity / simplicity of the code.
 >
-> Then add a second switch. Note any difficulties you may have. Hint - try using `BusIn` to simplify the code.
+> Then add a second switch. Note any difficulties you may have. Consider the fundamental issues that make this hard.
 > 
 > Finally, consider how you will keep the yellow LED flashing.
 
-Don't spend too much time on this. If you can find a way to solve it great. If you end up with a tangled mess, that's ok as well.
+
+Don't spend too much time on this. If you can find a way to solve it, then great. If you end up with a tangled mess, that's ok as well. The important point is to understand the problem.
+
+> A solution is provided - do NOT peek at this until you have given this task a try. It is not the only solution of course, but it is one worth studying carefully.
 
 As we will discover later, we can simplify our code again with some new techniques.
 
-| **TASK 308** | The Two Switch Challenge |
-| --- | --- |
-| 1. | Set the project Task-308-Challenge as the active program |
-| 2. | Modify the code to solve the problem  |
-| 3. | A number of solutions will be presented to you as we progress through the course |
-| |
-
-## Terminal Input and Output
+## Terminal Input
 Another commonly used peripheral is the UART (also known as a Serial Port). Mbed compliant boards connect one of the serial ports to the host PC via a "serial over USB" link. This is very useful for data logging and debugging applications.
 
-[ TO BE COMPLETED ]
+| **TASK 112** | Revision |
+| --- | --- |
+| 1. | Set Task-112 as your active project |
+| 2. | Ensure the serial monitor is visible (View->Serial Monitor) |
+| 3. | Step through this example code. You will need to type responses into the serial monitor at certain points. Establish where blocking may be taking place. |
+| 4. | Now go to Task-308-Soln. Build and run the code. |
+| 5. | Now use the debugger to step through the code to help you understand it |
+| 6. | Now add support for the BLUE button. Add some code such that when the user presses the BLUE button, they can type an integer value into the serial terminal and set the flash speed for the yellow LED. |
+| 7. | Is it possible to keep the yellow LED flashing all the time? Explain.  | 
+| |
+
+## Stretch Task (Optional)
+For those that want to push a little deeper, you might want to consider the following.
+
+In the previous example, we observed the blocking nature of the serial port (UART). Unless we know a few more techniques, this is seemingly a hurdle. However, it is possible to access the serial interface in non-blocking mode. 
+
+```C++
+    BufferedSerial pc(USBTX, USBRX);
+    pc.set_blocking(false);
+
+    char c;
+    ssize_t result = pc.read(&c, 1);
+
+    printf("read returned the value %d\n", result);
+    printf("Read: %c\n", c);
+
+    if (result == -EAGAIN) {
+        printf("No data in buffer\n");
+    }
+```
+
+**Stretch Task** | Non Blocking Serial |
+| --- | --- |
+| 1. | Reattempt Task 112 to read the serial terminal in non-blocking mode |
+| - | For this, you will need to read the characters manually and then convert the result to an integer. Consider reading them into a character array and using `stoi` function to concert the string to a decimal. Note that `stoi` expects a zero as an end of string marker.
+
+## Quiz
+Please click the following link and answer all questions as best you can.
+
 
 
 ---
