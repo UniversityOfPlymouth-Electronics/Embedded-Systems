@@ -1,6 +1,8 @@
 // (c) 2020 University of Plymouth
 
 // another edit 16 07 2020
+#ifndef __UOP_MSB_2_0_0_
+#define __UOP_MSB_2_0_0_
 
 #include "mbed.h"
 #include "Stream.h"
@@ -8,9 +10,6 @@
 //#include <iostream>
 #include <chrono>
 #include <map>
-//#include <string>
-//#include <iostream>
-//#include <iterator>
 
 namespace uop_msb_200 {
 
@@ -424,3 +423,5 @@ namespace uop_msb_200 {
     };    
 
 }
+
+#endif
