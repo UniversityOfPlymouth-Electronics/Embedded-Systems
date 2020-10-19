@@ -31,8 +31,10 @@ Now attempt each of the following tasks in sequence.
 
 1. [TASK 110 - Variables and Terminal Output](TASK110.md)
 1. [Task 112 - Variables and Terminal Input](TASK112.md)
-1. [Task 114 - GPIO Outputs](TASK114.md)
-1. [TASK 116 - Iteration](TASK116.md)
+1. [Task 114 - GPIO Outputs: Digital Out](TASK114.md)
+1. [Task 115 - GPIO Outputs: BusOut Out](TASK115.md)
+1. [Task 116 - GPIO Outputs: PortOut Out](TASK116.md)
+1. [TASK 120 - Iteration](TASK120.md)
 
 ---
 

@@ -2,7 +2,7 @@
 
 ---
 
-# Digital Outputs - Digital Out
+# Digital Outputs - `BusOut`
 This is a first look at digital outputs with Mbed OS. Before we start, you are advised to download a copy of the module support board schematics (circuit diagram) for future reference.
 
 [A direct link to the schematics is here](../Hardware/ModuleSupportBoard/msb_schematics.pdf)
@@ -13,127 +13,6 @@ This is a first look at digital outputs with Mbed OS. Before we start, you are a
 
 **You may be directed to the schematics**. You are encouraged to try and related what we do in software to the circuit diagrams.
 
-## General Purpose Input Output (GPIO)
-One of the most commonly used interfaces is the General Purpose Input-Output (GPIO). These are pins on the microcontroller which can be in one of the following states:
-
-* ON (3.3V)
-* OFF (0.0V)
-* Not connected (_floating_)
-
-In this section, we will be configuring pins as digital outputs. There is where the microcontroller sets the pin to one of these states. At this stage, we will only consider the output to be ON or OFF.
-
-Consider the figure below:
-
-* When the microcontroller pin is set HIGH, the transistor Q1 switches ON, and current can flow through it. The LED then switches on.
-* When the microcontroller pin is set LOW, the transistor Q1 switches OFF, and no current can flow through it. The LED then switches off.
-
-> When you switch a transistor fully ON, it is a bit like closing a mechanical push switch. Instead of a finger press, you use a small electrical current.
->
-> A key point is that the current needed to switch the transistor ON and OFF is _much_ less than the current in the LED. This means our microcontroller is able to control many more LEDs in this way. 
-
-<figure>
-<img src="../img/circuit/micro_driving_bipolar.jpg" width="400px">
-<figcaption>Microcontroller output controlling an LED via a transistor </figcaption>
-</figure>
-
-## GPIO Outputs with `DigitalOut`
-We will now formally look at the type `DigitalOut`.
-
-Let's first look at a circuit diagram from the module support board:
-
-<figure>
-<img src="../img/circuit/traffic1.png" width="400px">
-<figcaption>Microcontroller output controlling an LED via a transistor </figcaption>
-</figure>
-
-Here we observe three transistors controlling three LEDs (RED, YELLOW and GREEN). The inputs are labelled as follows:
-
-* TRAF_RED1
-* TRAF_YEL1
-* TRAF_GRN1
-
-On a circuit diagram (also known as a schematic), we do not draw lines between all points on the diagram. If we did this, it would be very messy and hard to follow! Instead,we use labels to indicate which points are connected together.
-
-| TASK-114 | Details |
-| --- | --- |
-| 1. | Download [schematics for the module support board](../Hardware/ModuleSupportBoard/msb_schematics.pdf) |
-| 2. | Look at the first page. Find the labels listed above |
-| 3. | Write down the microcontroller pins they are connected to. Hint. The pin name will begin with a `P` |
-| |
-
-[CLICK HERE FOR A HINT](../img/circuit/traffic1_mcu.png)
-
-Hover your mouse to reveal the answers:
-
-| LED | Pin | 
-| --- | --- |
-| RED | <p title="PC2">?</p> |
-| YELLOW | <p title="PC3">?</p> |
-| GREEN | <p title="PC6">?</p> |
-
-As we saw in an earlier task, you can use the `DigitalOut` type to control each of the outputs. For example:
-
-```C++
-DigitalOut redLED(PC_2);
-```
-
-This will configure pin PC2 as a digital output, that is, a pin that can be asserted as OFF (0.0V) or ON (3.3V).
-
-> Note the naming convention used in Mbed OS. We actually write `PC_2` and not `PC2`
-
-To set this output HIGH, we simply write the following:
-
-```C++
-redLED = 1;
-```
-To set the output LOW, we simply assign it to 0:
-
-```C++
-redLED=0;
-```
-
-If we wished to flash the led on and off four times, we could use a while loop (as shown in the lecture):
-
-```C++
-int count = 0;
-while (count < 4) {
-    redLED = 1;
-    wait_us(250000);
-    redLED = 0;
-    wait_us(250000);
-    count = count + 1;
-}
-```
-
-With the above, now attempt the following task.
-
-| TASK-114 | Details |
-| --- | --- |
-| 4. | Watch the following video on how to create your own Mbed-OS project |
-| - | https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cecdcb02-1840-4e0f-bae6-ac5900c4d5eb |
-| 5. | Create a project named TASK-114 |
-| 5. | In `main.cpp`, write a program to generate the standard traffic light sequence |
-| - | RED, RED+YELLOW, GREEN, FLASHING YELLOW (one and off 4 times), repeat.. |
-| - | Each phase should last 2 seconds |
-| - | Try and use a while-loop to implement the flashing |
-|  | A solution is provided |
-| |
-
-### Initial Values
-Sometimes you want the output to be in a particular state when the code starts. By default, the output will be LOW.
-
-If you want the pin to be HIGH at start-up, then specify this as a second parameter:
-
-```C++
-DigitalOut redLED(PC_2,1);
-```
-
-| TASK-114 | Details |
-| --- | --- |
-| 6. | Update your solution so that ALL LEDs are on at the start (as a power-on test)  |
-
-See Task-114-Solution to see the tutor's version.
-
 ## Multiple Outputs with `BusOut`
 Having control of individual pins is central to many applications, but sometimes we want to control whole groups of pins at once.
 
@@ -141,9 +20,9 @@ Having control of individual pins is central to many applications, but sometimes
 
 We will stick with the same traffic light LEDs for now to minimise any confusion and cognitive load.
 
-| TASK-116 | Details |
+| TASK-115 | Details |
 | --- | --- |
-| 1. | Make Task-116 your active program |
+| 1. | Make Task-115 your active program |
 | 2. | Build the code and run in debug mode. Step through line by line |
 | 3. | Using the debugger to assist you, complete the table below |
 | |
@@ -190,7 +69,7 @@ Where we declare `lights`, three parameters (PinNames) are provided
 
 You can have up to 16 parameters with `BusOut`. You can combine **any** pins that are capable of being configured as a `DigitalOut`.
 
-| TASK-116 | Details |
+| TASK-115 | Details |
 | --- | --- |
 | 4. | Modify this code to count **down** from 7 (binary 111) to 0 |
 | - | Hint |
@@ -288,7 +167,3 @@ These type allow more advanced configurations, such as "OpenDrain", "Pull-up and
 ## Quiz
 
 [TO BE DONE]
-
----
-
-[Next - Loops ](TASK116.md)
