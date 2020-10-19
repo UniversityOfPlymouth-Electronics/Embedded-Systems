@@ -25,10 +25,10 @@ As a guide, each section should take approximately 2 lab sessions (4-6 Hrs / sec
 | 1   |   | [Week 1 - Getting Started and Introduction](Introduction.md) |
 | 2-3 | 1 | Digital Outputs: [Week 2](Digital_Outputs_1.md), [Week 3](Digital_Outputs_2.md) |
 | 4   | 2 | Potential Dividers (self study) |
-| 5-6 | 3 | Digital Inputs and Multiple Outputs |
-| 7-8 | 4 | Analogue Input |
-| 9-10 | 5 | Analogue Output |
-| 10-13 | - | Coursework and Assessment |
+| 4-5 | 3 | Digital Inputs and Multiple Outputs: [Week 4](Digital_Inputs_1.md), [Week 5](Multiple_Outputs_1.md) |
+| 6-7 | 4 | Analogue Input |
+| 7-9 | 5 | Analogue Output |
+| 9-13 | - | Coursework and Assessment |
 
 _Provisional Time Plan for Practicals_
 
