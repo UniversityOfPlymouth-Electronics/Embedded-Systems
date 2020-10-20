@@ -84,9 +84,11 @@ You can have up to 16 parameters with `BusOut`. You can combine **any** pins tha
 
 
 
-## Quiz
 
-[TO BE DONE]
+## Quiz
+Please click the link and attempt all question. You may need to research some of the answers.
+
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=982852
 
 ---
 

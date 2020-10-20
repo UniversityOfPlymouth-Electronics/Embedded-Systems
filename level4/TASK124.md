@@ -50,8 +50,11 @@ When this is done, the program should do the following:
 * The code then repeats (outer while-loop)
 
 ## Quiz
-[TO BE DONE]
+Please attempt all question. You may need to research the answers:
+
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=982850
+
 
 ---
 
-[UP](Digital_Outputs_2.md)
+[Back](Digital_Outputs_2.md)

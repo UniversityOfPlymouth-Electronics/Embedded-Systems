@@ -54,6 +54,11 @@ Note also how the variables `grade` and `hits` were not initialised.
 | --- | --- |
 | 4. | Why did we not need to initialise `grade` and `hits`? |
 
+## Quiz
+Please attempt all questions. You may need to research some of the answers.
+
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=982847
+
 ---
 
 [NEXT - Iteration: for-loops](TASK124.md)

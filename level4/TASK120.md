@@ -93,7 +93,6 @@ This illustrates an important lesson, not just about how to construct a while-lo
 > Always test your code with valid values, invalid values and edge-cases (extremes) where ever possible. 
 
 
-
 ---
 
 [Next - Iteration: do-while loops](Task122.md)
