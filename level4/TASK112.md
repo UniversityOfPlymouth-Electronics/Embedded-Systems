@@ -135,7 +135,7 @@ Thank you.
 
 ---
 
-[Next - GPIO Outputs](TASK114.md)
+[Next - GPIO Outputs: `DigitalOut`](TASK114.md)
 
 
 

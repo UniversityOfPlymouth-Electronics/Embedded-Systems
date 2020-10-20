@@ -1,3 +1,7 @@
+[UP](Digital_Outputs_2.md)
+
+---
+
 # Digital Outputs - `PortOut`
 
 The digital outputs of the microcontroller are organised into "ports". In the example above, all the pins were from `PORTB` and `PORTC`. There are a number of ports on this device, each with up to 16 pins (PORTA, PORTB, etc...)
@@ -80,3 +84,8 @@ If you are curious, you might want to read about the following
 * `PortInOut`
 
 These type allow more advanced configurations, such as "OpenDrain", "Pull-up and Pull-down resistors" and "Bidirectional" communication.
+
+---
+
+[Next - Iteration: while-loops](TASK120.md)
+

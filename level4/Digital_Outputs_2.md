@@ -34,7 +34,9 @@ Now attempt each of the following tasks in sequence.
 1. [Task 114 - GPIO Outputs: Digital Out](TASK114.md)
 1. [Task 115 - GPIO Outputs: BusOut Out](TASK115.md)
 1. [Task 116 - GPIO Outputs: PortOut Out](TASK116.md)
-1. [TASK 120 - Iteration](TASK120.md)
+1. [TASK 120 - Iteration: while-loops](TASK120.md)
+1. [TASK 122 - Iteration: do-while-loops](TASK122.md)
+1. [TASK 124 - Iteration: for-loops](TASK124.md)
 
 ---
 
