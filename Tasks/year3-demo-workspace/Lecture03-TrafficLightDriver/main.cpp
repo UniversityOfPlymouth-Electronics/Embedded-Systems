@@ -12,7 +12,7 @@ int main()
         while (sw==0);
 
         //Update lights
-        lights.nextState();
+        TrafficLight::LIGHT_STATE s = lights.nextState();
 
         //Debounce switch
         wait_us(300000);

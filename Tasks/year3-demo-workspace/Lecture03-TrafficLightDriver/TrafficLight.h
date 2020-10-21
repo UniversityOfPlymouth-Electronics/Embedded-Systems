@@ -10,54 +10,19 @@ using namespace chrono;
 
 class TrafficLight 
 {
+    public:
+    typedef enum {STOP, READY, GO, WARNING} LIGHT_STATE;
+
     private:
     DigitalOut redLED;
     DigitalOut yellowLED;
     DigitalOut greenLED;
     Ticker t;
-    enum {STOP, READY, GO, WARNING} State;
+    LIGHT_STATE State;
 
-    void yellowFlashISR() {
-        yellowLED = !yellowLED;
-    }
-
-    void flashYellow(bool flash) {
-        t.detach();
-        if (flash) {
-            t.attach(callback(this, &TrafficLight::yellowFlashISR), 200ms);
-        }
-    }
-
-    void updateOutput()
-    {
-        switch (State)
-        {
-            case STOP:
-                flashYellow(false);
-                redLED = 1;
-                yellowLED = 0;
-                greenLED = 0;
-                break;
-            case READY:
-                flashYellow(false);
-                redLED = 1;
-                yellowLED = 1;
-                greenLED = 0;
-                break;
-            case GO:
-                flashYellow(false);
-                redLED = 0;
-                yellowLED = 0;
-                greenLED = 1;
-                break;
-            case WARNING:
-                redLED = 0;
-                flashYellow(true);
-                greenLED = 0;
-                break;                
-        }       
-    }
-
+    void yellowFlashISR();
+    void flashYellow(bool flash);
+    void updateOutput();
 
     public:
     //Constructor
@@ -66,6 +31,7 @@ class TrafficLight
     {
         flashYellow(false);
     }
+
     ~TrafficLight()
     {
         redLED = 1;
@@ -73,28 +39,8 @@ class TrafficLight
         greenLED = 0;
     } 
 
-    void nextState()
-    {
-        // Update State
-        switch (State)
-        {
-            case STOP:
-                State = READY;
-                break;
-            case READY:
-                State = GO;
-                break;
-            case GO:
-                State = WARNING;
-                break;
-            case WARNING:
-                State = STOP;
-                break;
-        }
-
-        //As it says
-        updateOutput();
-    } 
+    //Advance the traffic lights to the next state
+    LIGHT_STATE nextState();
 
 };
 
