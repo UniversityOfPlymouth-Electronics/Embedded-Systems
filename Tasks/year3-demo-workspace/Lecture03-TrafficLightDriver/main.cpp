@@ -3,6 +3,7 @@
 
 TrafficLight lights;
 DigitalIn sw(USER_BUTTON);
+TrafficLight::LIGHT_STATE s;
 
 int main()
 {
@@ -12,7 +13,7 @@ int main()
         while (sw==0);
 
         //Update lights
-        TrafficLight::LIGHT_STATE s = lights.nextState();
+        s = lights.nextState();
 
         //Debounce switch
         wait_us(300000);
