@@ -26,18 +26,10 @@ class TrafficLight
 
     public:
     //Constructor
-    TrafficLight(PinName redPin = TRAF_RED1_PIN, PinName yellowPin = TRAF_YEL1_PIN, PinName greenPin=TRAF_GRN1_PIN) 
-                                                            : redLED(redPin,1), yellowLED(yellowPin,0), greenLED(greenPin,0)
-    {
-        flashYellow(false);
-    }
+    TrafficLight(PinName redPin = TRAF_RED1_PIN, PinName yellowPin = TRAF_YEL1_PIN, PinName greenPin=TRAF_GRN1_PIN); 
 
-    ~TrafficLight()
-    {
-        redLED = 1;
-        yellowLED = 0;
-        greenLED = 0;
-    } 
+    //Destructor
+    ~TrafficLight();
 
     //Advance the traffic lights to the next state
     LIGHT_STATE nextState();

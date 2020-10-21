@@ -1,5 +1,18 @@
 #include "TrafficLight.h"
 
+TrafficLight::TrafficLight(PinName redPin, PinName yellowPin, PinName greenPin) 
+                                                        : redLED(redPin,1), yellowLED(yellowPin,0), greenLED(greenPin,0)
+{
+    flashYellow(false);
+}
+
+TrafficLight::~TrafficLight()
+{
+    redLED = 1;
+    yellowLED = 0;
+    greenLED = 0;
+} 
+
 void TrafficLight::yellowFlashISR() {
     yellowLED = !yellowLED;
 }
