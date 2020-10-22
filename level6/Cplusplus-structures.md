@@ -2,7 +2,7 @@
 
 ---
 
-# C++ and Object Orientated Programming 
+# C and C++ Structures 
 In this 2-part lab, we will explore object orientated techniques in C++. We begin with structures, which feature in both C and C++. Then we move to classes, which feature in C++ and are one of the main differentiating features between the two languages.  
 
 C++ is an "Object Orientated Language", whereas C is procedural. You can think of C++ as an extension of the C language, inheriting most of it's attributes and syntax.
@@ -306,16 +306,6 @@ Any variable of type SWITCH_STATE can be assigned to the literal values listed i
 
 This is not essential, but helps make the code more readable.
 
-... TO BE CONTINUED
-
-## Classes
-
-### Creating a Simple Class
-
-### References and Pointers
-
-### Simple Device Driver
-
 ---
 
-[Back to Contents](README.md)
+[NEXT - Lab3-C++ Classes](Cplusplus-classes.md)
