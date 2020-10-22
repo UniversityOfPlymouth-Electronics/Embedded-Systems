@@ -3,6 +3,7 @@
 
 TrafficLight lights;
 DigitalIn sw(USER_BUTTON);
+
 TrafficLight::LIGHT_STATE s;
 
 int main()
@@ -23,6 +24,7 @@ int main()
 
         //Switch debounce
         wait_us(300000);
+        
     }
 }
 
