@@ -1,10 +1,4 @@
-//
-//  main.cpp
-//  InheritanceProtection
-//
-//  Created by Nicholas Outram on 08/10/2018.
-//  Copyright © 2018 Nicholas Outram. All rights reserved.
-//
+#include "mbed.h"
 
 #include <iostream>
 
@@ -46,3 +40,5 @@ int main(int argc, const char * argv[]) {
     
     return 0;
 }
+
+

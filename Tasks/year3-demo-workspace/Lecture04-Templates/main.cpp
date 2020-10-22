@@ -1,10 +1,4 @@
-//
-//  main.cpp
-//  Templates
-//
-//  Created by Nicholas Outram on 14/11/2018.
-//  Copyright © 2018 Nicholas Outram. All rights reserved.
-//
+#include "mbed.h"
 
 #include <iostream>
 
@@ -30,7 +24,7 @@ namespace ELEC35X {
 }
 namespace WITHTEMPLATE {
     
-    template <typename T, typename T>
+    template <typename T>
     T max(T a, T b)
     {
         if (a >= b) {
@@ -74,3 +68,5 @@ int main(int argc, const char * argv[]) {
     cout << WITHTEMPLATE::max(a,b) << endl;
     return 0;
 }
+
+
