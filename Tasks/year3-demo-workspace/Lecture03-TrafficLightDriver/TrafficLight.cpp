@@ -1,8 +1,12 @@
 #include "TrafficLight.h"
 
 TrafficLight::TrafficLight(PinName redPin, PinName yellowPin, PinName greenPin) 
-                                                        : redLED(redPin,1), yellowLED(yellowPin,0), greenLED(greenPin,0)
+                                                        : redLED(redPin), yellowLED(yellowPin), greenLED(greenPin)
 {
+    redLED = 1;
+    yellowLED = 0;
+    greenLED = 0;
+    State = STOP;
     flashYellow(false);
 }
 

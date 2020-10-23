@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "TrafficLight.h"
 
-TrafficLight lights;
+TrafficLight lights();
 DigitalIn sw(USER_BUTTON);
 
 TrafficLight::LIGHT_STATE s;
