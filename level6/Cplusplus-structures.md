@@ -185,7 +185,7 @@ Finally, you can convert C-pointers to C++ references:
 
 ```C++
 ComplexNumber_C p = {2.0, 3.0};
-ComplexNumber_C* ptrP;
+ComplexNumber_C* ptrP = &p;
 ComplexNumber_C& nice_ptr = *ptrP;
 ```
 
