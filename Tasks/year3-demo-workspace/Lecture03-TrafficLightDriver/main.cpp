@@ -1,7 +1,7 @@
 #include "mbed.h"
 #include "TrafficLight.h"
 
-TrafficLight lights();
+TrafficLight lights;
 DigitalIn sw(USER_BUTTON);
 
 TrafficLight::LIGHT_STATE s;
@@ -15,7 +15,7 @@ int main()
 
         //Update lights
         s = lights.nextState();
-
+ 
         //Debounce switch
         wait_us(300000);
 
