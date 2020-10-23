@@ -306,6 +306,11 @@ Any variable of type SWITCH_STATE can be assigned to the literal values listed i
 
 This is not essential, but helps make the code more readable.
 
+## Quiz
+Please attempt the following short quiz before moving to the next section.
+
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=985992
+
 ---
 
 [NEXT - Lab3-C++ Classes](Cplusplus-classes.md)
