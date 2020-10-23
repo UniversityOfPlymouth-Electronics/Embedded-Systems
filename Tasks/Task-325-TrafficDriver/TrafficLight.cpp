@@ -1,11 +1,18 @@
 #include "TrafficLight.h"
 
+//Contructor
 TrafficLight::TrafficLight(PinName redPin, PinName yellowPin, PinName greenPin) 
-                                                        : redLED(redPin,1), yellowLED(yellowPin,0), greenLED(greenPin,0)
+                                                        : redLED(redPin), yellowLED(yellowPin), greenLED(greenPin)
 {
+    // These objects are already initialised in the member initialisation list above
+    redLED = 1;
+    yellowLED = 0;
+    greenLED = 0;
+    // Timer off
     flashYellow(false);
 }
 
+//Destructor
 TrafficLight::~TrafficLight()
 {
     redLED = 1;
@@ -13,17 +20,21 @@ TrafficLight::~TrafficLight()
     greenLED = 0;
 } 
 
+// Interrupt Service Routine (ISR)
 void TrafficLight::yellowFlashISR() {
     yellowLED = !yellowLED;
 }
 
+// Private member function to switch flasher on or off
 void TrafficLight::flashYellow(bool flash) {
-    t.detach();
+    t.detach(); //Turn off ticker
     if (flash) {
+        //Turn on ticker ..... Hmmm, interrupts!
         t.attach(callback(this, &TrafficLight::yellowFlashISR), 200ms);
     }
 }
 
+// Moore Machine - update outputs
 void TrafficLight::updateOutput()
 {
     switch (State)
@@ -54,6 +65,7 @@ void TrafficLight::updateOutput()
     }       
 }
 
+// Moore machine - next state logic
 TrafficLight::LIGHT_STATE TrafficLight::nextState()
 {
     // Update State
@@ -76,6 +88,6 @@ TrafficLight::LIGHT_STATE TrafficLight::nextState()
     //As it says
     updateOutput();
 
-    //Return the current state
+    //Return the current state (for information)
     return State; 
 } 

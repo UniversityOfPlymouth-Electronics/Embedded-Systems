@@ -370,20 +370,18 @@ Although this is a great improvement, it is not perfect however. _It is still po
 
 For C++ classes, we can exercise greater control.
 
-```C++
-class ComplexNumber {
-private:
-    double real;
-    double imag;
-    ...
-```
+| **TASK 323** | BMI C++ API |
+| --- | --- |
+| 1. | Make Task-323 the active project |
+| 2. | Build the code, then step through the code with the debugger |
+|        | Step into each function to see how it works |
+| 3. | Modify main and uncomment the following line `//person._height = 0.0;`
+| 4. | Try and build the code. What happens and why? |
+| |
 
-Note that `real` and `imag` are in the private section. These cannot be modified except my member functions of the class. Unlike with structures, there is no way around it making it inherently safer to use classes.
 
 ## Challenge
-Return to Task 321.
-
-Add some additional functions to the `ComplexNumber` class. 
+Return to Task 321. Add some additional functions to the `ComplexNumber` class. 
 
 * `negate` - negates both real imaginary parts 
 * `negated` - Same as `negate`, but returns a copy
@@ -400,10 +398,111 @@ Write code in Main.cpp to test your new member functions.
 Right now, you might find it the difference between `add` and `addedTo` confusing. When we discuss **operator overloading**, suddenly you code will look much more natural!
 
 ## Case Study: Simple Device Driver
-Let's move away from abstract mathematical code and get back to embedded systems.
+Let's move away from abstract mathematical code and get back to embedded systems. By now we are familiar with types such as `DigitalOut` and `BusOut`. These are classed as _device drivers_. Two key attributes of a device driver:
 
+* consistent software interface on different hardware
+* abstracts the developer making code simpler and safer to write
 
+There are two key terms associated with object orientated programming:
 
+> **Encapsulation** is where data and functions (also known as methods) are bound together such that implementation details are hidden and protected (data hiding).
+>
+> `DigitalOut` is a good example of this. It has the same interface on all Mbed-os boards (of which there are many, with each implementation written by the hardware vendor). The hardware specifics are hidden from the developer.
+>
+> **object composition** is where an object contains other objects. 
+>
+> A good example of this is `BusOut` which contains an array of `DigitalOut` objects. 
+
+We will now write a driver of our own, that uses object composition to simplify the control of a traffic light (3 LEDs and a hardware timer).
+
+| **TASK 325** | Device Driver |
+| --- | --- |
+| 1. | Make Task-323 the active project |
+| 2. | Build and run the code. Press and release the blue button to advance to the next state |
+| 3. | Study the code in detail |
+| | |
+
+Note how the code has been split between a header file `TrafficLight.hpp` and an implementation file `TrafficLight.cpp`
+
+> You could write all your class in the header file. However, there are reasons you might prefer to split them, including:
+> * If you are writing a commercially sensitive closed-source library, you might not want to reveal your functions. 
+> * If the class becomes large, it is helpful to split it into separate source files
+
+### The scope operator `::`
+The scope operator `::` frequently appears in the `TrafficLight.cpp` file.
+
+* When you define a member function outside of a class body, you prefix it with `<ClassName>::<function-name>`. This differentiates with from a global function.
+* Sometimes you reference members of a class from outside also using the scope operator
+  * In Main.cpp, the enumerated type `LIGHT_STATE` cannot be used directly as it is part of the `TrafficLight` class. 
+  * You therefore see the scoping operator `TrafficLight::LIGHT_STATE s;`
+
+### Object Composition and Initialisation
+Look inside `TrafficLight.h` and we can see the following private members:
+
+```C++
+    private:
+    DigitalOut redLED;
+    DigitalOut yellowLED;
+    DigitalOut greenLED;
+    Ticker t;
+```
+This is a clear example of object composition. Note the following:
+
+* These are all private members. Only class member functions will have direct access to these objects.
+* The Objects are not yet initialised. 
+   * The `DigitalOut` constructor must have at least one pin name (type `PinName`) - it does not have a parameterless constructor.
+   * The `Ticker` does have a parameterless constructor so can be created without further information 
+
+The Traffic light constructor _must_ contain code to initialise these objects immediately.
+
+| **TASK 325** | Device Driver |
+| --- | --- |
+| 4. | Open `TrafficLight.cpp` and find the constructor |
+| 5. | Put a breakpoint on the first line and start in debug mode. Which runs first, `main` or the constructor? |
+| |  |
 ---
+
+This highlights what is referred to as "code before main".
+
+### Member Initialisation Lists
+The constructor for `TrafficLight` has a member initialisation list. The constructor declaration has a list of parameters. These are passed to a list of other constructors (separated by a colon). You can think of this as _chaining constructors_ so they run in the correct order.
+
+```C++
+TrafficLight::TrafficLight(PinName redPin, PinName yellowPin, PinName greenPin) 
+        : redLED(redPin), yellowLED(yellowPin), greenLED(greenPin)
+{
+    // These objects are already initialised in the member initialisation list above
+    redLED = 1;
+    yellowLED = 0;
+    greenLED = 0;
+    // Timer off
+    flashYellow(false);
+}
+```
+
+For the body of the constructor to work, the objects `redLED, yellowLED and greenLED` must already exist.
+
+> The objects in the initialisation list will be created and initialised **first**. _Then_ (and only then) the `TrafficLight` object will be initialised.
+
+### Challenge 1
+Extend the `TrafficLight` class API to include the following public member functions:
+
+* `void stop()` - which resets the lights to red at any point
+* `void setFlashSpeed(double)` - which sets the speed of the flasher
+* `double getFlashSpeed()` - which returns the current flash speed.
+
+These must all be `public`. Any additional members must be `private`. You also need to test these new APIs.
+
+### Challenge 2
+Modify the class to allow the second set of traffic lights to be used. Note that these require open-drain (`DigitalInOut`).
+
+Hints
+
+* Consider replacing `DigitalOut` with `DigitalInOut`
+* Rather than pass pin names to the constructor, consider a single parameter to specify which set to use.
+    * Use an enumerated type to make the code clear
+    * Set the correct output mode depending on which set is used.
+
+Write some demo code to simulate a road with two traffic lights, one at each end.
 
 [NEXT - Lab4-C++ and OOP](Cplusplus-oop.md)
