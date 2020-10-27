@@ -269,7 +269,7 @@ DigitalInOut grnLED(TRAF_GRN2_PIN, PinDirection::PIN_OUTPUT, PinMode::OpenDrainN
 | 1. Build and run the code. |
 | 2. Now run the code in debug mode and step through each line |
 | 3. Determine the state of the leds when the code enters main. Explain. |
-| 4. Without using copy and paste, add another open-drain output for `TRAF_GRN2_PIN` and make it flash in the opposite state to the green. 
+| 4. Without using copy and paste, add another open-drain output for `TRAF_RED2_PIN` and make it flash in the opposite state to the green. 
 It is important you type this in yourself (slowly) and note how the autocomplete helps you see all the options available |
 | 5. In your source code, right click `PinMode` and select "Go to Definition". This will open the header file with the definition of this type.
 
