@@ -417,7 +417,7 @@ We will now write a driver of our own, that uses object composition to simplify 
 
 | **TASK 325** | Device Driver |
 | --- | --- |
-| 1. | Make Task-323 the active project |
+| 1. | Make Task-325 the active project |
 | 2. | Build and run the code. Press and release the blue button to advance to the next state |
 | 3. | Study the code in detail |
 | | |
