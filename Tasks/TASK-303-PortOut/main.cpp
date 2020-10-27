@@ -14,7 +14,7 @@ int main()
     while (true) {
         leds = 0;   //Binary 000
         wait_us(500000);
-        leds = 0xFF;   //Binary 1111111111111111
+        leds = 0xFF;   //Binary 11111111
         wait_us(500000);    
     }
 }
