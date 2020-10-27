@@ -23,8 +23,8 @@ The lectures for this week cover some basic programming concepts
 ## Tasks
 Now attempt each of the following tasks in sequence.
 
-1. [TASK 120 - DigitalIn and BusIn](TASK120.md)
-1. [TASK 122 - Switch Debounce](TASK122.md)
+1. [TASK 126 - DigitalIn and BusIn - COMING SOON]()
+1. [TASK 128 - Switch Debounce - COMING SOON]()
 
 ---
 
