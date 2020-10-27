@@ -1,6 +1,6 @@
 // (c) 2020 University of Plymouth
 
-// another edit 16 07 2020
+// updated 25 10 2020
 #ifndef __UOP_MSB_2_0_0_
 #define __UOP_MSB_2_0_0_
 
@@ -79,7 +79,6 @@ namespace uop_msb_200 {
         typedef enum {LOWER_OCTAVE, MIDDLE_OCTAVE, HIGHER_OCTAVE} OCTAVE_REGISTER;
 
         Buzzer(PinName p = BUZZER_PIN) : _buzzer(p) {
-            init_scale();
             volatile double T = periodForNote_us("C");
             _buzzer.period_us(T);
             rest();      
@@ -100,7 +99,7 @@ namespace uop_msb_200 {
         PwmOut _buzzer;
         double periodForNote_us(const char* note, OCTAVE_REGISTER octave=MIDDLE_OCTAVE)
         {
-            volatile uint8_t idx = note_offset[note]; 
+            volatile uint8_t idx = offsetForNote(note); 
             volatile double f = note_freq[idx];
 
             switch (octave) {
@@ -119,25 +118,32 @@ namespace uop_msb_200 {
         }
 
         private:
+        uint8_t offsetForNote(const char *noteStr)
+        {
+            switch (noteStr[0])
+            {
+                case 'A':
+                    return (noteStr[1]=='#') ? 1 : 0;
+                case 'B':
+                    return 2;
+                case 'C':
+                    return (noteStr[1]=='#') ? 4 : 3; 
+                case 'D':
+                    return (noteStr[1]=='#') ? 6 : 5;                    
+                case 'E':
+                    return 7;
+                case 'F':
+                    return (noteStr[1]=='#') ? 9 : 8;                                           
+                case 'G':
+                    return (noteStr[1]=='#') ? 11 : 10;  
+                default:
+                    return 0;                   
+            }
+        }
+
         double note_freq[12] = {
             220.0, 233.08, 246.94, 261.63, 277.18, 293.66, 311.13, 329.63, 349.23, 369.99, 392, 415.3
         };
-
-        std::map<const char*, uint8_t> note_offset;
-        void init_scale() {
-            note_offset["A"]  = 0;
-            note_offset["A#"] = 1;
-            note_offset["B"]  = 2;
-            note_offset["C"]  = 3;
-            note_offset["C#"] = 4;
-            note_offset["D"]  = 5;
-            note_offset["D#"] = 6;
-            note_offset["E"]  = 7;
-            note_offset["F"]  = 8;
-            note_offset["F#"] = 9;
-            note_offset["G"]  = 10;
-            note_offset["G#"] = 11;
-        }
 
     };
 
