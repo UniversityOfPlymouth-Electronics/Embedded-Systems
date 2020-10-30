@@ -21,7 +21,7 @@ void RoboDog::recharge() {
 }
 
 void RoboDog::woof() {
-    cout << this->name << " says \"Beepy beepy splurp\"" << endl;
+    cout << this->name << " says \"Beepy beepy boing\"" << endl;
     cout << "    I ***never*** say ";
     Dog::woof();
 }

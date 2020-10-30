@@ -410,8 +410,6 @@ namespace uop_msb_200 {
         virtual int _getc() {
             return -1;
         }
-
-
     };
 
     // Mbed os 5 like Timer

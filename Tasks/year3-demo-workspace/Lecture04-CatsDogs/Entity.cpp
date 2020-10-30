@@ -7,3 +7,8 @@
 //
 
 #include "Entity.hpp"
+
+void Entity::doThisV()
+{
+    cout << "doThisV() in the Entity class" << endl;
+}

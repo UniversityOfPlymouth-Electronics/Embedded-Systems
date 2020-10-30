@@ -14,11 +14,15 @@
 using namespace std;
 
 class ComplexNumber {
+    //Friend Function
+    friend void wipe(ComplexNumber&);
+
 private:
     double real;
     double imag;
     
 public:
+
     //Default constructor
     ComplexNumber() {
         this->real = 0.0;
@@ -41,7 +45,7 @@ public:
     ~ComplexNumber() {
         cout << "Bye'ee" << endl;
     }
-    
+
     //Conjugate - verb, so perform in place
     void conjugate() {
         this->imag *= -1.0;
@@ -51,6 +55,7 @@ public:
     double getReal() {
         return this->real;
     }
+
 
     double getImag() {
         return this->imag;
@@ -67,17 +72,41 @@ public:
         this->imag += c.imag;
     }
     
+    void operator += (const ComplexNumber& c) {
+        this->real += c.real;
+        this->imag += c.imag;
+    }
+
     //Add
     ComplexNumber addedTo(const ComplexNumber& c) {
         return ComplexNumber(this->real+c.real, this->imag+c.imag);
     }
+
+    ComplexNumber operator+(const ComplexNumber& c) {
+        return ComplexNumber(this->real+c.real, this->imag+c.imag);
+    }
+
+    double abs() {
+        return sqrt((this->real*this->real) + (this->imag * this->imag));
+    }
+
+    operator double() {
+        return this->abs();
+    }
     
+    void operator= (double p)
+    {
+        this->real = p;
+        this->imag = 0.0;
+    } 
+
     //Display
     void display() {
         cout << this->real << " + " << this->imag << "j" << endl;
     }
     
 };
+
 
 
 #endif /* ComplexNumber_hpp */

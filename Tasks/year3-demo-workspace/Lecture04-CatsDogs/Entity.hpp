@@ -11,13 +11,14 @@
 
 #include <stdio.h>
 #include <iostream>
+using namespace std;
 
 class Entity {
 private:
     unsigned int yearOfCreation;
 public:
-    virtual void doThisV();
-    virtual void doThisPV() = 0;
+    virtual void doThisV();         //Ordinary virtual function
+    virtual void doThisPV() = 0;    //Pure virtual
 };
 
 #endif /* Entity_hpp */

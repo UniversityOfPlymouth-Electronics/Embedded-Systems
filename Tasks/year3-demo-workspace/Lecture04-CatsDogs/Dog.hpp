@@ -16,8 +16,11 @@ using namespace std;
 class Dog : public Pet
 {
 public:
+    Dog();
     Dog(string name);
-    virtual void woof();
+    //virtual void woof();
+    void woof();
+    void woof(string);  //Overloaded
 };
 
 #endif /* Dog_hpp */

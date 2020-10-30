@@ -11,6 +11,17 @@
 Dog::Dog(string name) : Pet(name)
 { }
 
+//Overload the constructor
+Dog::Dog() : Dog("Fido")
+{
+
+}
+
 void Dog::woof() {
     cout << this->name << " says woof!" << endl;
+}
+
+//Overloaded version of woof
+void Dog::woof(string snd) {
+    cout << this->name << snd << endl;
 }
