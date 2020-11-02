@@ -1,6 +1,9 @@
 #include "mbed.h"
+#include <cstdlib>
 #include <functional>
 #include <iostream>
+#include "../../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
 // The author would like to acknowledge the following helpful article!
 // https://www.cprogramming.com/c++11/c++11-lambda-closures.html
