@@ -26,7 +26,7 @@ As a guide, each section should take approximately 2 lab sessions (4-6 Hrs / sec
 | 2 | 1 | [Digital Outputs 1](Digital_Outputs_1.md) |
 | 3-4 | 1 | [Digital Outputs 2 and Iteration](Digital_Outputs_2.md) |
 | 5 | 2 | Potential Dividers (self study) |
-| 5 | 3 | [Digital Inputs](Digital_Inputs_1.md) |
+| 5 | 3 | [Digital Inputs and Conditionals](Digital_Inputs_1.md) |
 | 6-7 | 4 | Analogue Input |
 | 8 | 5 | Analogue Output |
 | 9-13 | - | Coursework and Assessment |

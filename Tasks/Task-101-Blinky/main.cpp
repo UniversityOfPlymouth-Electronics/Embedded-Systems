@@ -1,4 +1,5 @@
-#include "mbed.h"
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
 // Create a DigitalOut “object” called greenLED. Pass constant LED1 as a “parameter”
 DigitalOut greenLED(LED1);
