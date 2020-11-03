@@ -1,7 +1,7 @@
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
 using namespace uop_msb_200;
 
-BusIn button(PG_0, PG_1, PG_2, PG_3);
+BusIn buttons(PG_0, PG_1, PG_2, PG_3);
 
 DigitalOut redLED(TRAF_RED1_PIN);       //Red Traffic 1
 DigitalOut yellowLED(TRAF_YEL1_PIN);    //Yellow Traffic 1
@@ -14,6 +14,10 @@ int main()
 {
     int count = 0;
     
+    //Configure switches
+    buttons[2].mode(PullDown);
+    buttons[3].mode(PullDown);
+
     //Turn ON the 7-segment display
     disp.enable(true);
 
@@ -23,8 +27,38 @@ int main()
     while (true) {
         
         //Read button without blocking
-        int btn = button;     //Local to the while-loop  
+        int btn = buttons;     //Local to the while-loop  
 
+        switch (btn) {
+            case 0:
+            //Nothing pressed
+            greenLED = 0;
+            yellowLED = 0;
+            redLED = !redLED;
+            break;
+
+            case 1:
+            //Button A only
+            redLED = 0;
+            yellowLED = 0;            
+            greenLED = !greenLED;
+            break;
+
+            case 3: 
+            //Button A and B
+            redLED = 0;
+            yellowLED = !yellowLED;            
+            greenLED = 0;
+            break;
+
+            default:
+            //All others
+            greenLED = 0;
+            yellowLED = 0;
+            redLED = 0;
+            break;
+
+        }
 
         // Slow it down a bit (and debounce the switches)
         wait_us(100000);  

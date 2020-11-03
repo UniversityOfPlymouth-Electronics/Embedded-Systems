@@ -30,7 +30,7 @@ Now attempt each of the following tasks in sequence.
 1. [Task127 - BusIn](TASK127.md)
 1. [TASK 128 - Switch Debounce](TASK128.md)
 1. [TASK 130 - If Statements](TASK130.md)
-1. [TASK 132 - Switch Statements - COMING SOON]()
+1. [TASK 132 - Switch Statements](TASK132.md)
 1. [TASK 134 - Multiple Input Devices - COMING SOON]()
 1. [TASK 140 - First Look at Interrupts - COMING SOON]()
 
