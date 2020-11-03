@@ -31,7 +31,7 @@ int main()
         //Test Button A
         if (btnA == 1) {
             redLED = !redLED;    //Toggle RED led
-            count = count + ((count<99) ? 1 : 0);            //Increment count
+            count = count + 1;            //Increment count
             disp = count;       //Update display
         }
 
