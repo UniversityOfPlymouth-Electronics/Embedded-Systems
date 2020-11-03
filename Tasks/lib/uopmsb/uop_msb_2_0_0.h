@@ -88,6 +88,7 @@ namespace uop_msb_200 {
             DigitalOut LED_GRN_LE;
             DigitalOut LED_BLUE_LE;     
 
+            // Returns the currently selected latch enable pin
             DigitalOut& LE(LEDGROUP grp)
             {
                 switch (grp) {
@@ -114,6 +115,7 @@ namespace uop_msb_200 {
             }
 
 
+            // Convert decimal to a 7-segment pattern
             #define A  0x10
             #define B  0x20
             #define C  0x40
