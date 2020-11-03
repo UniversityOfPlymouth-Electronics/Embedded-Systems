@@ -60,6 +60,12 @@ Here, the same code runs for both cases 1 and 5.
 
 Attempt this task. Note that you will need to use multiple conditions for D.
 
+# Quiz
+
+Please attempt the following quiz before proceeding to the next section
+
+[Quiz on switch-case](https://dle.plymouth.ac.uk/mod/quiz/view.php?id=993811)
+
 ---
 
 [Up - Digital inputs](Digital_Inputs_1.md)

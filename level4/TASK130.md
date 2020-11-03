@@ -241,7 +241,12 @@ The code above uses two switches.
     * Button A increments the count
     * Button B decrements the count
     * Both Buttons A and B reset the count to 0
-    
+
+
+# Quiz
+Please attempt the following quiz before proceeding to the next section
+[Quiz on if-else](https://dle.plymouth.ac.uk/mod/quiz/view.php?id=993808)
+
 ---
 
 [NEXT - TASK 132 - Switch Statements](TASK132.md)
