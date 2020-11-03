@@ -11,7 +11,6 @@ In this task, we look at another flow-control technique, `switch-case`.
 | 2. | Build and run the code. Press and hold button A to see what it does. |
 | - | Press A and B together. What happens? |
 | - | Press A, B and C together. What happens (and why)? |
-| 3. | Debug the code to understand how the code works both with button A pressed and released |
 
 Note we are using `BusIn` for the 4 switch inputs.
 
@@ -29,6 +28,7 @@ So for example, if button A and B are pressed, this will return the value 3.
 
 | TASK132 | Switch-case |
 | --- | --- |
+| 3. | Debug the code to understand how the code works both with button A pressed and released |
 | 4. | Modify the code to do the following: |
 | -  | If only A is pressed, the red flashes |
 | -  | If only B is pressed, the yellow flashes |
