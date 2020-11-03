@@ -19,7 +19,7 @@ Instead of having 4 separate input pins using 4 instances of `DigitalIn`, consid
 
 | TASK127 | BusIn |
 | --- | --- |
-| 4. | Remove the `DigitalOut` objects and replace them with the following line |
+| 4. | Remove the `DigitalIn` objects and replace them with the following line |
 | - | `BusIn bus(PG_0, PG_1, PG_2, PG_3);` |
 | 5. | At the start of main, configure `PG_2` and `PG_3` to have internal pull-down resistors using the following code |
 | - | `bus[2].mode(PinMode::PullDown);` |
