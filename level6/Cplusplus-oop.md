@@ -5,6 +5,11 @@
 Topics
 
 # C and C++ Object Orientated Programming
+C++ is a large language that takes a long time and practise to master. We will focus on core object orientated concepts. Even if you don't use all of these, you may encounter code that does.
+
+The focus of all the sections below is on C++ classes. This is one of the major differences between the C language and C++. 
+
+The examples are kept purposely simple to illustrate the key points. Real-world examples are arguably more interesting, but at the same time can quickly become complex. So my apologies in advance if some of the examples are somewhat contrived. Be reassured the concepts are the same and we will look at more real-world examples later.
 
 ## Function overloading
 
