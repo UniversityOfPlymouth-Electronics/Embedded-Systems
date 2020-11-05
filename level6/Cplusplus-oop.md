@@ -9,19 +9,19 @@ C++ is a large language that takes a long time and practise to master. We will f
 
 The focus of all the sections below is on C++ classes. This is one of the major differences between the C language and C++. 
 
-The examples are kept purposely simple to illustrate the key points. Real-world examples are arguably more interesting, but at the same time can quickly become complex. So my apologies in advance if some of the examples are somewhat contrived. Be reassured the concepts are the same and we will look at more real-world examples later.
+The examples are initially kept purposely simple to illustrate the key points. Then something closer to a real-world example is presented. These are arguably more interesting, but at the same time can quickly become complex. So my apologies in advance if some of the examples are somewhat contrived. Be reassured the concepts are the same and we will look at more real-world examples later.
 
 ## Function overloading
 
-## Class Inheritance
+## Operator Overloading
 
-## Abstract Classes
+## Class Inheritance
 
 ## Function Override
 
 ## Polymorphism and Virtual Functions
 
-## Operator Overloading
+## Abstract Classes
 
 ## Rules about constructors
 
