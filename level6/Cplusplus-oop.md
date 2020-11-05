@@ -21,13 +21,15 @@ The examples are initially kept purposely simple to illustrate the key points. T
 
 ## Polymorphism and Virtual Functions
 
-## Abstract Classes
+## Multiple Inheritance
+
+## Pure Virtual Functions
 
 ## Rules about constructors
 
 https://docs.microsoft.com/en-us/cpp/cpp/constructors-cpp?view=vs-2019#:~:text=%20Constructors%20%28C%2B%2B%29%20%201%20Member%20initializer%20lists.,section.%20%206%20See%20also.%20%20More%20
 
-## Multiple Inheritance
+
 
 ## Namespaces
 
