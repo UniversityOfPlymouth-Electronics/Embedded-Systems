@@ -1,10 +1,12 @@
+#ifndef __DOUBLE_NUMBER__
+#define __DOUBLE_NUMBER__
+
 #include "mbed.h"
 #include <cmath>
 #include <iostream>
 #include <math.h>
 #include <string.h>
 #include <string>
-
 using namespace std;
 
 class DoubleNumber {
@@ -95,26 +97,4 @@ public:
 
 };
 
-
-int main()
-{
-    //Constructor Function overloading 
-    DoubleNumber n0(1.0);
-    DoubleNumber n1;
-    DoubleNumber n2;
-    DoubleNumber n3;
-
-    //setValue function overloading  
-    n1 = 10.0;
-    n1 += 1.0;      // Equivalent to n1.operator+=(1.0);
-    n2 = "-3.0";
-    n3 = n2;
-
-    DoubleNumber sum = (n0 + n1 + n2 + n3);
-    cout << sum << endl;
-
-    while (true) {
-
-    }
-}
-
+#endif

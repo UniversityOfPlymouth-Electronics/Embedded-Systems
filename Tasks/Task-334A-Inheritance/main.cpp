@@ -1,38 +1,22 @@
-#include "mbed.h"
+#include "DoubleNumber.hpp"
+#include "ComplexNumber.hpp"
 
-class Base {
-    private:
-    int _val;
 
-    public:
-    Base(int u) {
-        _val = u;
-    }
-
-    int read() {
-        return _val;
-    }
-
-    Base& operator=(int v) {
-        _val = v;
-        return *this;
-    }
-
-    void operator=(double v) {
-        _val = (int)v;
-    }
-};
-
-class Child : public Base {
-    public:
-    Child(int v) : Base(v) {
-        printf("Hello\n");
-    }
-};
-
-// main() runs in its own thread in the OS
 int main()
 {
+    //Constructor Function overloading 
+    ComplexNumber c0(1.0, 2.0);
+    DoubleNumber  d0(3.0);
+    ComplexNumber c1;
+    DoubleNumber  d1;
+
+    d1 = 10.0;
+    (DoubleNumber)c1 = d1;  //Type cast and = returns type DoubleNumber&
+    
+    // Note how this works with both types, but only on the real parts
+    DoubleNumber sum = c0 + c1 + d0 + d1;
+    cout << sum << endl;
+
     while (true) {
 
     }

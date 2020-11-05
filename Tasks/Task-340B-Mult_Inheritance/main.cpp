@@ -8,7 +8,7 @@ using namespace uop_msb_200;
 using namespace chrono;
 
 // This class now inherits TWO parent classes
-class Flashy : public DigitalOut, CanBeEnabled {
+class Flashy : public DigitalOut, public CanBeEnabled {
     private:
         static uint32_t count;
     protected:
