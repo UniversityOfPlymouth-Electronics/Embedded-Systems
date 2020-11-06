@@ -9,6 +9,7 @@ class Flashy : public DigitalOut {
     protected:
     //Less composition in action here
     Ticker tick;
+
     //Internal state
     microseconds _interval;
     bool _enabled = false;
@@ -17,6 +18,7 @@ class Flashy : public DigitalOut {
     virtual void timerISR()  {
         //Call the baseclass version to toggle the GPIO
         DigitalOut::write(1-this->read());
+        
     }
 
     void enable(bool en)
@@ -88,6 +90,7 @@ class Flashy : public DigitalOut {
         //Don't call the baseclass version!
     }
 };
+
 
 class Flickery : public Flashy {
     protected:

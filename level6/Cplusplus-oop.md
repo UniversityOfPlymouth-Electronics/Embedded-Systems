@@ -749,7 +749,11 @@ Let's look at `Flashy` and we see the ISR has been slightly modified. The `Ticke
 >
 > Under the hood, it uses something known as a v-table to do this.
 
-
+| TASK 338B | Virtual Functions |
+| --- | --- |
+| 6. | Set a break point inside BOTH ISRs (in the parent and child class) |
+| 7. | Use the debugger to discover which one is when the blue button is held down |
+| 8. | Remove the `virtual` keyword and rebuild the code. Repeat the above experiment |
 
 ## Further topics
 
@@ -759,11 +763,7 @@ C++ allows us to  inherit code from more than one class. You can see an example 
 ### Pure Virtual Functions
 Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "abstract classes". This is a rather an advanced topic, but an example has been provided in Task-342
 
-| TASK 338B | Virtual Functions |
-| --- | --- |
-| 6. | Set a break point inside BOTH ISRs (in the parent and child class) |
-| 7. | Use the debugger to discover which one is when the blue button is held down |
-| 8. | Remove the `virtual` keyword and rebuild the code. Repeat the above experiment |
+
 
 
 ---
