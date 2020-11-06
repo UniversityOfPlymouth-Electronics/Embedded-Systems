@@ -438,30 +438,337 @@ You can see which operator can be overloaded in the following article:
 https://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B
 
 ## Class Inheritance
-Now we move to an important topic, whereby one class can inherit many of the properties of another
+Now we move to an important topic in object orientated programming. 
+
+Some of the key properties of inheritance include:
+
+* A child-class can inherit (and hence reuse) many of the properties of a parent class
+* A child-class can add additional functionality and state
+* A child-class can override behaviours of the parent
+
+We first look at a pure C++ example, whereby we extend our `DoubleNumber` to `ComplexNumber`, retaining all it's properties and augmenting it with new functions.
+
+| TASK 334A | Inheritance |
+| --- | --- |
+| 1.  | Make Task334A the active program |
+| 2.  | Using the debugger, step through the code and observe the output + read the comments. |
+| - | Note how the classes have been moved out to separate files to keep main short. |
+| 3.  | What has been added to `ComplexNumber` that was not in `DoubleNumber`? |
+
+The code is below:
+
+```C++
+#include "DoubleNumber.hpp"
+
+class ComplexNumber : public DoubleNumber {
+private:
+
+protected:
+    double _imag;
+
+public:
+    ComplexNumber(double r, double i) : DoubleNumber(r) {
+        _imag = i;
+        cout << "This is the constructor of the sub-class" << endl;
+    }
+    
+    ComplexNumber() : ComplexNumber(0.0, 0.0) { }
+};
+```
+
+From the code, we can say the following about the `ComplexNumber` class:
+
+* It has added a new property `_imag`
+* It has a constructor that accepts two parameters
+    * It passes the real-part to it's parent class
+    * It initialised the imaginary part itself
+* It will inherit all the functions from `DoubleNumber`
+
+In main, we see how the constructor is used:
+
+```C++
+ComplexNumber c0(1.0, 2.0);
+```
+
+| TASK 334A | Inheritance |
+| --- | --- |
+| 4.  | Use the debugger to step into the constructor. Which constructor gets called first, `DoubleNumber` or `ComplexNumber`? |
+
+Further down in main, we see `toString` being invoked
+
+```C++
+cout << c1.asString() << endl;
+```
+
+| TASK 334A | Inheritance |
+| --- | --- |
+| 5.  | Use the debugger to step into this function. Which class does it belong to? |
+
+As you will hopefully see, `ComplexNumber` has all the attributes of `DoubleNumber` and more. However, it is far from complete and some of the behaviours are not suited to complex numbers (unless they are only real values of course).
+
+For example, the public addition operator has been inherited:
+
+```C++
+ cout << (c0 + c1 + d0 + d1).asString();
+ ```
+
+| TASK 334A | Inheritance |
+| --- | --- |
+| 6.  | Use the debugger to step into this function. Why is the imaginary part not included? (sorry if this is obvious, but I'm trying to stress a point) |
+
+> I am simply trying to stress _how_ inheritance works. Maybe this was not a great example as very little of the base class functions are useful in this case! In the next example we see how it is more useful.
+
+### Inheritance with Mbed
+For a more interesting example, now do the following:
+
+| TASK 334B | Inheritance with Mbed |
+| --- | --- |
+| 1.  | Make Task334B the active program |
+| 2.  | Look in main and find the class declaration for `Flashy`. What class does it **inherit**? |
+| 3.  | Run the code to see what it does |
+| 4.  | Does this class still use composition? If so, in what regard? |
+| 5.  | Change the default flash rate to be 250ms by modifying the `Flashy` class (can you find where it is currently set?) |
+
+Some key points to consider:
+
+* `Flashy` is a new class, but still a `DigitalOut`.
+    * Nowhere in the `Flashy` class do I have any code to set up or control the GPIO pins. That is all contained in `DigitalOut`
+* `Flashy` adds new functionality to `DigitalOut`. This includes a `Ticker` and associated functions to toggle the output on and off.
+
+### Reflection
+This example is a much more meaningful example of inheritance, and hopefully you can see the benefits. 
+
+We essentially take an existing class (and all the effort that went into writing it), inherit it's hard earned behaviours, and extend it for new purposes.
+
+> The ability to inherit and reuse code in this way is one of the key arguments of class inheritance.
+
+We also saw in a previous example that this was possible with **composition**. Both approaches can be made to work, but with composition, you would only have access to the public functions of `DigitalOut`.
+
+> When we derive a class, we gain access to the `protected` members as well as the `private` 
+>
+> This is a key difference between inheritance and composition
+
+The downside is that inheritance is more complex and arguably harder to write.
+
+That's a lot, but yes, there is more! (yippee I hear you cry). 
+
+_What if one of the parent class behaviours needs to be changed (or as we say, overridden)?_
+
+This is the topic of the next section: function override.
 
 ## Function Override
+As we saw in Task 334A, the `ComplexNumber` class inherits all the functionality of `DoubleNumber` and adds a new property, `_imag`. 
+
+However, most of the functions written in `DoubleNumber`  perform operations on a single scalar value. `ComplexNumber` is 2-dimensional, and has two values (known as real and imaginary), so the same functions need to be adapted in many cases.
+
+> Function override allows us to change the behaviour of an inherited function, will still maintain access to the version in the parent class
+>
+> If you are not an engineering student, think of complex numbers as coordinates on a graph with some quirky maths
+
+
+| TASK 336A | Function Override |
+| --- | --- |
+| 1.  | Make Task336A the active program |
+| 2.  | Using the debugger, step through the code and see which functions are in the parent class and which are in the child |
+| 3.  | The overridden `operator+` is not finished. Complete this and test |
+
+Note how the `toString` function uses the version that matches the type.
+
+| TASK 336A | Function Override |
+| --- | --- |
+| 4.  | ADVANCED: Consider the following line: |
+| -   | `cout << c1.asDoubleNumber().asString() << endl;` |
+| -   | Can you explain how this works? Good luck :) |
+
+As you might have picked up, this can get really complicated. In fact, to write a good complex number class probably means throwing this all away and taking a more sophisticated approach.
+
+### Inheritance and Overloading the operator =
+Just as you thought, hmm, this is clever...a word of caution here. Remember before we even looked at operator overloading, you could use `=` to copy one class to the other? **This behaviour is the default and has not gone away**.
+
+Consider the code below:
+
+```C++
+class A {
+    double p;
+    public:
+    A(double u) { p = u;}
+}
+...
+A u1(2.0);
+A u2(0.0);
+u2 = u1;
+```
+
+Note the default `=` operator does a member-by-member copy (just like structures)?
+
+_By default, unless you write your own, the compiler creates an `operator=` for you. The `ComplexNumber` class therefore has it's own overridden `+`.
+
+### Overriding with Mbed
+Again, a less contrived example is provided in Task 336B. Again, we continue with overriding `DigitalOut`, but now we are making it look and feel more like the original `DigitalOut`
+
+| Operation | DigitalOut | Flashy |
+| --- | --- | --- |
+| Equate to 1 or 0 | Static ON or OFF | Flashing ON/OFF or OFF |
+| Set duration | Not implemented | Define flash rate |
+
+
+| TASK 336B | Function Override with Mbed |
+| --- | --- |
+| 1.  | Make Task336B the active program. Build and run. |
+
+Let's look at the main code:
+
+```C++
+    Flashy flashRed(TRAF_RED1_PIN, 125ms);
+    Flashy flashYellow(TRAF_YEL1_PIN, 250ms);
+    Flashy flashGreen(TRAF_GRN1_PIN);
+
+    while (true) {
+        flashRed    = 1;
+        flashYellow = 1;
+        flashGreen  = 1;
+        wait_us(5000000);              //5 seconds
+        flashRed    = 0;
+        flashYellow = 0;
+        flashGreen  = 0;
+        wait_us(5000000);              //5 seconds
+
+        if (blueButton == 1) {
+            flashGreen << 50ms;
+        } else {
+            flashGreen << 500ms;
+        }
+    }
+```
+
+In many ways, it now looks like `DigitalOut`. 
+
+* Equate to a `1` and it flashes; 
+* Equate to a `0` and the light is out.
+
+We can also set a time with the operator `<<` to set the duration.
+
+So to **use** this new class is just as simple as `DigitalOut`.
+
+Looking into the `Flashy` class we note the following two functions:
+
+```C++
+    Flashy& operator=(int u) {
+        this->write(u);
+        return *this;
+    }
+
+    //Override write
+    void write(int value)
+    {
+        if (value == 0) {
+            this->enable(false);
+        } else {
+            this->enable(true);
+        }
+        //Don't call the baseclass version!
+    }
+```
+
+Both the `=` operator and the `write` functions exist in the `DigitalOut` class. They have been overridden to change the behaviour.
+
+> Setting to a `1` with `=` only turns on the `Ticker`. It does not set the Pin state at all!
+
+So how does the pin state ever change? That is found in the Ticker interrupt service routine
+
+```C++
+    void timerISR()  {
+        //Call the baseclass version to toggle the GPIO
+        DigitalOut::write(1-this->read());
+    }
+```
+
+Note how we use the scope operator `::` to explicitly call the version of `write` from the **parent class** (`DigitalOut`).
+
+In other words, we can choose which version to use.
+
+> You always have access to the parent class functions even if you override it.
 
 ## Polymorphism and Virtual Functions
 
-## Multiple Inheritance
+| TASK 338B | Virtual Functions |
+| --- | --- |
+| 1.  | Make Task338B the active program. Build and run. |
+| 2.  | Pay particular attention to the timing of the red LED | 
+| 3.  | Now step through the code with the debugger to ensure you follow it |
+| 4. | Now uncomment the line that reads `//#define EXP1` |
+| 5. | Rebuild the code and run. Again, observe the behaviour of the red LED. Now press the black reset button WHILE holding down the blue button. Note the behaviour. 
+ |
+ | - | Use the debugger to help you follow what has happened here |
+ 
+In the last example, we used **dynamic memory allocation** to create an object:
 
-## Pure Virtual Functions
+```C++
+    Flashy* pFlashRed;
+    if (blueButton == 1) {
+        pFlashRed = new Flickery(TRAF_RED1_PIN, 125ms);
+    } else {
+        pFlashRed = new Flashy(TRAF_RED1_PIN, 125ms);
+    }
+```
 
-## Rules about constructors
+When the button is pressed, you will see an instance of the child-class `Flickery` has been created instead of `Flashy`. 
 
-https://docs.microsoft.com/en-us/cpp/cpp/constructors-cpp?view=vs-2019#:~:text=%20Constructors%20%28C%2B%2B%29%20%201%20Member%20initializer%20lists.,section.%20%206%20See%20also.%20%20More%20
+> This uses the C++ operator `new`, which does the following:
+>
+> * it allocates memory for a new object
+> * It creates the object, which in turn calls its constructor
+> * It returns an address of that object so it can be saved in a pointer.
+>
+> If we wish to deallocate and destroy this object, we would use `delete`
+
+A key point to note is this:
+
+* The pointer `pFlashRed` is of type `Flashy*` and NOT `Flickery*`
+* Flickery subclasses `Flashy`, and **overrides the ticker interrupt service routine (ISR)** in order to change its behaviour.
+
+When the code **runs**, we observe the following:
+
+* If button is now pressed, it is a new `Flashy` that is created. 
+* If button is pressed, it is a new `Flickery` that is created. 
+
+Clearly the compiler has no idea which one will be created, so how does it know which ISR to use?
+
+Let's look at `Flashy` and we see the ISR has been slightly modified. The `Ticker` ISR now reads as follows:
+
+```C++
+    virtual void timerISR()  {
+        //Call the baseclass version to toggle the GPIO
+        DigitalOut::write(1-this->read());
+    }
+```
+
+**The keyword `virtual` has been added.** 
+
+> This tells the compiler to add code to "look up" what **type** is really being used, and find the appropriate function, starting at the bottom and working up.
+>
+> Under the hood, it uses something known as a v-table to do this.
 
 
-## Namespaces
 
-## C++ Structures
+## Further topics
 
-## Summary of Key Terms / Jargon
+### Multiple Inheritance
+C++ allows us to  inherit code from more than one class. You can see an example of this in Task460B
 
-Encapsulation
-Composition
-Inheritance
-Overload
-Override
+### Pure Virtual Functions
+Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "abstract classes". This is a rather an advanced topic, but an example has been provided in Task-342
 
+| TASK 338B | Virtual Functions |
+| --- | --- |
+| 6. | Set a break point inside BOTH ISRs (in the parent and child class) |
+| 7. | Use the debugger to discover which one is when the blue button is held down |
+| 8. | Remove the `virtual` keyword and rebuild the code. Repeat the above experiment |
+
+
+---
+
+
+[Back to Contents](README.md)
+
+---

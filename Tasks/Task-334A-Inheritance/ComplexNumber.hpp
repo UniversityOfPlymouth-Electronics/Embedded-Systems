@@ -16,6 +16,16 @@ public:
     
     ComplexNumber() : ComplexNumber(0.0, 0.0) { }
 
+    // ComplexNumber& operator=(double u) {
+    //     DoubleNumber::operator=(u);
+    //     return *this;
+    // }
+
+    // ComplexNumber& operator=(ComplexNumber& u) {
+    //     DoubleNumber::operator=(u);
+    //     return *this;
+    // }
+
 };
 
 #endif

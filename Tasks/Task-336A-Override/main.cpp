@@ -15,18 +15,16 @@ int main()
     //Write the value as a string
     cout << d1.asString() << endl;
 
-    //DANGER! THIS IS NOT AS IT LOOKS
-    //By default, the compiler creates an = operator!
+    //Now overrides the default =
     c1 = c0;
 
-    //Write as a string, but note asString() comes from the parent class
+    //Now overrides the parent asString
     cout << c1.asString() << endl;
-    
 
-    //The plus will work, but it will be the DoubleNumber version
-    cout << (c0 + c1 + d0 + d1).asString();
+    //Challenge - try and understand this ;)
+    cout << c1.asDoubleNumber().asString() << endl;
 
-    // Note how this works with both types, but only on the real parts
+    //TODO - write an overloaded + operator
     DoubleNumber sum1 = c0 + c1 + d0 + d1;
     cout << sum1 << endl;
 

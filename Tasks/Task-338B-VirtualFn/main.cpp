@@ -113,7 +113,7 @@ class Flickery : public Flashy {
 
 DigitalIn blueButton(USER_BUTTON);
 
-#define EXP1
+//#define EXP1
 int main()
 {
     #ifdef EXP1
