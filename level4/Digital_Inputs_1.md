@@ -31,8 +31,9 @@ Now attempt each of the following tasks in sequence.
 1. [TASK 128 - Switch Debounce](TASK128.md)
 1. [TASK 130 - If Statements](TASK130.md)
 1. [TASK 132 - Switch Statements](TASK132.md)
-1. [TASK 134 - Multiple Input Devices - COMING SOON]()
-1. [TASK 140 - First Look at Interrupts - COMING SOON]()
+1. [TASK 134 - Multiple Input Devices](TASK134.md)
+1. [TASK 136 - Software State Machine](TASK136.md)
+1. [TASK 138 - First Look at Interrupts](TASK138.md)
 
 ---
 
