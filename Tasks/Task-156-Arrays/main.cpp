@@ -13,10 +13,15 @@ DigitalOut greenLED(TRAF_GRN1_PIN);
 AnalogIn ldr(AN_LDR_PIN);
 Buzzer buzz;
 
-unsigned short samples[100];
 
 int main()
 {
+    unsigned short samples[100];
+
+    for (unsigned int m=0; m<100; m++) {
+        printf("%X ", samples[m]);
+    }
+
     // Automatic headlamp 
     while (true) {
 

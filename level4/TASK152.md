@@ -43,6 +43,4 @@ For this to work, we need to keep track of which state (ON or OFF) we are curren
 
 ---
 
-1. [NEXT - Task 156 - Arrays](TASK156.md)
-
-
+[NEXT - Task 158 - C Strings](TASK158.md)
