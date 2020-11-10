@@ -55,6 +55,16 @@ namespace uop_msb_200 {
     #define LED_BLUE_LE_PIN PE_14
     #define LED_DIGIT_OE_PIN PE_15
 
+    // ANALOGUE
+    #define AN_POT_PIN  PA_0
+    #define MIC_AN_PIN  PA_3
+    #define DAC1_AN_PIN PA_4 
+    #define DAC2_AN_PIN PA_5
+    #define BNC_AN_PIN  PA_6
+    #define AN_LDR_PIN  PC_0
+    #define STEREO_LEFT_AN_PIN      PB_0
+    #define STEREO_RIGHT_AN_PIN     PB_1
+
     // *********
     // BUTTONS *
     // *********

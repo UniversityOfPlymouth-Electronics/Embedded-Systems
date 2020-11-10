@@ -111,6 +111,8 @@ void funcTmr()
 
 Like variables, as programmers we don't usually concern ourselves with the actual addresses and use names. When the address is referring to some program code, we call it a **function**.
 
+We will talk a lot more about functions later in the course.
+
 ---
 
 [Up - Digital inputs](Digital_Inputs_1.md)
