@@ -32,7 +32,7 @@ So for example, if button A and B are pressed, this will return the value 3.
 | 4. | Modify the code to do the following: |
 | -  | If only A is pressed, the red flashes |
 | -  | If only B is pressed, the yellow flashes |
-| -  | If only A is pressed, the green flashes |
+| -  | If only C is pressed, the green flashes |
 | -  | For all other combinations, the LEDs are all ON |
 
 Multiple conditions can handled as follows:
@@ -53,7 +53,7 @@ Here, the same code runs for both cases 1 and 5.
 | 5. | Modify the code to do the following: |
 | -  | If only A is pressed, the red flashes |
 | -  | If only B is pressed, the yellow flashes |
-| -  | If only A is pressed, the green flashes |
+| -  | If only C is pressed, the green flashes |
 | -  | If D is pressed at all, then all LEDs flash
 | -  | For all other combinations, the LEDs are all ON |
 
