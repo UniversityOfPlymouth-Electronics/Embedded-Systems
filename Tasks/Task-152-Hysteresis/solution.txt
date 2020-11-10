@@ -1,0 +1,36 @@
+
+
+
+
+int main()
+{
+    enum {OFF=0, ON} state;
+
+    while (true) {
+        //Read Analog to Digital Converter values (16 bit)
+        unsigned short potVal   = pot.read_u16();
+        printf("Potentiometer: %X\n", potVal);
+        
+        switch (state) {
+            case OFF:
+                if (potVal > 0x9000) {
+                    state = ON;
+                    buzz.playTone("C");
+                    redLED = 1;
+                }
+                break;
+
+            case ON:
+                if (potVal < 0x7000) {
+                    state = OFF;
+                    buzz.rest();
+                    redLED = 0;
+                }
+                break;
+        };
+
+        //Wait 0.25 seconds
+        wait_us(500000);
+
+    }
+}
