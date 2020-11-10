@@ -128,7 +128,7 @@ You may have noticed that there is some code to control the red, green and blue 
 Can you use these to display signal levels on the three input devices:
 
 * Green display for the LDR
-* Yellow display for the POT
+* Red display for the POT
 * Blue display for the Microphone 
 
 ---
