@@ -2,17 +2,16 @@
 
 ---
 
-# Digital Inputs and Conditionals (Week 4-5)
-We continue from last week still focusing on digital output and more aspects of the C/C++ programming language.
+#Analogue Input
+We now look at another type of input signal - analogue.
 
 ## Lectures
-The lectures for this week cover some basic programming concepts
+The lectures for this lab cover some basic concepts
 
 | Related Slides |
 | --- |
-| [Session 04+01 Digital Inputs](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EZWUG3G6-dBDiqGJIi_2EpABIibqt_LA7EufOnVYaga3ew) |
-| [Session 04+02 - Operators](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EaI8nBl7SMdJqZqmlnHZ958B8CxRs-la9UyKPies8L0gGA) |
-| [Session 05+01 - If Else While do-while](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EXIO4l5Jl3xEuPWJt8k_v_gBOZh-DuIXnCvE_v1X3dyBBQ) |
+| [Session 06+01 - Analogue Input](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/ETF9yQ3BxURPrfT-sNUJmckBN6F_QpoERMsGgKj25c1LCw) |
+| [Session 06+02 - Arrays and Strings](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/Eagu8zIy9xZFq2JZeMVR7YQBo1wTCE4TgfQlQ1pCvVab_w) |
 
 
 ## Topics Covered 
