@@ -48,18 +48,13 @@ int main()
     printf("String length: %d\n", strlen(str4));   
     //strcpy(str3, str4);   //Uncomment this
 
-    //sprintf
+    //sprintf - building strings
     for (unsigned int n=0; n<3; n++) {
         int x = rand() % 10;
         sprintf(str4, "I guess %u", x);
         printf("%s\n", str4);
     }
 
-    //sscanf
-    const char str5[] = "Pi equals 3.14";
-    char s1[64], s2[64];
-    float pi;
-    sscanf(str5, "%s %s %f", s1, s2, &pi);
 
     // Automatic headlamp 
     while (true) {
