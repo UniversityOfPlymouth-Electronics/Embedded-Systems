@@ -22,7 +22,7 @@ This course is divided into two blocks:
 | Block | Content | - | Weeks |
 | --- | --- | --- | --- |
 | 1. | Review of Mbed-OS, C++, OOP and Interfacing | [Lab1-DigitalIO](DigitalIO.md), [Lab2-C and C++ Structures](Cplusplus-structures.md), [Lab3-C++ Classes](Cplusplus-classes.md), [Lab4-C++ and OOP](Cplusplus-oop.md) | 1-4 |
-| 2. | Multi-tasking: Blocking, polling, interrupts,  multi-threaded programming and networking | | 5 - 8 |
+| 2. | Multi-tasking: Blocking, polling, interrupts,  multi-threaded programming and networking | [Lab5-Rapid Polling and Interrupts](rapid-poll-int.md), Lab6-Threads and Thread Synchronisation, Lab7-Thread Abstractions, Lab8-Network Programming | 5 - 8 |
 | 3. | Coursework | | 9 - 13 |
 | |
 
