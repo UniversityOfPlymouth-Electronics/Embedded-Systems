@@ -1,4 +1,4 @@
-[Back to Contents](README.md)
+[Back to Contents](./README.md)
 
 ---
 
@@ -100,7 +100,7 @@ The second constructor has no parameter, but invokes the first with a default va
 Which is called depends on the parameters that are passed when creating the object.
 
 ### Overloaded Member Functions
-The function `setReal` is overloaded three times:
+The function `setValue` is overloaded three times:
 
 ```C++
     void setValue(double u) {
@@ -758,7 +758,7 @@ Let's look at `Flashy` and we see the ISR has been slightly modified. The `Ticke
 ## Further topics
 
 ### Multiple Inheritance
-C++ allows us to  inherit code from more than one class. You can see an example of this in Task460B
+C++ allows us to  inherit code from more than one class. You can see an example of this in Task-340B
 
 ### Pure Virtual Functions
 Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "abstract classes". This is a rather an advanced topic, but an example has been provided in Task-342
