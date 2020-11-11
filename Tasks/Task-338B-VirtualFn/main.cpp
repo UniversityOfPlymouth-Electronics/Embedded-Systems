@@ -119,14 +119,14 @@ DigitalIn blueButton(USER_BUTTON);
 //#define EXP1
 int main()
 {
-    #ifdef EXP1
+    #ifndef EXP1
     Flickery flashRed(TRAF_RED1_PIN, 250ms); 
     #endif
     Flashy flashYellow(TRAF_YEL1_PIN, 250ms);
     Flashy flashGreen(TRAF_GRN1_PIN);
 
     //Run-time check to choose which object it actually is!
-    #ifndef EXP1
+    #ifdef EXP1
     Flashy* pFlashRed;
     if (blueButton == 1) {
         pFlashRed = new Flickery(TRAF_RED1_PIN, 125ms);
