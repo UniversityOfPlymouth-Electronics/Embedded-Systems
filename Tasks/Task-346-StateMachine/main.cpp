@@ -14,8 +14,9 @@ DigitalOut greenLED(TRAF_GRN1_PIN);     //Green Traffic 1
 LatchedLED disp(LatchedLED::SEVEN_SEG);
 
 //Timers
-TimerCompat tmrA;
-TimerCompat tmrB;
+Timer tmrA;
+Timer tmrB;
+Timer tmrLED;
 
 int main()
 {
@@ -44,9 +45,14 @@ int main()
     // Input storage variables
     int btnA = 0;
     int btnB = 0;
-    long long timeA = 0;  
-    long long timeB = 0;
+    microseconds timeA = 0ms;  
+    microseconds timeB = 0ms;
+    microseconds timeLED = 0ms;
     
+    //Start
+    tmrLED.start();
+    disp = count;
+
     while (true) {
 
         // ************************************
@@ -54,8 +60,9 @@ int main()
         // ************************************
         btnA = buttonA;
         btnB = buttonB;
-        timeA = tmrA.read_ms();
-        timeB = tmrB.read_ms();
+        timeA = tmrA.elapsed_time();
+        timeB = tmrB.elapsed_time();
+        timeLED = tmrLED.elapsed_time();
 
         // ***************************
         // UPDATE "STATE" for button A
@@ -74,7 +81,7 @@ int main()
             break;
 
             case DEBOUNCE_1:
-                if (timeA >= 50) {
+                if (timeA >= 50ms) {
                     stateA = WAITING_FOR_RELEASE;
                     tmrA.stop();
                 }
@@ -89,7 +96,7 @@ int main()
             break;
 
             case DEBOUNCE_2:
-                if (timeA >= 50) {
+                if (timeA >= 50ms) {
                     stateA = WAITING_FOR_PRESS;
                     tmrA.stop();
                 }
@@ -113,7 +120,7 @@ int main()
             break;
 
             case DEBOUNCE_1:
-                if (timeB >= 50) {
+                if (timeB >= 50ms) {
                     stateB = WAITING_FOR_RELEASE;
                     tmrB.stop();
                 }
@@ -128,13 +135,37 @@ int main()
             break;
 
             case DEBOUNCE_2:
-                if (timeB >= 50) {
+                if (timeB >= 50ms) {
                     stateB = WAITING_FOR_PRESS;
                     tmrB.stop();
                 }
             break;            
         }
 
+        // ********************************
+        // UPDATE "STATE" for LED and Timer
+        // ********************************
+        
+        // The timer value is the "state" for the flashing LED
+
+        // METHOD 1 (Simple if)
+        // if (timeLED >= 250ms) {
+        //     greenLED = !greenLED;
+        //     tmrLED.reset();
+        // }
+
+
+        // METHOD 2 (switch-case style)
+        // Convert the time (type microseconds) to ms (type long long)
+        long long time_ms = duration_cast<milliseconds>(timeLED).count();       //Ugh..
+        switch (time_ms) {
+            case 0 ... 249:     // Cool huh?
+            break;
+
+            default:
+            greenLED = !greenLED;
+            tmrLED.reset();
+        }
   
     }
 }
