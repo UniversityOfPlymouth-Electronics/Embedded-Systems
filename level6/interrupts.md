@@ -83,5 +83,236 @@ In this example, we see both GPIO and Timer based interrupts wake the CPU.
 >
 > This is a very important point which we will now look at in more details.
 
+## Task-350 - Race Conditions
+**This is one of the most important topics in this module.** Pay particular attention to this exercise as it underpins many issues you will meeting going forward. It is also the basis of some of the most difficult software faults to detect and fix.
+
+| TASK-350 | Race Conditions |
+| --- | --- |
+| 1.  | Set Task-350 as your active program |
+| 2.  | Build and run the task. |
+| 3.  | Note the LED sequence |
+
+In this example a timer is used to generate a **single** interrupt (using the `Timeout` class). 
+
+If you inspect the code you will observe the following:
+
+* There is a global variable `counter` initialised to zero
+* There is a function `countUp()` that **increments** `counter` by 1 over 1,000,000 iterations. 
+    * This is run ONCE and is called from `main()`.
+* There is a function `countDown()` that **decrements** `counter` by 1 over 1,000,000 iterations. 
+    * This is run ONCE and is invoked by an interrupt
+* Both `countUp()` and `countDown()` share the same variable `counter`. Both only run ONCE.
+
+Three LEDs are used in this project. 
+
+* The green LED is on while `countUp()` is running
+* The yellow LED is on while `countDown()` is running
+* The red LED is on as long as `counter` is not equal to zero
+
+| TASK-350 | Race Conditions |
+| --- | --- |
+| 4.  | Press the black reset button and again observe the green and yellow LEDs |
+| -   | Note that green first switches on and then off, followed by yellow switching on and off. |
+| -   | This shows that one function is allowed to finish before the other one starts |
+| -   | At the end of the sequence, the red LED goes off as `counter` equals zero |
+
+This makes numerical sense. The `countUp()` function adds 10,000,000 to `counter`, then the `countDown()` function subtracts 10,000,000. **The net result is zero**.
+
+| TASK-350 | Race Conditions |
+| --- | --- |
+| 5.  | While holding down the blue button, press and release the black reset button. Again observe the green and yellow LEDs |
+| -   | Note that there is a moment when both yellow and green are switched ON. |
+| -   | This shows that one function is interrupting the other |
+| -   | At the end of the sequence, the red LED stays ON. This means the  `counter` does NOT equal zero |
+| -   | However, both functions have been allowed to run to completion! |
+
+So what has changed here? In short, **nothing has changed except for timing**.
+
+Let's look more closely at this:
+
+```C++
+...
+
+    if (button == PRESSED) {
+        t1.attach(&countDown, 15us);
+    } else {
+        t1.attach(&countDown, 2s);                   
+    }
+    
+    //Run count up on the main thread
+    countUp();
+    
+...
+```
+
+**Case 1: Blue button is NOT pressed**
+
+The single timer interrupt does not occur for 2 seconds. This means `countUp()` has time to finish before the interrupt invokes `countDown()`
+
+**Case 2: Blue button IS pressed**
+
+The single timer interrupt now occurs just 15 microseconds after it is attached. This means `countUp()` is allowed to start, but does NOT have time to finish before it is interrupted by `countDown()`. When `countDown()` is complete, `countUp()` is allowed to complete.
+
+However, the final value of `counter` is not zero, which is incorrect. So why the difference?
+
+**It's still the same code. All that has changed is timing!**
+
+## Race Conditions
+This is one of the most sinister types of bug, and at root of this is **out of line** code execution.
+
+In both `countUp()` and `countDown()`, we see the `counter` variable being modified. If we were to inspect the assembly code for each of these, we would see this resolves to CPU instructions. 
+
+An example is shown below:
+
+<figure>
+<img src="../img/count_decrement_assembler.png" width="300px">
+<figcaption>ARM assembler for the C statement count-- with no optimisation</figcaption>
+</figure>
+
+This is the assembly language for `count--`. `count++` is very similar.
+
+> Note the use of registers `r1`, `r2` and `r3`
+
+We can divide this code into three sections:
+
+* Fetch (from memory into registers)
+* Modify (registers)
+* Write (registers back to memory)
+
+From the lecture, you may recall the following:
+
+**Scenario 1:** count++ and count-- run exclusively
+
+| main - `countUp()` | Event | ISR - `countDown()` |
+| --- | --- | --- |
+| Copy data from `counter` into registers | - | - |
+| Modify registers (increment) | - | - |
+| Write registers into `counter` | - | - |
+| - | - | - |
+| - | Interrupt -> | registers `r0-r3` pushed on the stack |
+| - | - |Copy data from `counter` into registers |
+| - | - |Modify registers (decrement) |
+| - | - |Write registers into `counter` |
+| - | <- return | registers `r0-r3` popped from the stack |
+| `main()` continues | - | - |
+
+Consider the case where `counter=5` at the start. At the end, the value remains unchanged.
+
+**Scenario 2:** count++ is pre-empted by count-- 
+
+| main - `countUp()` | Event | ISR - `countDown()` |
+| --- | --- | --- |
+| Copy data from `counter` into registers | - | - |
+| Modify registers (increment) | - | - |
+| - | Interrupt-> | registers `r0-r3` pushed on the stack |
+| - | - |Copy data from `counter` into registers |
+| - | - |Modify registers (decrement) |
+| - | - |Write registers into `counter` |
+| - | <- return | registers `r0-r3` popped from the stack |
+| Write registers into `counter` | - | - |
+| `main()` continues | - | - |
+
+Consider again the case where `counter=5` at the start. Following the table above, At the end, you will find `counter=6`, which is the wrong result.
+
+> This occurred because `count++` was preempted before it had time to write its result to memory. Furthermore, any value saved by `count--` in the ISR was overwritten upon return to `main`
+
+## Critical Sections
+Although the example above is very contrived, the phenomena is very real. 
+
+> Such timing error can occur very rarely, and therefore can go undetected. Their impact can be catastrophic.
+
+To avoid such errors, we need to perform two-key steps:
+
+1. Identify all **critical sections** of code
+2. Add additional measures to ensure such critical sections are never pre-empted by code that shares any common resource (memory, I/O, or any other mutable state).
+
+What do we mean by critical section?
+ 
+> Where 2 or more blocks of code make reference to the same mutable state (anything that can be written to) and where at least one block performs a write operation. These blocks are critical sections and must NOT be allowed to preempt each other.
+
+The problem with interrupts is we don't know when they will occur, as they are **asynchronous**.
+
+There are a few strategies we can use:
+
+* Turn off interrupts during each critical section
+* Temporarily elevate the priority of a code block to prevent it being preempted
+* Rarely, we can perform an operation with a single assembly instruction. These can be added to our C code. This only applies for very simple operations.
+
+## Protecting Critical Sections in Mbed
+For this task, we find a solution for the race condition in the previous example.
+
+| TASK-350 | Race Conditions |
+| --- | --- |
+| 1.  | Set Task-350 as your active program |
+| 2.  | Build and run the task, first without the blue button being pressed, and secondly with the blue button held down |
+| -  | In both cases, the red LED turns off |
+
+Look at the new `countUp()` and `countDown()` functions. In each of these, we see a shared variable `count` being referenced. Both in this case modify this variable, so each constitutes a critical section in each function.
+
+Therefore, the following has been added to prevent the read-modify-write cycle of `count++` and `count--` being interrupted.
+
+For `countUp()`:
+
+```C++
+        CriticalSectionLock::enable();
+        counter++; 
+        counter++;
+        counter++;
+        counter++;
+        counter++;
+        counter++;
+        counter++;
+        counter++;
+        counter++;
+        counter++; 
+        CriticalSectionLock::disable();
+```
+
+For `countDown()`:
+
+```C++
+        CriticalSectionLock::enable();
+        counter--;
+        counter--;
+        counter--;
+        counter--;
+        counter--;
+        counter--;
+        counter--;
+        counter--;
+        counter--;
+        counter--;  
+        CriticalSectionLock::disable();
+```
+
+In simple terms:
+
+* `CriticalSectionLock::enable();` turns off interrupts
+* `CriticalSectionLock::disable();` returns them to their previous state (turns them back on in this case).
+
+> **Why so many `counter++` instructions?**
+> 
+> In case you were wondering, this is a contrived example that presents a high probability of a race condition occurring for demonstration purposes. 
+>
+> In real applications, races might be quite subtle and hard to spot. Worst of all, they are often rare and hard to detect.
+
+## Reflection
+It is not unknown for developers to use interrupts and be completely oblivious to their dangers. In some applications, this could even pose a risk to life and/or the environment.
+
+Most developer tools will not help you detect race conditions. Most code tests are unlikely to detect them especially when they are rare. 
+
+**You** have to spot them by reading the code. A group code walk-through with experienced developers is one way to increase the chances of spotting such an error. It also comes with practise.
+
+In contrast to rapid polling, interrupts are very efficient but also much more dangerous.
+
+> In the absence of any interrupts, rapid polling has no pre-emption so is always safe from race conditions.
+
+However, sometimes we have to use them, so this issue cannot be avoided forever.
+
+
+
+---
+
+
 
 

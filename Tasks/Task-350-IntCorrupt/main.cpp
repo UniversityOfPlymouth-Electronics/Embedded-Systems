@@ -32,7 +32,7 @@ void countUp()
     }  
     green_led = 0; 
     
-    //Last to finish turnes out the green light
+    //Last to finish turns out the red light
     if (counter == 0) {
         red_led = 0;   
     }
@@ -57,7 +57,7 @@ void countDown()
     }
     yellow_led = 0;
       
-    //Last to finish turns out the green light  
+    //Last to finish turns out the red light  
     if (counter == 0) {
         red_led = 0;   
     }     
