@@ -2,7 +2,7 @@
 
 ---
 
-# Multi-Tasking with Rapid-Polling and Interrupts
+# Multi-Tasking with Rapid-Polling
 If you remember back to the level 5 course, one of the challenges was with managing multiple devices at the same time.
 
 > Blocking has been recognised as a problem for computers for many years. In the absence of an alternative strategy, simply waiting on a device to change state can mean ignoring other device I/O, which can lead to data loss or integrity errors.
@@ -133,20 +133,92 @@ The code is very short:
     }
 ```
 
-Here, the input is value of the timer which is reset every time more than 250ms passes.
+Here, the input is value of the timer which is reset every time more than `250ms` passes.
 
-> Note the modern API being used here. We are using the C++ std::chrono library, which overloads the following operators:
+> Note the modern API being used here. We are using the C++ `std::chrono` library, which overloads the following operators:
 > 
 > * ""ms 
 > * ""us 
 > * ""ns 
 >
-> All these do it scale the prefix value to microseconds (type `long long`)
+> These do it scale the prefix value to microseconds (type `long long`)
 >
 > Note the type of `tm` is `std::chrono::microseconds`
 >
-> The header file include `using namespace std::chrono;` which saves us from 
+> The header file include `using namespace std::chrono;` which saves us from writing the `std::chrono::` prefix.
 
+### Reflection
+Some points to consider.
 
+When no buttons are pressed, the while loop repeats at a high speed so as not to miss any inputs. However, to manage switch bounce, a simple wait is added at the end. This is a bit crude as it blocks for 50ms. We were trying to remove blocking!
+
+This delay noticeably slows the loop time, but luckily not enough to notice. It might mean the green flash rate is not particularly accurate. 
+
+An improvement would be to poll two more timers, one per switch and remove blocking entirely. This is the purpose of the next task. This change is going to add more complexity to our code however.
+
+## Task-346 - Using a State Machine pattern
+We will now remote any blocking code from the previous task. So that the code does not become too complex, a state machine is used for each input/output combination. In fact we employ 3 state machines.
+
+> A state machine allows us to keep track of where we are in a sequence. As you will see, this removes the need to record the previous input values and we can avoid blocking entirely.
+
+| Task-346 | Using a State Machine for Rapid Polling |
+| --- | --- |
+| 1.  | Make Task-346 the active program |
+| 2.  | Build and run the code |
+| -   | Press A and B to see the count change. Note the flashing green LED is unaffected |
+| 3.  | Use the debugger to step through the code to make sure you understand it |
+
+Inspecting the code, it is fairly repetitive. The two state machines used for buttons A and B are almost identical. 
+
+> Each state machine has a switch (`DigitalIn`) and a timer (`Timer`).
+>
+> The other difference is what happens when a switch is pressed. One increments and the other decrements.
+
+### Challenge
+Write a C++ class that encapsulates all the behaviour of the switch-timer state machine. 
+
+> Use composition to encapsulate a `Timer`, `DigitalIn`
+> Use this class to simplify and shorten the code
+
+The next task as one possible solution.
+
+## Task-427
+This task contains one possible solution to the challenge in the previous task.
+
+| Task-347 | Using a State Machine for Rapid Polling |
+| --- | --- |
+| 1.  | Make Task-347 the active program |
+| 2.  | Build and run the code |
+| -   | Press A and B to see the count change. Note the flashing green LED is unaffected |
+| 3.  | Use the debugger to step through the code to make sure you understand it |
+| 4.  | Now write another class to encapsulate the logic needed for the flashing green LED |
+| -  | Write the class |
+| -  | Instantiate and test for the Green LED |
+| -  | Add instances for the red and yellow LED |
+| -  | Make them all flash at different rates |
+
+A solution is provided (Task427B-Solution). Note how the code is easily reused by encapsulating logic in a class.
+
+## Reflection
+That is all I want to do with rapid polling. There are a few observations that need to be summarised:
+
+* Rapid polling is a technique that allows us to manage multiple input/output devices without blocking
+* The rate at which the inputs are sampled needs to be high enough to avoid missing events. 
+* The rate at which the inputs are sampled is determined by the loop time and is variable.
+* The technique is not power efficient. The CPU is typically running at full speed even when nothing is being updated.
+* The code can easily become verbose and complicated. C++ was used to reduce repetition, but is not easy to write or debug.
+
+Saying all this, rapid polling is a valid technique. In terms of power, this class of microcontroller still uses very little power even when running at full speed. 
+
+* If this was part of a control system where other devices are consuming power in the order of Watts (or kWatts even!), then a few mW of additional power makes little difference.
+* However, if this is part of a batter powered device that needs to run on a coin cell for many months, then this is significant.
+
+This technique is also unsuited to sampling and analogue to digital conversion. This is because it is very hard to obtain a fixed sampling rate (loop-time is rarely a known constant).
+
+Next, we loop a more sophisticated solution, **hardware interrupts**.
+
+---
+
+[NEXT - Lab6-Interrupts](interrupts.md)
 
 

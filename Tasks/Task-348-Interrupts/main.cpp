@@ -24,11 +24,6 @@ void funcA()
     redLED = !redLED;
 }
 
-void funcB()
-{
-    yellowLED = !yellowLED;
-}
-
 void funcTmr()
 {
     greenLED = !greenLED;
@@ -38,7 +33,6 @@ int main()
 {
     //Set up interrupts
     btnA.rise(&funcA);
-    btnB.fall(&funcB);
     tick.attach(&funcTmr, 500ms);
     
     //Main loop - mostly sleeps :)
