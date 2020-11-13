@@ -296,23 +296,90 @@ In simple terms:
 >
 > In real applications, races might be quite subtle and hard to spot. Worst of all, they are often rare and hard to detect.
 
+## `Volatile`?
+You may have noticed the keyword `volatile` prefixing the `counter` variable and wondered what this means?
+
+In the discussion above, the read-write-modify cycle was assumed to occur in sequence. A statement such as `counter++` logically speaking will behave as a read, a modify (increment) and write (back to memory).
+
+For code that runs in sequence, the compiler will guarantee the behaviour you express through your source code. However, it may also use some techniques to optimise your code for speed and/or size, but without breaking the logic.
+
+For example:
+
+* It is not uncommon for a variable to be held in a register, making for faster code. This might mean the read, modify and write operations are separated.
+
+* Some variables are optimised out entirely by committing a CPU register to it's value. This has a major performance benefit, especially in tight-loops with lots of modifications.
+
+* The compiler might even reorder aspects of your code either to keep it shorter and/or faster. This won't break the logic of your code, but you might find when debugging that it "jumps about" unexpectedly as operations are performed in more optimal ways.
+
+This is nothing that normally concerns us of course, that is until you write code that contains out-of-sequence execution, **such as an interrupt**. 
+
+Optimising compilers (reasonably) assume code runs in the sequence you specify.
+
+> C and C++ compilers know nothing of interrupts and certainly have no way of telling then they will occur.
+>
+> Where a variable is shared between two sections of code, and where one part of that code runs out of sequence, then compiler optimisation can break the logic.
+>
+> Do not confuse this with race conditions. Even in the absence of a race, data inconsistency can still occur.
+
+Luckily, there is a way to suppress a variable being optimised, and that is to declare it as `volatile`. Doing so enforces the full read-modify-write cycle to all take place and at the point you specify it.
+
+## Re-entrant Functions
+Another danger with interrupts is non-reentrant functions, a famous example being `printf`.
+
+We have already seen that functions that share mutable state with other code need additional protection to ensure they can be safely used in an interrupt.
+
+This is not just limited to variables, it can include anything that is mutable (can be modified):
+
+* Any global variables
+* Static local variables
+* Hardware I/O
+* Even a database table on another machine
+
+You may surprised at how many functions and classes are not interrupt safe. It is actually quicker to list the Mbed OS driver classes that **are** interrupt safe:
+
+* DigitalIn, DigitalOut, DigitalInOut.
+* InterruptIn.
+* PortIn, PortOut, PortInOut, PwmOut.
+* Ticker, TimerEvent, Timeout, Timer.
+
+[reference: Mbed OS documentation](https://os.mbed.com/docs/mbed-os/v6.4/apis/thread-safety.html#thread-safety)
+
+All the others must never be used in an interrupt service routine! This is quite a major restriction.
+
+Of course, you can always write your own interrupt safe driver, but that involves bare-metal programming and knowledge of MCU specific registers.
+
 ## Reflection
-It is not unknown for developers to use interrupts and be completely oblivious to their dangers. In some applications, this could even pose a risk to life and/or the environment.
+It is not unknown for developers to use interrupts and be completely oblivious to their dangers and limitations. In some applications, this could even pose a risk to life and/or the environment.
 
 Most developer tools will not help you detect race conditions. Most code tests are unlikely to detect them especially when they are rare. 
 
-**You** have to spot them by reading the code. A group code walk-through with experienced developers is one way to increase the chances of spotting such an error. It also comes with practise.
+Forgetting to make a variable volatile is another common error and very easy to make. 
+
+**You** have to spot these errors by reading the code. A group code walk-through with experienced developers is one way to increase the chances of spotting such an error. It also comes with practise.
 
 In contrast to rapid polling, interrupts are very efficient but also much more dangerous.
 
 > In the absence of any interrupts, rapid polling has no pre-emption so is always safe from race conditions.
 
-However, sometimes we have to use them, so this issue cannot be avoided forever.
+However, sometimes we simply have to use them, so this issue cannot be avoided entirely. The good news is you may be able to limit their use and approach multi-tasking in another and much simpler way. 
 
+> That way is to use a Real-Time Operating System (RTOS)  to write **multi-threaded applications**.
 
+Underpinning multi-threaded programming is a scheduler, driven by a timer interrupt. What does this achieve?
+
+* The harder and more dangerous interrupt operations are abstracted away
+* Running tasks in parallel is done for you.
+* Lot of tools are provided to prevent race conditions
+* Your code can be greatly simplified
+* Accessing the CPU sleep mode is handled automatically
+* Most functions and driver classes are thread safe, even where they are not interrupt safe
+* Facilities are provided to allow interrupts to synchronise with threads, enabling your interrupts to remain very short and simple
+
+This is the topic of the next section.
 
 ---
 
+[NEXT - Threads and Thread Synchronisation](threads1.md)
 
 
 

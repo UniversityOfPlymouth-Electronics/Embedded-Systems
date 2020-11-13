@@ -8,7 +8,7 @@ void SwitchManager::waitForRising() {
   // Turn off interrupt
   switchInterrupt.rise(NULL);
   // Turn on timer
-  t.attach(callback(this, &SwitchManager::waitForStabilityRising), 200ms);
+  t.attach(callback(this, &SwitchManager::waitForStabilityRising), 50ms);
 }
 
 void SwitchManager::waitForStabilityRising() {
@@ -19,7 +19,7 @@ void SwitchManager::waitForStabilityRising() {
 void SwitchManager::waitForFalling() {
   led = !led;
   switchInterrupt.fall(NULL);
-  t.attach(callback(this, &SwitchManager::waitForStabilityFalling), 200ms);
+  t.attach(callback(this, &SwitchManager::waitForStabilityFalling), 50ms);
 }
 
 void SwitchManager::waitForStabilityFalling() {
