@@ -52,6 +52,22 @@ In this task, you will have three input devices controlling two outputs.
 | 4. | Modify the code so that the `count` controls the flash rate. |
 | -  | Count ranges from 0..99 |
 | -  | Flash rate should range from 100 ms to 1000ms |
+| -  | Note the type of `tm` is `microseconds` |
+| -  | If stuck, you can take a look at `solution.txt` |
+
+> **Note**
+>
+> The modern API being used here. We are using the C++ `std::chrono` library, which overloads the following operators:
+> 
+> * ""ms 
+> * ""us 
+> * ""ns 
+>
+> What these do is scale the prefix value to microseconds (type `long long`)
+>
+> Note the type of `tm` is `std::chrono::microseconds`
+>
+> The header file include `using namespace std::chrono;` which saves us from writing the `std::chrono::` prefix.
 
 Let's look at some key points inside the main while-loop:
 
@@ -134,18 +150,6 @@ The code is very short:
 ```
 
 Here, the input is value of the timer which is reset every time more than `250ms` passes.
-
-> Note the modern API being used here. We are using the C++ `std::chrono` library, which overloads the following operators:
-> 
-> * ""ms 
-> * ""us 
-> * ""ns 
->
-> These do it scale the prefix value to microseconds (type `long long`)
->
-> Note the type of `tm` is `std::chrono::microseconds`
->
-> The header file include `using namespace std::chrono;` which saves us from writing the `std::chrono::` prefix.
 
 ### Reflection
 Some points to consider.
