@@ -1,5 +1,5 @@
 #include "mbed.h"
-
+//Constants
 #define N 1000000
 #define RELEASED 0
 #define PRESSED  1
