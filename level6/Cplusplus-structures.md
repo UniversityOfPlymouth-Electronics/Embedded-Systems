@@ -25,7 +25,7 @@ where `short` is an existing type and `int16_t` is the new name. In fact, some o
 * int32_t
 * uint32_t
 
-> If you want to revise this, [see here](../level4/TASK110#Platform-independent-types-and-typedef.md)
+> If you want to revise this, [see here](../level4/TASK110.md#Platform-independent-types-and-typedef)
 
 We will use `typedef` in combination with structures to create new complex types.
 
