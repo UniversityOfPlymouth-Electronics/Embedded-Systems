@@ -400,14 +400,24 @@ Without the second line, we would have to prefix every `cout`, `cin` and `endl` 
 > If we know which prefix to use, we can have it automatically added with the `using` directive
 
 ## Challenge
-There is a very clever function in the C standard library called `strtok`.
+There is a clever function in the C standard library called `strtok`. This is used to read parts of string separated by a _delimiter_, such as a comma or space.
 
-You can read about it here: https://linux.die.net/man/3/strtok_r
+> You can read about it here: https://linux.die.net/man/3/strtok_r
+
+Task-159 has some starter code which takes a string, with instructions separated by commas.
 
 * Build and step through Task-160 to see what it does
 
 Using string functions described about, you should do the following:
 
+Use each string to switch on a specific LED
+
+When you find a _wait_ string, do the following:
+
+* wait for 1s,
+* then turn OFF all LEDs 
+
+Use `strcmp` as part of your solution.
 
 
 ---
