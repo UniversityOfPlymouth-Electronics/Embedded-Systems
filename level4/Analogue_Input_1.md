@@ -29,10 +29,7 @@ Now attempt each of the following tasks in sequence.
 1. [TASK 150 - AnalogIn](TASK150.md)
 1. [Task 152 - Hysteresis](TASK152.md)
 1. [Task 156 - Arrays](TASK156.md)
-1. [Task 158 - C Strings](TASK158.md)
-1. [Task 160 - Reading Strings](TASK160.md)
-1. [Task 160 - C String Utilities](TASK162.md)
-1. [Task 162 - C++ Strings](TASK164.md)
+1. [Task 158 - C and C++ Strings](TASK158.md)
 
 ---
 

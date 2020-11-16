@@ -28,7 +28,7 @@ As a guide, each section should take approximately 2 lab sessions (4-6 Hrs / sec
 | 5 | 2 | Potential Dividers (self study) |
 | 5 | 3 | [Digital Inputs and Conditionals](Digital_Inputs_1.md) |
 | 6-7 | 4 | [Analogue Input, arrays and strings](Analogue_Input_1.md) |
-| 8 | 5 | Analogue Output and functions |
+| 8 | 5 | [Analogue Output and functions](Analogue_Output_1.md) |
 | 9-13 | - | Coursework and Assessment + Advanced Topics |
 
 _Provisional Time Plan for Practicals_
