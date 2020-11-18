@@ -1,6 +1,5 @@
 //#include "mbed.h"
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
-#include "BMP280_SPI.h"
 
 using namespace uop_msb_200;
 
@@ -29,9 +28,6 @@ DigitalInOut traf2GrnLED(TRAF_GRN2_PIN, PIN_OUTPUT, OpenDrainNoPull, 1);
 //Light Levels
 AnalogIn ldr(AN_LDR_PIN);
 
-//Environmental sensor
-EnvironmentalSensor sensor;
-
 //LCD Backlight
 DigitalOut backLight(LCD_BKL_PIN);
 
@@ -51,13 +47,7 @@ int main()
         wait_us(500000);    
 
         disp.cls();
-        disp.printf("LDR: %0.3f", ldr.read());
-
-        float temperature, pressure;
-        temperature=sensor.getTemperature();
-        pressure=sensor.getPressure();
-
-        printf("%.1fC %.1fmBar\n",temperature,pressure);     
+        disp.printf("LDR: %0.3f", ldr.read());    
     }
 }
 

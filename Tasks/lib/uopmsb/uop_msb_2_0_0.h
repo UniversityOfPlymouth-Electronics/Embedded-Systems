@@ -6,7 +6,6 @@
 
 #include "mbed.h"
 #include "Stream.h"
-#include "../BMP280_SPI/BMP280_SPI.h"
 
 //#include <iostream>
 #include <chrono>
@@ -71,15 +70,6 @@ namespace uop_msb_200 {
     #define BMP280_MISO_PIN PB_4
     #define BMP280_SCLK_PIN PB_3
     #define BMP280_CS_PIN   PB_2
-
-    class EnvironmentalSensor : public BMP280_SPI
-    {
-        private:
-        public:
-        EnvironmentalSensor() : BMP280_SPI(BMP280_MOSI_PIN, BMP280_MISO_PIN, BMP280_SCLK_PIN, BMP280_CS_PIN) {
-            initialize();
-        }
-    };
 
     // *********
     // BUTTONS *
