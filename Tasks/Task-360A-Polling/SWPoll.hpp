@@ -8,20 +8,20 @@ private:
     State state;        // Internal state
     DigitalIn sw;      // These are references (aliases) and MUST be initialised
     DigitalOut led;    // ""
-    TimerCompat t;            // Each instance has it's own timer, so this is is finite
+    Timer tmr;         // Each instance has it's own timer, so this is is finite
     
 public:
     //Constructor - MUST be given two parameters (for the switch and led) BY REFERENCE
     SWPoll(PinName gpioInPin, PinName gpioOutIn) : sw(gpioInPin), led(gpioOutIn) {
         state = LOW;
-        t.reset();
+        tmr.reset();
         led = 0;
     }    
     //Destructor - should the instance go out of scope, this is called
     ~SWPoll() {
         //Shut down
-        t.stop();
-        t.reset();
+        tmr.stop();
+        tmr.reset();
         led = 0;   
     }
     //The public API - poll the switches
@@ -33,16 +33,16 @@ public:
         case LOW:
             if (sw == 1) {
                 state = LOW_DEBOUNCE;
-                t.reset();
-                t.start();
+                tmr.reset();
+                tmr.start();
             }
             break;
             
         case LOW_DEBOUNCE:
-            if (t.read_ms() >= 200) {
+            if (tmr.elapsed_time() >= 200ms) {
                 state = HIGH;
-                t.stop();
-                t.reset();    
+                tmr.stop();
+                tmr.reset();    
             }
             break;
         
@@ -50,20 +50,20 @@ public:
             if (sw == 0) {
                 led = !led; //Toggle output on state transition  
                 state = HIGH_DEBOUNCE;
-                t.reset(); //(purely defensive)
-                t.start();
+                tmr.reset(); //(purely defensive)
+                tmr.start();
             }
             break;
         case HIGH_DEBOUNCE:
-            if (t.read_ms() >= 200) {
+            if (tmr.elapsed_time() >= 200ms) {
                 state = LOW;
-                t.stop();
-                t.reset();  
+                tmr.stop();
+                tmr.reset();  
             }
             break;            
          default:
-            t.stop();
-            t.reset();    
+            tmr.stop();
+            tmr.reset();    
             state = LOW;
             break;
         }  //end switch

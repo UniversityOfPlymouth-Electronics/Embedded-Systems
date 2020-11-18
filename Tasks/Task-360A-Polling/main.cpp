@@ -10,23 +10,30 @@ DigitalOut yellow_led(TRAF_YEL1_PIN);  //CountDown is in its critical section
 SWPoll switch1(BTN1_PIN, TRAF_RED1_PIN);
 SWPoll switch2(BTN2_PIN, TRAF_GRN1_PIN);
 
+DigitalOut statusLED(LED1);
+
 int main() {
     
     //Main uses a Timer
     yellow_led = 1;
-    TimerCompat t;
+    Timer tmr;
         
     //Now loop forever
-    t.start();
+    tmr.start();
     while(1) { 
-        //Flash the yellow on the "main thread"
-        if (t.read_ms() >= 500) {
+
+        //Flash the yellow
+        if (tmr.elapsed_time() >= 500ms) {
             yellow_led = !yellow_led;   
-            t.reset(); 
+            tmr.reset();        
         }
+
+        //Update state and outputs
         switch1.poll();
         switch2.poll();
         
+        //Toggle the status LED to indicate polling loop speed
+        statusLED = !statusLED;
     };
 }
 
