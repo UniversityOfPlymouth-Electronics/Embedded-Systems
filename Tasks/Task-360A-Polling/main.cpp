@@ -34,6 +34,7 @@ int main() {
         
         //Toggle the status LED to indicate polling loop speed
         statusLED = !statusLED;
+        //wait_us(1); //Uncomment this if you want to see the LED!
     };
 }
 

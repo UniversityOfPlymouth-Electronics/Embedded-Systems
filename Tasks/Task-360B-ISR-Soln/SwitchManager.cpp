@@ -6,7 +6,9 @@ volatile uint32_t SwitchManager::count = 0;
 // Member functions
 
 void SwitchManager::waitForRising() {
+  CriticalSectionLock::enable();
   SwitchManager::count++;
+  CriticalSectionLock::disable();
 
   // Turn off interrupt
   switchInterrupt.rise(NULL);

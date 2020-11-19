@@ -11,6 +11,7 @@
 #include <chrono>
 #include <cstdint>
 #include <map>
+using namespace std::chrono;
 
 namespace uop_msb_200 {
 
@@ -567,7 +568,6 @@ namespace uop_msb_200 {
     };
 
     // Mbed os 5 like Timer
-    using namespace std::chrono;
     class TimerCompat : public Timer {
 
         public:

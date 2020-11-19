@@ -1,16 +1,22 @@
 #include "mbed.h"
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
+
 void countUp();
 void countDown();
 
-#define N 1000000
+#define N 5000000
 #define RELEASED 0
 #define PRESSED  1
 
 //Hardware
-DigitalOut red_led(PE_15);     //CountUp is in its critical section
-DigitalOut yellow_led(PB_10);  //CountDown is in its critical section
-DigitalOut green_led(PB_11);   //counter != 0
+DigitalOut red_led(TRAF_RED1_PIN);     //CountUp is in its critical section
+DigitalOut yellow_led(TRAF_YEL1_PIN);  //CountDown is in its critical section
+DigitalOut green_led(TRAF_GRN1_PIN);   //counter != 0
+DigitalOut backLight(LCD_BKL_PIN,0);
 DigitalIn button(USER_BUTTON);
+AnalogIn pot(AN_POT_PIN);
+LCD_16X2_DISPLAY disp;
 
 //Additional Threads
 Thread t1;
@@ -23,7 +29,7 @@ volatile long long counter = 0; //Volatile means it must be stored in memory
 void countUp()
 {
     //RED MEANS THE COUNT UP FUNCTION IS IN ITS CRITICAL SECTION
-    red_led = 1;
+    green_led = 1;
     for (unsigned int n=0; n<N; n++) {
         counter++; 
         counter++;
@@ -36,7 +42,7 @@ void countUp()
         counter++;
         counter++;           
     }  
-    red_led = 0; 
+    green_led = 0; 
     
 }
 
@@ -58,28 +64,45 @@ void countDown()
         counter--;           
     }
     yellow_led = 0;
-          
-}
-int main() {
     
-    green_led = 1;
+}
+
+
+int main() {
+    disp.cls();
+    uint16_t skew = pot.read_u16() >> 12;
+    red_led = 1;
     
     //Start competing threads
-    t1.start(countUp);
-    t2.start(countDown);
     
-    //These threads DO exit, so let's wait for BOTH to finish
-    t1.join();  //Wait for thread t1 to finish
-    t2.join();  //Wait for thread t2 to finish
+    if (button == 0) {
+        t1.start(countUp);
+        t1.join();  //Wait for t1 to complete
+        t2.start(countDown);
+        t2.join();  //Wait for t2 to complete
+    } else {
+        backLight = 1;
+        disp.printf("Skew: %uuS\n", skew);   
+        t1.start(countUp);
+        wait_us(skew);
+        t2.start(countDown);
+        t1.join();  //Wait for t1 to complete
+        t2.join();  //Wait for t2 to complete
+    }
     
     //Did the counter end up at zero?
+    backLight = 1;
+    disp.locate(1, 0);
+    disp.printf("Counter=%Ld\n", counter);
+
     if (counter == 0) {
-        green_led = 0;   
+        red_led = 0;   
     }
         
-    //Now spin-lock for ever
-    while(1) { 
-        asm("nop");
-    };
+    //Now wait forever
+    while (true) {
+        ThisThread::sleep_for(Kernel::wait_for_u32_forever);
+    }
+    
 }
 

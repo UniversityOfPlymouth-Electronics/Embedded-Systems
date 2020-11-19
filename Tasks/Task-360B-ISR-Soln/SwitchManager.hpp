@@ -19,7 +19,9 @@ private:
 public:
   SwitchManager(PinName intInPin, PinName gpioPin)
       : switchInterrupt(intInPin), led(gpioPin) {
+    CriticalSectionLock::enable();
     count = 0;
+    CriticalSectionLock::disable();
     // Listen for rising edge
     switchInterrupt.rise(callback(this, &SwitchManager::waitForRising));
   }
@@ -32,7 +34,10 @@ public:
   }
 
   //This is a STATIC member of the CLASS
-  static uint32_t getCount() { return count; }
+  static uint32_t getCount() { 
+      CriticalSectionLock lock;
+      return count; 
+  }
 };
 
 #endif
