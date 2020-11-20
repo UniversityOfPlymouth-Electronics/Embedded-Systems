@@ -3,15 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
- // Mbed Module Support Board Test Code
- // Martin Simpson 
- // v0.1
- // 18-09-2020
- 
-  
 #include "mbed.h"
 #include "F429_Mega_Shell_Header.h"
 #include "TextLCD/TextLCD.h"
+#include <cstdio>
 
 //prototypes
 void Traffic_Lights();
@@ -24,6 +19,8 @@ void seg7clear();
 void count_thread();
 float potav();
 void environment_data();
+int write_sdcard();
+int read_sdcard();
 
 Thread t1;
 Thread t2;
@@ -36,6 +33,9 @@ Timer stopwatch;
 
 int main()
 {
+    write_sdcard();
+    read_sdcard();
+    
     seg7clear();
 
     Traffic_Lights_2.output();
@@ -288,7 +288,7 @@ void seg7clear(void){
     LatE1=1;LatE1=0;
     LatE2=1;LatE2=0;
 }
-
+ 
 void environment_data(void)
 {
     float temperature, pressure;
@@ -304,3 +304,61 @@ void environment_data(void)
     }
 }
 
+int write_sdcard()
+{
+    printf("Initialise and write to a file\n");
+
+    // call the SDBlockDevice instance initialisation method.
+    if ( 0 != sd.init()) {
+        printf("Init failed \n");
+        return -1;
+    }
+    
+    FATFileSystem fs("sd", &sd);
+    FILE *fp = fopen("/sd/test.txt","w");
+    if(fp == NULL) {
+        error("Could not open file for write\n");
+        sd.deinit();
+        return -1;
+    } else {
+        //Put some text in the file...
+        fprintf(fp, "Martin Says Hi!\n");
+        //Tidy up here
+        fclose(fp);
+        printf("SD Write done...\n");
+        sd.deinit();
+        return 0;
+    }
+    
+}
+
+int read_sdcard()
+{
+    printf("Initialise and read from a file\n");
+
+    // call the SDBlockDevice instance initialisation method.
+    if ( 0 != sd.init()) {
+        printf("Init failed \n");
+        return -1;
+    }
+    
+    FATFileSystem fs("sd", &sd);
+    FILE *fp = fopen("/sd/test.txt","r");
+    if(fp == NULL) {
+        error("Could not open or find file for read\n");
+        sd.deinit();
+        return -1;
+    } else {
+        //Put some text in the file...
+        char buff[64]; buff[63] = 0;
+        while (!feof(fp)) {
+            fgets(buff, 63, fp);
+            printf("%s\n", buff);
+        }
+        //Tidy up here
+        fclose(fp);
+        printf("SD Write done...\n");
+        sd.deinit();
+        return 0;
+    }
+}

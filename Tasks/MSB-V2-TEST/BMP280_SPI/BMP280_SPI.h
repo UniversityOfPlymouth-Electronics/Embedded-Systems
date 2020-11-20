@@ -21,7 +21,7 @@
  * limitations under the License.
  */
 
-
+ 
 #ifndef MBED_BMP280_SPI_H
 #define MBED_BMP280_SPI_H
 
