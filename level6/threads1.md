@@ -652,7 +652,7 @@ if (counterLock.trylock_for(5s) == true)
 | -   | Do this where you think it is appropriate |
 | -   | Consider what makes sense if the return value is false |
 | -   | Do not unlock in the case that you don't have the lock |
-| -  | Use printf to log errors to the serial terminal
+| -  | Use printf to log errors to the serial terminal |
 
 Don't be surprised if you struggle with this task. One solution is given in the next task.
 
@@ -688,5 +688,42 @@ An embedded system is rarely accessible, and often not monitored, so we should b
 What you do depends on context and would form part of your risk-assessment.
  
 ## Watchdog
+A very common facility on real-time systems is the watch-dog. 
+
+> I should point out that some individuals might find some of the terminology around watch-dogs offensive. The historical API for notifying a watch-dog that the system is still working is to "kick" it. This is not the only example in history where APIs and application names may seem inappropriate.
+
+| TASK 364A | Watch Dog |
+| --- | --- |
+| 1.  | Make Task-364A the Active Program |
+| 2.  | Build and run the application, and monitor the serial terminal. |
+| -  | Wait until the system counts down and resets |
+| 3.  | Now press the blue button before the countdown resets |
+| 4.  | Locate the button ISR and find the API that resets the watch-dog timer |
+
+The `WatchDog` class is designed to be a **singleton**, that is, **only one instance of this class may be created**.
+
+We obtain a reference to the single instance as follows:
+
+```C++
+Watchdog &watchdog = Watchdog::get_instance();
+watchdog.start(TIMEOUT_MS);
+```
+
+We pass in the amount of time before the system times-out.
+
+Once started, the timer starts counting down. If the count gets down to zero, the system will automatically reset.
+
+Active threads and interrupts can then indicate the system is alive by "kicking" the watch-dog timer.
+
+```C++
+Watchdog::get_instance().kick();
+```
+
+> This API is both interrupt and thread safe. It also works with both bare-metal and full mbed-os profiles.
+
+Although not as fine-grained as timeouts, this is a common facility and one you need to be aware of.
+
+[See the documentation here](https://os.mbed.com/docs/mbed-os/v6.4/apis/watchdog.html)
 
 
+MORE TO FOLLOW
