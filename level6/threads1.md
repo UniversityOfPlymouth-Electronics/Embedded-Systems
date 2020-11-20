@@ -597,28 +597,96 @@ A solution to the previous exercise is provided:
 
 Note that the lock is taken around all ten increments / decrements. This is to reduce the amount of locking and unlocking (otherwise it becomes very slow).
 
-| TASK 362B | Threads and Races - Solution |
+| TASK 362C | Threads and Races - Deadlock |
 | --- | --- |
-| 4.  | Uncomment the lines in main that read:  |
-| -   | `//counterLock.lock();`
-| -   | `//counterLock.unlock();`
-| 5.  | Build and run again (with the blue button held down) |
+| 1.  | Note the extra two lines in main:  |
+| 2.  | Build and run again (with the blue button held down) 
 | -   | Wait for approx 2 mins |
 | -   | What happens and why? |
+
+_Additional code in main_
+```C++
+        //INDUCE A DEADLOCK
+        counterLock.lock(); // Add one extra lock (oops)
+        t1.join();  //Wait for t1 to complete
+        t2.join();  //Wait for t2 to complete
+        counterLock.unlock(); //Release again 
+```
 
 Don't wait forever as you will be waiting a very long time!
 
 * Main takes the lock
-* Main then waits for the other threads to finish..
-    * Meanwhile, the other threads will also try to take the lock, and will block as main has it
-* Main is waiting on threads `t1` and `t2` to finish, but they can't as they are waiting on `main`
+* Main then blocks, waiting for the other threads to finish..
+    * Meanwhile, the other threads will also try to take the lock, and will block as main still has it
+* Main is waiting on threads `t1` and `t2` to finish, but they can't finish as they are waiting on `main`
 
-> This is known as a **deadlock** and is a serious problem. Like race conditions, they are hard to track down and can occur sporadically.
+> This one example of a **deadlock** and is a serious problem. Like race conditions, they are hard to track down and can occur sporadically.
 
 This is caused when two or more threads are waiting on each other to release a shared lock.
 
 A problem with deadlocks is they are hard to spot. However, we can **detect** when they occur by **checking for a timeout**.
 
 ## Mitigation against deadlocks - Timeouts
+Many of the blocking functions (those that block in the `WAITING` state) provide the option for a _timeout_. The MUTEX lock is one such example. Instead of `lock()`, we can use `try_lock_for()` passing in a timeout.
+
+For example, for a 5s timeout
+
+```C++
+if (counterLock.trylock_for(5s) == true)
+{
+    // GOOD - WE ACQUIRED THE LOCK WITHIN 5s
+    // Enter critical section
+    // *** Critical Section ***
+    // Leave critical section and return the lock
+    counterLock.unlock();  
+} else {
+    // Did not get the lock - timed out!
+    // REPORT ERROR and TAKE APPROPRIATE ACTION
+    // Do not unlock as we don't have it!
+}
+```
+
+| TASK 362C | Threads and Races - Deadlock |
+| --- | --- |
+| 3.  | Try strategically replacing `counterLock.lock()` with `counterLock.trylock_for(5s)` |
+| -   | Do this where you think it is appropriate |
+| -   | Consider what makes sense if the return value is false |
+| -   | Do not unlock in the case that you don't have the lock |
+| -  | Use printf to log errors to the serial terminal
+
+Don't be surprised if you struggle with this task. One solution is given in the next task.
+
+| TASK 362D | Deadlock - Solution |
+| --- | --- |
+| 1.  | Make Task-362D the Active Program |
+| -   | Note this still does NOT use the bare-metal profile |
+| 2.  | Build and run with the blue button held down |
+| 3.  | Monitor the serial console for errors |
+| 4.  | Read through the code and compare with your own solution |
+
+### Reflection
+A MUTEX lock is a power efficient way to guard a critical section. 
+* If the lock is acquired, the code will proceed. 
+* If not, it will block in the WAITING state
+* Once another thread releases the lock, the scheduler will allow another waiting thread to acquire the lock
+
+Once we prevent race-conditions, we then introduce the risk of deadlocks. Like races, they can be hard to spot and may only occur occasionally (aka sporadically).
+
+> Even if we think our code is perfect, it may not be! The very nature of these errors is that they are hard to spot.
+>
+> Furthermore, even if a bug does not exist now, with future edits, one may be introduced. A simple early return from a function, forgetting to release a lock is one example of this.
+
+An embedded system is rarely accessible, and often not monitored, so we should be concerned about such bugs occurring.
+
+> So, we often **mitigate** against the occurance of such bugs. One way is to use timeouts.
+
+* Many of the blocking APIs offer a timeout value, and return a result to indicate the outcome.
+* A real challenge is to know what to do in the event of such an error.
+    * Logging to a serial terminal or storage device is important to that engineers can be informed of such errors.
+    * In the case of sporadic deadlocks, a system restart might keep the system running
+
+What you do depends on context and would form part of your risk-assessment.
+ 
+## Watchdog
 
 

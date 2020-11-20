@@ -27,6 +27,12 @@ volatile long long counter = 0; //Volatile means it must be stored in memory
 //Associated MUTEX
 Mutex counterLock;
 
+void criticalFailure()
+{
+    printf("Critical Failure. Restarting\n");
+    wait_us(1000);
+    system_reset();
+}
 
 //Increment the shared variable 
 void countUp()
@@ -34,7 +40,11 @@ void countUp()
     //RED MEANS THE COUNT UP FUNCTION IS IN ITS CRITICAL SECTION
     green_led = 1;
     for (unsigned int n=0; n<N; n++) {
-        counterLock.lock();
+        bool ok = counterLock.trylock_for(5s);
+        if (!ok) {
+            printf("Green Thread Deadlocked\n");   
+            return;
+        }
         counter++; 
         counter++;
         counter++;
@@ -57,7 +67,11 @@ void countDown()
     //YELLOW MEANS THE COUNT DOWN FUNCTION IS IN ITS CRITICAL SECTION
     yellow_led = 1;
     for (unsigned int n=0; n<N; n++) {
-        counterLock.lock();
+        bool ok = counterLock.trylock_for(5s);
+        if (!ok) {
+            printf("Yellow Thread Deadlocked\n");   
+            return;
+        }
         counter--;
         counter--;
         counter--;
@@ -93,21 +107,34 @@ int main() {
         t1.start(countUp);
         wait_us(skew);
         t2.start(countDown);
-        t1.join();  //Wait for t1 to complete
-        t2.join();  //Wait for t2 to complete
+
+        //Induce a deadlock on purpose
+        if (counterLock.trylock_for(5s) == true) {
+            t1.join();  //Wait for t1 to complete
+            t2.join();  //Wait for t2 to complete
+            
+            counterLock.unlock(); //Release again
+        } else {
+            printf("MUTEX deadlocked\n");
+        }
+
     }
     
     //Did the counter end up at zero?
     backLight = 1;
     disp.locate(1, 0);
 
-    counterLock.lock(); //Pedantic, but setting an example :)
-    disp.printf("Counter=%Ld\n", counter);
-
-    if (counter == 0) {
-        red_led = 0;   
+    if (counterLock.trylock_for(5s) == true)
+    {
+        printf("Done\n");
+        disp.printf("Counter=%Ld\n", counter);
+        if (counter == 0) {
+            red_led = 0;   
+        }        
+        counterLock.unlock();  
+    } else {
+        printf("Serious fault - mutex deadlocked\n");
     }
-    counterLock.unlock();   
 
     //Now wait forever
     while (true) {

@@ -93,8 +93,12 @@ int main() {
         t1.start(countUp);
         wait_us(skew);
         t2.start(countDown);
+
+        //INDUCE A DEADLOCK
+        counterLock.lock(); // Add one extra lock (oops)
         t1.join();  //Wait for t1 to complete
         t2.join();  //Wait for t2 to complete
+        counterLock.unlock(); //Release again
     }
     
     //Did the counter end up at zero?
