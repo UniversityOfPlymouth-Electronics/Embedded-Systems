@@ -131,7 +131,15 @@ This is very similar to the green and blue LEDs.
 
 | TASK-170B | Functions |
 | --- | --- | 
-| 6.  | Can you write a function to set the latch value for a given set of LEDs? |
-| -   | Hint: |
+| 6.  | Can you write and text the following function to set the latch value for a given set of LEDs? |
+| -   | `void setLatch(uint8_t dat, char col)` |
+| -   | `dat` is the data value |
+| -   | `col` is the colour, set as 'g' (for green), 'r' (for red), 'b' (for blue) |
+
+The code in main should read:
+
+```C++
+
+```
 
 
