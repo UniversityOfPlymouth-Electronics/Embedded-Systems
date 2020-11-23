@@ -26,9 +26,8 @@ The lectures for this lab cover some basic concepts
 ## Tasks
 Now attempt each of the following tasks in sequence.
 
-1. [TASK 170 - Functions](TASK170.md)
-2. [TASK 172 - Function Scope]()
-3. [TASK 174 - External Functions]()
-4. [TASK 180 - `AnalogOut`]()
-5. [TASK 182 - `PwmOut`]()
+1. [TASK 170 - Functions and Scope](TASK170.md)
+3. [TASK 172 - Global and Static Functions](TASK174.md)
+4. [TASK 180 - `PwmOut`](TASK176.md)
+5. [TASK 182 - `AnalogOut`](TASK178.md)
 
