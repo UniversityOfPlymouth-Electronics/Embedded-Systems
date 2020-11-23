@@ -135,11 +135,55 @@ This is very similar to the green and blue LEDs.
 | -   | `void setLatch(uint8_t dat, char col)` |
 | -   | `dat` is the data value |
 | -   | `col` is the colour, set as 'g' (for green), 'r' (for red), 'b' (for blue) |
+| -   | See solution-2.txt for one possible solution |
 
 The code in main should read:
 
 ```C++
+int main()
+{
+    printf("Functions demo\n");
 
+    led_init(0x00, true);
+
+    while (true) {
+
+        //Update the red
+        setLatch(0xFF,'r');
+
+        //Update the green
+        setLatch(0b10101010, 'g');
+
+        //Update the blue
+        setLatch(0b11001100, 'b');
+
+
+        for (unsigned int n=0; n<10; n++) {
+            //Enable all the LED BAR Latch Outputs
+            LED_BAR_OE = 0;
+
+            //Wait
+            wait_us(500000);
+
+            //Disable the latch outputs
+            LED_BAR_OE = 1;
+
+            //Wait
+            wait_us(500000);            
+        }
+
+        //Spin forever
+        while(true);
+
+    }
 ```
+
+You can see that writing functions can make the code more readable and reduces repetition. Having all the functions at the top of the source files might now be your preference.
+
+| TASK-170B | Functions |
+| --- | --- | 
+| 7.  | Cut and paste the `main` function so it is the first function in `main.cpp` |
+| 8.  | Try and build the code - what happens? |
+
 
 
