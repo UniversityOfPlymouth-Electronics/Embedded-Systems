@@ -185,5 +185,18 @@ You can see that writing functions can make the code more readable and reduces r
 | 7.  | Cut and paste the `main` function so it is the first function in `main.cpp` |
 | 8.  | Try and build the code - what happens? |
 
+The error occurs because you have called the functions `led_init` and `set_latch` before they were defined.
 
+> When the compiler reaches these function calls in `main`, it is unable to check if they exist or whether the parameters are the correct type. This is a historical behaviour of C compilers.
+
+To resolve this, all you need to do is _declare_ these functions in advance, so the compiler has advanced warning.
+
+| TASK-170B | Functions |
+| --- | --- | 
+| 9.  | Add the following lines before `main` and build the code |
+
+```C++
+void setLatch(uint8_t dat, char col);
+void led_init(uint8_t dat, bool enabled);
+```
 
