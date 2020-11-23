@@ -82,6 +82,8 @@ This demonstrated an example of a parameterless function.
 * No data was passed to the function
 * It was simple a way to group a sequence of programming statements into a function so it can be reused.
 
+## Passing Parameters
+
 Very often, we pass data to a function in order to customise it's behaviour. For example:
 
 ```C++
@@ -194,9 +196,40 @@ To resolve this, all you need to do is _declare_ these functions in advance, so 
 | TASK-170B | Functions |
 | --- | --- | 
 | 9.  | Add the following lines before `main` and build the code |
+| -  | See solution-3.txt for a final solution |
 
 ```C++
 void setLatch(uint8_t dat, char col);
 void led_init(uint8_t dat, bool enabled);
 ```
+
+## Returning Values
+So far, all the functions we have used have accepted parameters, but not have returned any results. Let's now look at an example of returning values.
+
+
+| TASK-170C | Functions |
+| --- | --- | 
+| 1.  | Make Task-170C the active program |
+| 2.  | Build and run the code to see what it does |
+| 3.  | Study the code, read the comments |
+| 4.  | In main there is a line that reads `int delay_ms = getDelayMS();` |
+| -   | Use the debugger to step into this function. |
+| -   | Use the debugger to find out what range of values this function returns (you will need to turn the potentiometer from one extreme to the other) |
+| 5.  | Do you always get the same result? Explain |
+
+This was an example of a function that returns a value. Again, this helps keep the main code simple and is easier to test.
+
+> We could now test each of the functions separately. What would be better is if they were not all in the same file, so they could be reused in other projects
+
+## Challenge
+Currently the LEDs just flash on and off with the same LED patterns. It being close to a UK festive season, it is traditional to have decorative lights. Even better, it would be good to have the light sequence change. 
+
+* Now try and modify the code in 170C to display a sequence of LED patterns that flash on and off.
+* In addition to the functions created here, use arrays to cycle through a sequence of 10 LED patterns. Red, green and blue should all have different patterns (so maybe use three arrays)
+
+## Local and Static Local Variables
+TO BE COMPLETED
+
+
+
 
