@@ -1,12 +1,13 @@
-#include "mbed.h"
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
 
 #define N 1000000
 #define RELEASED 0
 #define PRESSED  1
 
-DigitalOut red_led(LED3);     //CountUp is in its critical section
-DigitalOut yellow_led(LED2);  //CountDown is in its critical section
-DigitalOut green_led(LED1);   //counter != 0
+DigitalOut red_led(TRAF_RED1_PIN);     //CountUp is in its critical section
+DigitalOut yellow_led(TRAF_YEL1_PIN);  //CountDown is in its critical section
+DigitalOut green_led(TRAF_GRN1_PIN);   //counter != 0
 
 DigitalIn button(USER_BUTTON);
 

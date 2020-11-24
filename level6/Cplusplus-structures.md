@@ -106,7 +106,7 @@ a = 6;
 
 the value of `b` will be unaffected as they are independent. The statement `b = a` is said to use **value semantics**.
 
-When you assign once variable to another using value semantics
+When you assign one variable to another using value semantics
 
 * The values will be logically copied from one variable to another
 * Each will remain independent of each other
@@ -119,7 +119,7 @@ ComplexNumber_C q;
 q = p;
 ```
 
-What will happen here is that `q` will be created separately from `p`, and each value in `p` will be copied from `p` to `p`
+What will happen here is that `q` will be created separately from `p`, and each value in `p` will be copied from `p` to `q`
 
 Any changes to `p` will not affect `q`, and equally, any changes to `q` will not affect `p`. This is value semantics. _The downside is the computational cost of the copy_, but modern compilers are very clever with minimising this.
 
