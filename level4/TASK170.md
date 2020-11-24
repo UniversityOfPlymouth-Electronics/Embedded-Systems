@@ -228,8 +228,86 @@ Currently the LEDs just flash on and off with the same LED patterns. It being cl
 * In addition to the functions created here, use arrays to cycle through a sequence of 10 LED patterns. Red, green and blue should all have different patterns (so maybe use three arrays)
 
 ## Local and Static Local Variables
-TO BE COMPLETED
+We continue looking at functions now, and how to further tidy up the tree light application.
 
+| TASK-172A | Statics |
+| --- | --- | 
+| 1.  | Make Task-172A the active program |
+| 2.  | Build and run the code to see what it does |
+| 3.  | Study the code, read the comments |
+
+The following code has been added to the main function:
+
+```C++
+//Get average delay value
+for (unsigned int n=0; n<32; n++) {
+    int potValue = getDelayMS();     //Get raw value (with noise)
+    meanPotValue = 0.95*meanPotValue + 0.05*potValue; //Handy forumula!
+}
+int delay_ms = (int)meanPotValue;    //Cast to integer
+```
+
+> This code uses the simple "digital low-pass filter" to smooth the incoming signal x
+> 
+> y<sub>n+1</sub>=&alpha;y<sub>n</sub>+(1-&alpha;)x<sub>n</sub>
+>
+> where x<sub>n</sub> is the next input sample, y<sub>n+1</sub> is the next output and &alpha; is a coefficient 0.0&#8804;&alpha;<1.0
+
+| TASK-172A | Statics |
+| --- | --- | 
+| 4.  | Can you write a function to encapsulate the smoothing. |
+| -   | It should perform all the operations, including the loop and calling `getDelayMS()` |
+| -   | It should take a `double` as a parameter (to specify &alpha;) and return an `int` (the output) |
+| -   | You will have to also relocate the variable `meanPotValue` |
+| 5.  | Compare with Task-172B |
+
+If you struggled with this task, that is understandable. Do study the solution.
+
+Note the following about the solution in Task-172B:
+
+* The function `getAverageDelay` now does most of the work, but is not entirely self-contained
+    * It relies on access to the variable `meanPotValue`
+* The variable `meanPotValue` had to be put somewhere it could be accessed. 
+    * Keeping it in `main` would leave it is as a **local** variable (which is only accessible in `main` and nowhere else)
+* `meanPotValue` is now said to have **global scope**
+    * This means it can be access from **anywhere**. 
+    * This is not ideal. What if that name was already used?
+
+| TASK-172A | Statics |
+| --- | --- | 
+| 5.  | Now comment out the line `double meanPotValue = (double)getDelayMS();` |
+| 6.  | Update the `getAverageDelay` function as follows: |
+
+```C++
+int getAverageDelay(double alpha)
+{
+    static double meanPotValue = 0.0;
+    for (unsigned int n=0; n<32; n++) {
+        int potValue = getDelayMS();                    //Get raw value (with noise)
+        meanPotValue = alpha*meanPotValue + (1.0-alpha)*potValue; //Handy forumula!
+    }
+    return (int)meanPotValue;
+}
+```
+
+Note the keyword `static` on the front.
+
+| TASK-172A | Statics |
+| --- | --- | 
+| 7.  | Use the debugger to step into `getAverageDelay` |
+| -   | One the first occasion, note the initial value of `meanPotValue` |
+| -   | One the second occasion, compare what happens. Does `meanPotValue` get reset to 0.0? |
+
+A **static** local will only be initialised the **first time** the function is called. From then on, the line `static double meanPotValue = 0.0;` is ignored. 
+A **static local** also retains it's value.
+
+| TASK-172A | Statics |
+| --- | --- | 
+| 8.  | Remote the keyword static. Use the debugger to step into `getAverageDelay` again. What has changed? |
+
+This will break the logic of this code as `meanPotValue` will we set to 0.0 everytime.
+
+Refer back to the lecture notes for more information.
 
 
 
