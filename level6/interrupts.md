@@ -241,9 +241,9 @@ There are a few strategies we can use:
 ## Protecting Critical Sections in Mbed
 For this task, we find a solution for the race condition in the previous example.
 
-| TASK-350 | Race Conditions |
+| TASK-351 | Race Conditions |
 | --- | --- |
-| 1.  | Set Task-350 as your active program |
+| 1.  | Set Task-351 as your active program |
 | 2.  | Build and run the task, first without the blue button being pressed, and secondly with the blue button held down |
 | -  | In both cases, the red LED turns off |
 
