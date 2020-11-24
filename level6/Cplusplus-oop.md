@@ -494,7 +494,7 @@ ComplexNumber c0(1.0, 2.0);
 | --- | --- |
 | 4.  | Use the debugger to step into the constructor. Which constructor gets called first, `DoubleNumber` or `ComplexNumber`? |
 
-Further down in main, we see `toString` being invoked
+Further down in main, we see `asString` being invoked
 
 ```C++
 cout << c1.asString() << endl;
