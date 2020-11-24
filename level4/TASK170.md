@@ -298,8 +298,13 @@ Note the keyword `static` on the front.
 | -   | One the first occasion, note the initial value of `meanPotValue` |
 | -   | One the second occasion, compare what happens. Does `meanPotValue` get reset to 0.0? |
 
-A **static** local will only be initialised the **first time** the function is called. From then on, the line `static double meanPotValue = 0.0;` is ignored. 
-A **static local** also retains it's value.
+A note about static local variables
+
+* A **static** local will only be initialised the **first time** the function is called. 
+* From then on, the line `static double meanPotValue = 0.0;` is ignored. 
+* **static local** variables also retain their values.
+
+The advantage here was that a global variable is now local. It has the advantage of retaining it's value but avoids the risk of _name collisions_. It also means the function `getAverageDelay` is more self-contained.
 
 | TASK-172A | Statics |
 | --- | --- | 
@@ -308,6 +313,12 @@ A **static local** also retains it's value.
 This will break the logic of this code as `meanPotValue` will we set to 0.0 everytime.
 
 Refer back to the lecture notes for more information.
+
+
+# Quiz
+A quiz on functions is available on the DLE. Please complete this quiz.
+
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=1005421
 
 
 
