@@ -2,8 +2,6 @@
 
 ---
 
-Topics
-
 # C and C++ Object Orientated Programming
 C++ is a large language that takes a long time and practise to master. We will focus on core object orientated concepts. Even if you don't use all of these, you may encounter code that does.
 
@@ -228,7 +226,7 @@ The `=` operator is slightly more complex. We could have written this:
 
 This is the exact same principle as above, and indeed would work for simple cases. 
 
-> The line `n3 = n2;` would simply copy the value of `n2` into `n1`.
+> The line `n3 = n2;` would simply copy the value of `n2` into `n3`.
 
 But what if you wrote the following?
 
