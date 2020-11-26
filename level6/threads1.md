@@ -876,6 +876,8 @@ This sets signal flag 1 on thread `t2`.
 
 You may with to explore the signal-wait mechanism more by studying the header files. Right click any of the signal-wait APIs and click "Go to Definition" to read the details and explore other APIs.
  
+I suggest you now revisit `PushSwitch.hpp` to better understand how it works. 
+
 ## Semaphores
 The Mutex lock is the 
 
