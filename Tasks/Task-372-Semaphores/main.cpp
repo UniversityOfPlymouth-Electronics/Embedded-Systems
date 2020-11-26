@@ -25,11 +25,10 @@ void climb()
         sem2.acquire(); //Decrement
         countLock.lock();
         counter++;
+        printf("%u\n", counter);
         countLock.unlock();
         sem1.release(); //Increment
         led = 0;
-
-        printf("%u\n", counter);
 
         //Debounce
         ThisThread::sleep_for(50ms);
@@ -50,12 +49,11 @@ void descend()
         sem1.acquire(); //Decrement
         countLock.lock();
         counter--;
+        printf("%u\n", counter);
         countLock.unlock();
         sem2.release(); //Increment
         led = 0;
 
-        printf("%u\n", counter);
-        
         //Debounce
         ThisThread::sleep_for(50ms);
         sw.waitForRelease();

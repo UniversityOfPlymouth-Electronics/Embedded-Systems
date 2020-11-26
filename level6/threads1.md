@@ -878,6 +878,201 @@ You may with to explore the signal-wait mechanism more by studying the header fi
  
 I suggest you now revisit `PushSwitch.hpp` to better understand how it works. 
 
+## Passing Parameters to Threads
+When you start a thread, it is possible to also pass parameters to the thread function. This can make thread functions more reusable and generic.
+
+| TASK 368 | Thread Parameters |
+| --- | --- |
+| 1. | Make Task-366 the Active Program |
+| 2. | Build and run the application |
+| 3. | Study the code carefully. |
+
+There are two examples given in this code. The simpler example is where the `PinName` is provided so the thread can use different GPIO pins.
+
+```C++
+PinName redPin(TRAF_RED1_PIN);
+t1.start(callback(FlashLED, &redPin));
+```    
+
+Note the second parameter must be an **address**.  The thread function is as follows:
+
+```C++
+void FlashLED(PinName* p)
+{
+    PinName pin = *p;
+    DigitalOut led(pin);
+    while (true) {
+        led = !led;
+        ThisThread::sleep_for(500ms);
+    }
+}
+```
+
+Note again the parameter is an address. This allows us to change the pin for `DigitalOut`. A slight concern with this code however is that it assumes the outputs are designed for *push-pull* signals.
+
+> The second set of traffic lights on the module board are open drain, so this would not work.
+
+The second variant is much more flexible and allows the following to be specified:
+
+* Pin
+* Output mode (pushpull, opendrain etc..)
+* Flash duration
+
+To encapsulate all of this, a structure type is defined:
+
+```C++
+typedef struct {
+    PinName pin;
+    PinMode mode = PullDefault;
+    Kernel::Clock::duration_u32 interval = 500ms;
+
+} FlashyParam;
+```
+
+When the thread is started, the address of a structure containing all the relevant data is passed:
+
+```C++
+FlashyParam p1 = {.pin=TRAF_YEL2_PIN, .mode= PinMode::OpenDrainNoPull, .interval=250ms};
+t2.start(callback(FlashLED2, &p1));
+```
+
+Note this uses a separate function `FlashLED2`
+
+```C++
+void FlashLED2(FlashyParam* p)
+{
+    FlashyParam params = *p;
+    DigitalInOut led(params.pin, PIN_OUTPUT, params.mode, 1);
+
+    while (true) {
+        led = !led;
+        ThisThread::sleep_for(params.interval);
+    }
+}
+```
+
+This is a much better option and can be used for all pin types.
+
+## Task 370 - Challenge
+You are to write some code to perform accurate sampling at a rate of 1kHz.
+
+| TASK 370 | Signal-Wait Challenge |
+| --- | --- |
+| 1. | Make Task-370 the Active Program |
+| 2. | Write some code to perform the tasks below |
+| STEPS  | - |
+
+
+1. Create an ISR - called by a Ticker every 1ms. This ISR simply has the job of signalling a waiting thread to perform an ADC conversion
+2. Create a thread that waits for a signal from the ISR. This thread should ideally have the highest priority
+3. Each time it is unblocked by the signal, it should read the ADC (Use `AnalogIn`) for the LDR and add it to a running sum.
+4. Every 1s, it should print out the average of the past 1000 samples to the terminal. 
+
+This challenge, if done correctly, is an excellent basis for accurate sampling in Mbed OS.
+
 ## Semaphores
-The Mutex lock is the 
+The `Mutex` lock is actually a special case of a more generic object, `Semaphore`.
+
+> Whereas `Mutex` only takes the values 0 (Locked) or 1 (Unlocked), the `Semaphore` takes a range of values from 0 (locked) to 2<sup>32</sup>-1 (unlocked).
+>
+> Like the `Mutex`, if you try to acquire a `Semaphore` with a value of 0, the code will block in the `WAITING` state.
+
+This has a number of applications, including the solution to the well-known _producer consumer problem_. Let's focus on the function of `Semaphore` for now.
+
+| TASK 372 | Semaphore |
+| --- | --- |
+| 1. | Make Task-372 the Active Program |
+| 2. | Build and run the code. Monitor the serial output |
+| 3. | Press buttons A and B to see what they do. |
+| -  | Note the LEDs which come on to indicate the semaphore is blocked |
+| 4. | Press and release button A until the counter stops changing |
+| 5. | Press and release button B until the counter stops changing |
+| 6. | Why can you not get past 10 or below 0? |
+
+To help answer 6 above, let's look at the code. 
+
+Two semaphores are used in this example. 
+
+```C++
+Semaphore sem1;
+Semaphore sem2(10);
+```
+* `sem1` is initialised with a value of 0
+* `sem2` is initialised with a value of 10
+
+Inside each of the threads `t1` and `t2`, there is code that modifies these semaphores using two members functions of the class `Semaphore`. 
+
+* The member function `acquire()` will attempt to decrement the semaphore. **If the semaphore is equal to zero, any attempt to acquire it will block (in the `WAITING` state).**
+* The member function `release()` will increment the semaphore. This is non-blocking.
+* The members functions `acquire()` and `release()` are written such that they are **atomic** (entirely thread safe).
+
+> As long as neither semaphore is equal to zero, buttons A and B can be used to increment and decrement the counter.
+
+A general name for a semaphore is a _counting semaphore_. This is because you can atomically count up or down.
+
+> It is the automatic blocking on `acquire()` that is most useful (if it did not have the blocking behaviour, we could simply use an integer and a mutex lock).
+>
+> Usually, **counting semaphores are used to block when a resource (such as an array) is full or empty**.
+
+| TASK 372 | Semaphore |
+| --- | --- |
+| 7. | Modify the code so that `counter` starts with the value of 5 |
+| -  | All other behaviour must be the same |
+
+## Condition Variables
+Condition variables are another signal-wait mechanism, only these only work for threads (do NOT use them in an ISR context!)
+
+You create a condition variable for a given Mutex. For example:
+
+```C++
+Mutex mutex;
+ConditionVariable cond(mutex);
+```
+
+The Mutex will be protecting some resource, such as a variable or some I/O.
+
+> The idea of a conditional variable is that you want to wait until there has been a change in this resource (changed in another thread).
+
+For this, you would simply invoke the `wait()` member function:
+
+```C++
+cond.wait();
+
+```
+The following now happens:
+
+* The associated Mutex lock is automatically **released**
+* The thread enters the `WAITING` state and waits for a signal (from another thread)
+
+> The `wait()` function therefore blocks **without** holding on to the mutex lock. This frees up another thread to change the protected resource.
+
+In another thread, you would acquire the Mutex lock and make some changes. When finished, you then **notify** any waiting threads that there been a change by invoking `notify()` on the conditional variable. 
+
+When you invoke `notify()` on a conditional variable, the following happens:
+
+* The `wait()` unblocks and attempts to take the lock
+    * If more than one thread is waiting, only one will the lock
+
+This is best shown by example (derived from the Mbed OS documentation)
+
+| TASK 374 | Condition Variables |
+| --- | --- |
+| 1. | Make Task-374 the Active Program |
+| 2. | Build and run the code. Monitor the serial output |
+
+The example shown here is a reusable pattern which you might want to reuse of in your own code. 
+
+## Reflection
+For the Mutex and semaphore, we see a common **condition** that causes blocking: that is attempting to acquire a lock when the value is zero. Being equal to zero is just one possible condition however.
+
+The condition variable, as it's name suggests, can be used to block on conditions other than _equal to zero_. 
+
+For example, you can notify waiting threads when an integer is within a particular range, or when a particular set of bits are set high.
+
+* Threads waiting for a particular "condition" will first attempt to take the lock, then wait for a notification.
+
+* Another thread making changes to a resource, will notify waiting threads if a particular condition occurs.
+
+You can think of counting semaphores being a special case, where the value (of the semaphore) becomes greater than zero.
+
 
