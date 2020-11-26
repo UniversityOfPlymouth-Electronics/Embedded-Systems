@@ -725,5 +725,157 @@ Although not as fine-grained as timeouts, this is a common facility and one you 
 
 [See the documentation here](https://os.mbed.com/docs/mbed-os/v6.4/apis/watchdog.html)
 
+| TASK 364B | Watch Dog Application |
+| --- | --- |
+| 1.  | Make Task-364B the Active Program |
+| 2.  | Build and run the application, and monitor the serial terminal. |
+| -   | You need to press each button (A and B) once every 10 seconds or the watch-dog will fire and reset the software |
 
-MORE TO FOLLOW
+Let's look at the code:
+
+```C++
+typedef enum {NONE=0, THREAD1=1, THREAD2=2, ALL=3} THREADHEALTH; 
+uint8_t threadHealth = 0;
+Mutex threadHealthLock;
+void isAlive(THREADHEALTH th)
+{
+    threadHealthLock.lock();
+    threadHealth |= th;
+    if (threadHealth & THREAD1) {
+        printf("Thread 1 checked in\n");
+    }
+    if (threadHealth & THREAD2) {
+        printf("Thread 2 checked in\n");
+    }
+    if (threadHealth == ALL) {
+        Watchdog::get_instance().kick();
+        threadHealth = NONE;
+        printf("Both checked in: Reset Watchdog\n");
+    }
+    threadHealthLock.unlock();
+}
+```
+
+Each thread reports in via the `isAlive` function. 
+
+* `task1()` calls `isAlive(THREAD1);` every time a switch is pressed
+* `task2()` calls `isAlive(THREAD2);` every time a switch is pressed
+
+
+| TASK 364B | Watch Dog Application |
+| --- | --- |
+| 3.  | Press A and B together (needs to be within 50ms of each other) |
+| -   | Now try both button A and B, and note the deadlock! |
+| -   | Wait for the watch dog to reset the software |
+| 4.  | Inspect `task1()` and `task2()`. Can you see why the deadlock occurs? |
+
+> Note - The two MUTEX locks in `task1` and `task2` are both unnecessary. This is an engineered demo designed to create a deadlock for demonstration purpose.
+
+| TASK 364B | Watch Dog Application |
+| --- | --- |
+| 5.  | Remove the Mutex locks `m1` and `m2`.  |
+| 6.  | Now add another switch (button C) to control the yellow LED. Ensure it also checks in with the watchdog. |
+| -   | Ensure the system resets if one (or more) buttons is not pressed in a 10s period  |
+
+## Signal-wait
+Let's take a formal look at the signal-wait mechanism. 
+
+| TASK 366 | Signal-Wait |
+| --- | --- |
+| 1. | Make Task-366 the Active Program |
+| 2. | Build and run the application, and monitor the serial terminal. |
+| 3. | Press the blue button to start |
+| -  | Press switch A then B. Then try different sequences.|
+| -  | Press switch C and D in any sequence |
+
+In this code has three threads (`main`, `t1` and `t2`). We see signals being _sent_ from both interrupt and thread contexts.
+
+> You cannot wait on a signal in an ISR (as it would be blocking)
+
+Signals (or flags) exist independently for each thread. You can send multiple signals to any given thread. This is organised as an integer, where each bit position (flag) represents a different signal.
+
+Consider the following code in `main`
+
+```C++
+mainThreadID = ThisThread::get_id();
+
+while (true) {
+    ThisThread::flags_wait_all(1 | 2);  // (1 | 2) => 3 
+    printf("Buttons C and D have been pressed\n");
+    ThisThread::sleep_for(50ms);    //Debounce
+    ThisThread::flags_clear(1 | 2);     //Clear both flags
+}
+```
+
+This code blocks in the `WAITING` state until both flag bits 1 and 2 have been set. Another way to write this would be:
+
+```C++
+ThisThread::flags_wait_all(3);
+```
+
+This will block until ALL flag bits (1 and 2) have been set. The ISR for buttons C and D are shown below:
+
+```C++
+void buttonC_rise()
+{
+    osSignalSet(mainThreadID, 1);
+}
+
+void buttonD_rise()
+{
+    osSignalSet(mainThreadID, 2);
+}
+```
+
+* Button C sends the signal 1 (flag bit 0)
+* Button D sends the signal 2 (flag bit 1)
+
+Note we have used the C-API as Main does not have an instance of `Thread`.
+
+> Clearing Flags
+>
+> Note that once both flags are set, `ThisThread::flags_wait_all` unblocks
+>
+> However, these signal flags are set by interrupt, and may be set multiple times due to switch bounce.
+> 
+> We therefore wait for 50ms (for the switches to settle), clear both flags with `ThisThread::flags_clear(1 | 2);` and then block again.
+
+Once again, switch bounce add complication to our code.
+
+| TASK 366 | Signal-Wait |
+| --- | --- |
+| 4. | What happens if we were to wait in main using the following instead? |
+| - | `ThisThread::flags_wait_any(3);` |
+| | |
+
+Note the difference between `all` and `any` in the API here.
+
+> **What is the significance of this?**
+>
+> Reflecting on what this code does, we see that we have synchronised an interrupt and a thread. 
+>
+> As interrupts are so limited (and need to exit quickly), a useful strategy is to simply signal a waiting thread when an interrupt occurs. This allows the operations to continue in a thread context, where you have a lot more flexibility!
+
+In the functions `task1()` and `task2()` we also see signal-wait being used to coordinate with each other.
+
+This uses the C++ API to send a signal:
+
+```C++
+t1.flags_set(1);
+```
+
+This sets signal flag 1 on thread `t1`.
+
+```C++
+t2.flags_set(1);
+```
+
+This sets signal flag 1 on thread `t2`.
+
+> Note that each thread has separate flags. Sending a signal to one thread has no effect on the another.
+
+You may with to explore the signal-wait mechanism more by studying the header files. Right click any of the signal-wait APIs and click "Go to Definition" to read the details and explore other APIs.
+ 
+## Semaphores
+The Mutex lock is the 
+
