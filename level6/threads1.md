@@ -1059,8 +1059,10 @@ This is best shown by example (derived from the Mbed OS documentation)
 | --- | --- |
 | 1. | Make Task-374 the Active Program |
 | 2. | Build and run the code. Monitor the serial output |
+| 3. | Compare and contrast what happens when you call `notify_one()` instead of `notify_all()` |
 
 The example shown here is a reusable pattern which you might want to reuse of in your own code. 
+
 
 ## Reflection
 For the Mutex and semaphore, we see a common **condition** that causes blocking: that is attempting to acquire a lock when the value is zero. Being equal to zero is just one possible condition however.
