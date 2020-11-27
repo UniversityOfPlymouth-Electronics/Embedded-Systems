@@ -577,7 +577,7 @@ counterLock.unlock();
 | --- | --- |
 | 5.  | Try and fix the race condition in using a mutex lock |
 | -   | Remember that taking and releasing a lock consumes a significant amount of time |
-| -   | One solution is given in Task-336B |
+| -   | One solution is given in Task-362B |
 
 If you did this correctly, you should notice two things:
 
