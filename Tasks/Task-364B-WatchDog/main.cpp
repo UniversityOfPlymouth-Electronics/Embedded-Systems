@@ -8,8 +8,8 @@ using namespace uop_msb_200;
 void task1();
 void task2();
 
-typedef enum {NONE=0, THREAD1=1, THREAD2=2, ALL=3} THREADHEALTH; 
-uint8_t threadHealth = 0;
+typedef enum {NONE=0, THREAD1=0b01, THREAD2=0b10, ALL=0b11} THREADHEALTH; 
+uint8_t threadHealth = 0b00;
 Mutex threadHealthLock;
 void isAlive(THREADHEALTH th)
 {
