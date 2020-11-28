@@ -883,7 +883,7 @@ When you start a thread, it is possible to also pass parameters to the thread fu
 
 | TASK 368 | Thread Parameters |
 | --- | --- |
-| 1. | Make Task-366 the Active Program |
+| 1. | Make Task-368 the Active Program |
 | 2. | Build and run the application |
 | 3. | Study the code carefully. |
 
