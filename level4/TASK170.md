@@ -230,7 +230,7 @@ Currently the LEDs just flash on and off with the same LED patterns. It being cl
 ## Local and Static Local Variables
 We continue looking at functions now, and how to further tidy up the tree light application.
 
-| TASK-172A | Statics |
+| TASK-172A | Functions |
 | --- | --- | 
 | 1.  | Make Task-172A the active program |
 | 2.  | Build and run the code to see what it does |
@@ -253,13 +253,15 @@ int delay_ms = (int)meanPotValue;    //Cast to integer
 >
 > where x<sub>n</sub> is the next input sample, y<sub>n+1</sub> is the next output and &alpha; is a coefficient 0.0&#8804;&alpha;<1.0
 
-| TASK-172A | Statics |
+The actual purpose is not that important here. What is more important is that we know how to move code to a function:
+
+| TASK-172A | Functions |
 | --- | --- | 
-| 4.  | Can you write a function to encapsulate the smoothing. |
+| 4.  | Can you write a function to encapsulate the smoothing shown above. |
 | -   | It should perform all the operations, including the loop and calling `getDelayMS()` |
 | -   | It should take a `double` as a parameter (to specify &alpha;) and return an `int` (the output) |
 | -   | You will have to also relocate the variable `meanPotValue` |
-| 5.  | Compare with Task-172B |
+| 5.  | Compare with Task-172B which has a solution |
 
 If you struggled with this task, that is understandable. Do study the solution.
 
@@ -273,28 +275,17 @@ Note the following about the solution in Task-172B:
     * This means it can be access from **anywhere**. 
     * This is not ideal. What if that name was already used?
 
-| TASK-172A | Statics |
+| TASK-172B | Statics |
 | --- | --- | 
-| 5.  | Now comment out the line `double meanPotValue = (double)getDelayMS();` |
-| 6.  | Update the `getAverageDelay` function as follows: |
-
-```C++
-int getAverageDelay(double alpha)
-{
-    static double meanPotValue = 0.0;
-    for (unsigned int n=0; n<32; n++) {
-        int potValue = getDelayMS();                    //Get raw value (with noise)
-        meanPotValue = alpha*meanPotValue + (1.0-alpha)*potValue; //Handy forumula!
-    }
-    return (int)meanPotValue;
-}
-```
+| 1.  | Make Task-172B the active program |
+| 2.  | Comment out the line `double meanPotValue = (double)getDelayMS();` |
+| 3.  | Uncomment the line inside the `getAverageDelay` function that reads `static double meanPotValue = 0.0;` |
 
 Note the keyword `static` on the front.
 
-| TASK-172A | Statics |
+| TASK-172B | Statics |
 | --- | --- | 
-| 7.  | Use the debugger to step into `getAverageDelay` |
+| 4.  | Use the debugger to step into `getAverageDelay` |
 | -   | One the first occasion, note the initial value of `meanPotValue` |
 | -   | One the second occasion, compare what happens. Does `meanPotValue` get reset to 0.0? |
 
@@ -306,19 +297,44 @@ A note about static local variables
 
 The advantage here was that a global variable is now local. It has the advantage of retaining it's value but avoids the risk of _name collisions_. It also means the function `getAverageDelay` is more self-contained.
 
-| TASK-172A | Statics |
+| TASK-172B | Statics |
 | --- | --- | 
-| 8.  | Remote the keyword static. Use the debugger to step into `getAverageDelay` again. What has changed? |
+| 5.  | Remote the keyword static. Use the debugger to step into `getAverageDelay` again. What has changed? |
 
-This will break the logic of this code as `meanPotValue` will we set to 0.0 everytime.
+This will break the logic of this code as `meanPotValue` will we set to 0.0 every time.
 
 Refer back to the lecture notes for more information.
+
+| TASK-172C | Global Functions |
+| --- | --- | 
+| 1.  | Make Task-172C the active program |
+| 2.  | Build and run the code to see what it does |
+| 3.  | Study the code, read the comments. Note that some of the code is now moved into `LED_Latch.cpp` |
+
+> **Separation of Concerns**
+>
+> In this version, all the code concerning the LEDs has been moved out of `main.cpp` and into a separate file `LED_Latch.cpp`. 
+> 
+> There is no code in `main` that needs direct access to the hardware associated with the LED display
+>
+> Instead, code in `main` calls functions written in the `LED_Latch.cpp` file
+>
+> All the code inside the `LED_Latch.cpp` file is concerned with the LED display and nothing else. We call this _separation of concerns_
+
+So how do you move functions to other files? It's actually quite simple, but is often considered difficult for beginners.
+
+
+
+
+
 
 
 # Quiz
 A quiz on functions is available on the DLE. Please complete this quiz.
 
 https://dle.plymouth.ac.uk/mod/quiz/view.php?id=1005421
+
+---
 
 
 

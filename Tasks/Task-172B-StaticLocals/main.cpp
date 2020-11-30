@@ -21,12 +21,12 @@ uint8_t pattern_blue[] = {128, 64, 32, 16, 8,  4,  2,  1,  0,    0xFF};
 uint8_t idx = 0;
 
 //Mean pot value
-// double meanPotValue = (double)getDelayMS();
+double meanPotValue = (double)getDelayMS();     // 2. Comment out this line
 
 //Calculate average delay by filtering the potentiometer value
 int getAverageDelay(double alpha)
 {
-    static double meanPotValue = 0.0;
+    // static double meanPotValue = 0.0;        // 3. Uncomment this line
     for (unsigned int n=0; n<32; n++) {
         int potValue = getDelayMS();                    //Get raw value (with noise)
         meanPotValue = alpha*meanPotValue + (1.0-alpha)*potValue; //Handy forumula!
