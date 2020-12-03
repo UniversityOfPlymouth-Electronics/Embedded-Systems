@@ -2,155 +2,86 @@
 #include <chrono>
 using namespace uop_msb_200;
 
+#include "mbed.h"
+
 #include "string.h"
 #include <stdio.h>
 #include <ctype.h>
 #include "sample_hardware.hpp"
 
+#define DELAY 200
 
-#define RED_DONE 1
-#define YELLOW_DONE 2
-
-
-//Function declarations
-void countUP();
-void countDOWN();
-extern "C" void spinlock(volatile int *arg);
-extern "C" void spinunlock(volatile int *arg);
-
-//MUTEX Lock
-Mutex countLock;
-volatile int _spinLock = 1;
+Buzzer buzz;
 
 //Thread ID for the Main function (CMSIS API)
 osThreadId tidMain;
 
-//Stared mutable state
-volatile int counter = 0;
-
-// *************************************************************
-// * TRY THIS WITH AND WITHOUT UNCOMMENTING THE FOLLOWING LINE *
-// * Note the speed difference for this particular case.
-// *************************************************************
-
-//#define SPIN
-
-void inline increment()
+void thread1() 
 {
-  //**** Take lock ****
-    #ifdef SPIN
-    spinlock(&_spinLock); 
-    #else
-    countLock.lock();
-    #endif
-    
-    counter++;
-    
-    //**** Release lock ****
-    #ifdef SPIN
-  spinunlock(&_spinLock);   
-    #else
-    countLock.unlock();
-    #endif
-}
-
-
-
-void inline decrement()
-{
-  //**** Take lock ****
-    #ifdef SPIN
-    spinlock(&_spinLock); 
-    #else
-    countLock.lock();
-    #endif
-    
-    counter--;
-    
-    //**** Release lock ****
-    #ifdef SPIN
-    spinunlock(&_spinLock);   
-    #else
-    countLock.unlock();
-    #endif
-}
-//Threads
-void countUP()
-{
-    redLED = 1;
-    
-    for (unsigned int n=0; n<100000; n++) {      
-                increment();
-                increment();
-                increment();
-                increment();
-                increment();
-                increment();
-                increment();
-                increment();
-                increment();
-                increment();            
+    printf("Entering thread 1\n");
+    while (true) {
+        yellowLED = !yellowLED;
+        ThisThread::sleep_for(200ms);   
     }
-    
-    redLED = 0;
-    osSignalSet(tidMain, RED_DONE);  //Signal main thread we are done
 }
 
-void countDOWN()
+//This thread has higher priority
+void thread2() 
 {
-    yellowLED = 1;
-    
-    for (unsigned int n=0; n<100000; n++) {      
-                decrement();
-                decrement();
-                decrement();
-                decrement();
-                decrement();
-                decrement();
-                decrement();
-                decrement();
-                decrement();
-                decrement();
-    }   
-        
-    yellowLED = 0;    
-    osSignalSet(tidMain, YELLOW_DONE); //Signal main thread we are done
+    printf("Entering thread 2\n");  
+    while (true) {
+        redLED = !redLED;
+        if (buttonA == 1) {          
+            wait_us(200000); 
+        } else {
+            ThisThread::sleep_for(200ms);    
+        }           
+    }
 }
 
 
 //Main thread
 int main() {
-    redLED    = 0;
-    yellowLED = 0;
-    greenLED  = 1;
+    post();
+
+    printf("Press button A to use a spinning wait in thread 2\n");
+    printf("Hold down button B to elevate thread 2 priority\n");
+
+    //Main thread ID
+    tidMain = ThisThread::get_id();  
     
-    //Threads
-    Thread t1;
-    Thread t2;
-    tidMain = ThisThread::get_id(); 
+    //Create a thread with normal priority
+    Thread t1(osPriorityNormal);
+    t1.start(thread1);
     
-    //Press the switch to run concurrently
-    if (onBoardSwitch == 1) {
-        printf("Running sequntially\n");
-        countUP();
-        countDOWN();        
+    // 2) Select the Thread Priority
+    Thread t2(osPriorityNormal);
+    t2.start(thread2);
+
+    wait_us(100000);
+
+    if (buttonB == 1) {
+        printf("Thread 2 running with elevated priority\n");
+        t2.set_priority(osPriorityAboveNormal);        
     } else {
-        printf("Running concurrently\n");
-        t1.start(countUP);           
-        t2.start(countDOWN);    
-  
-        //Wait for the ALL_ON signal
-        Thread::signal_wait(RED_DONE,osWaitForever);
-        Thread::signal_wait(YELLOW_DONE,osWaitForever);        
+        printf("Thread 2 running with same priority\n");
+    }
+    
+
+    while (onBoardSwitch == 0) {
+        printf("Main Thread checking in!\n");
+        buzz.playTone("G");
+        ThisThread::sleep_for(125ms);
+        buzz.rest();
+        ThisThread::sleep_for(2s);
     }
 
-    printf("Final result = %d\n", counter);
-    if (counter == 0) {
-        greenLED = 0;
-    }
-        
     while(true);
+
 }
+
+   
+
 
 
 

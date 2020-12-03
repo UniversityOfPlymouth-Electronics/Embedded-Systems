@@ -1118,6 +1118,8 @@ A spin-lock must not be used with a priority scheduler or the highest-priority i
 
 Let’s now look at an example to illustrate this:
 
+**ATTENTION - the following task does not work with the ARMC6 Compiler - I am looking into updating it**
+
 | TASK-376 | SPINLOCKS |
 | --- | --- |
 | 1. | Open the project Task-376 and make it your active program |
@@ -1183,7 +1185,23 @@ run. Task A can enter the WAITING state by waiting on a number of objects, inclu
 
 Mbed-os actually uses a priority scheduler, but by default, all threads are given the same priority. When this is the case, it becomes a round-robin scheduler.
 
+> Threads can have equal or different priorities. Where priorities are all equal, the scheduler on mbed becomes a round-robin scheduler. When any thread has a higher priority, it becomes a priority scheduler (see above).
 
+| TASK-378 | Scheduling Priority 1 |
+| --- | --- |
+| 1. | Open Task-378 and read through the code. |
+| - | Note there are two types of wait in thread 2. |
+| 2. | Run the code and trying holding button A |
+| 3. | Hold down button B and reset (to set a higher priority for thread 2). Repeat. |
+| - | What do you notice? |
+| - | <p title="If thread 2 has a higher priority and never enters the WAITING state, no other threads get any time">Hover here for an answer</p> |
+
+
+**Key Points:**
+
+* A `Thread::sleep` will yield control back to the scheduler
+* BUSY-WAIT loops should not be used with a priority scheduler as they can starve other threads from running.
+* If all threads have the same priority, then BUSY WAIT delays can be tolerated as they will still be pre-empted. The may consume additional power however.
 
 ## Reflection
 For the Mutex and semaphore, we see a common **condition** that causes blocking: that is attempting to acquire a lock when the value is zero. Being equal to zero is just one possible condition however.

@@ -2,9 +2,9 @@
 #include <chrono>
 using namespace uop_msb_200;
 
-#include "string.h"
-#include <stdio.h>
-#include <ctype.h>
+// #include "string.h"
+// #include <stdio.h>
+// #include <ctype.h>
 #include "sample_hardware.hpp"
 
 
@@ -15,8 +15,8 @@ using namespace uop_msb_200;
 //Function declarations
 void countUP();
 void countDOWN();
-extern "C" void spinlock(volatile int *arg);
-extern "C" void spinunlock(volatile int *arg);
+extern void spinlock(volatile int *arg);
+extern void spinunlock(volatile int *arg);
 
 //MUTEX Lock
 Mutex countLock;
@@ -33,7 +33,7 @@ volatile int counter = 0;
 // * Note the speed difference for this particular case.
 // *************************************************************
 
-//#define SPIN
+#define SPIN
 
 void inline increment()
 {
@@ -120,9 +120,7 @@ void countDOWN()
 
 //Main thread
 int main() {
-    redLED    = 0;
-    yellowLED = 0;
-    greenLED  = 1;
+    post();
     
     //Threads
     Thread t1;
@@ -136,12 +134,14 @@ int main() {
         countDOWN();        
     } else {
         printf("Running concurrently\n");
-        t1.start(countUP);           
+        t1.start(countUP); 
+        wait_us(10);          
         t2.start(countDOWN);    
   
         //Wait for the ALL_ON signal
-        Thread::signal_wait(RED_DONE,osWaitForever);
-        Thread::signal_wait(YELLOW_DONE,osWaitForever);        
+        ThisThread::flags_wait_all(RED_DONE | YELLOW_DONE);
+        // Thread::signal_wait(RED_DONE,osWaitForever);
+        // Thread::signal_wait(YELLOW_DONE,osWaitForever);        
     }
 
     printf("Final result = %d\n", counter);
