@@ -1064,6 +1064,127 @@ This is best shown by example (derived from the Mbed OS documentation)
 The example shown here is a reusable pattern which you might want to reuse of in your own code. 
 
 
+## SPIN-LOCKS
+A spin lock is a simple implementation of a MUTEX lock that does not require the use of a scheduler. It performs a thread-safe busy-wait on a single value.
+
+* *A wait will loop continuously (spin) as long as the value is 0.
+* *A release will increment the value.
+
+A spinlock is typically backed by a single byte (or even bit) of data, but the main code never directly accesses it. 
+
+It is critical that the read-modify-write cycle of the value is atomic. The ARM Cortex® M4 has some specific instructions to facilitate this. These are “Load Exclusive” and “Store Exclusive”.
+
+* `LDREX`
+* `STREX`
+
+Let’s first look at the algorithm to wait (lock).
+
+### Lock
+The flow-chart below outlines the logic.
+
+1. The value is read from memory into a register with the `LDREX` instruction. This will ‘request’ exclusive access.
+1. The value in the register is decremented. If this produces a negative result, then the lock is already taken, so branch back to 1.
+1. If positive or zero, then the lock was available.
+1. Attempt to store the new value - if the load in 1 had exclusive access, then this will succeed, otherwise branch to 1 and try again.
+
+The code to perform this is in `myasm.s`
+
+<figure>
+<img src="../img/spinlock-lock-flowchart.png" width="200px">
+<figcaption>Flow chart for the LOCK operation of a spin-lock</figcaption>
+</figure>
+
+### Unlock
+The unlock is somewhat simpler. Again, an attempt is made to
+read the value into a register and acquire an exclusive lock. The register is incremented and an attempt is made to write the result back.
+
+1. If the exclusive lock was granted, the save is successful and the code can proceed.
+1. If the exclusive lock was not granted, the code loops and tries again.
+
+Again, the code is in `myasm.s`
+
+<figure>
+<img src="../img/spinlock-unlock-flowchart.png" width="200px">
+<figcaption>Flow chart for the UNLOCK operation of a spin-lock</figcaption>
+</figure>
+
+### Compatibility
+The spin-lock, by its very nature, utilises 100% of the CPU core while running. It does not assume anything about operating systems, and so does not yield to the scheduler.
+A priority scheduler will always run the highest priority thread. If a spin-lock is used in the highest priority thread, and fails to acquire the lock, the application will deadlock.
+
+A spin-lock must not be used with a priority scheduler or the highest-priority interrupt.
+
+> Remember that a MUTEX lock puts a thread in the `WAITING` state, and yields control back to the scheduler. Although often the preferred method, this may not always be the most efficient choice due to the overheads involved in such a process.
+
+Let’s now look at an example to illustrate this:
+
+| TASK-376 | SPINLOCKS |
+| --- | --- |
+| 1. | Open the project Task-376 and make it your active program |
+| 2. | Build and deploy the code. |
+| -  | Note approximately how long it takes for all the LEDs to flash and go off. |
+| 3. | Now uncomment the line that reads //#define SPIN. 
+| -  | Build and run the code again. Is there any speed difference and why? |
+
+This is a striking demonstration of how expensive it is to use a Mutex. 
+
+> For very fast and repetitive operations, such as those in this example, a spin lock is actually more efficient. 
+
+In general we will not be taking and releasing locks quite so frequently.
+
+## Scheduling and Priority
+The scheduler in an operating system performs a number of tasks, including:
+* Saving the context of a pre-empted function
+* *Choosing the next thread to run (using a “scheduling algorithm”)
+* Restoring the context of the next function
+
+Mbed os supports two scheduling algorithms, although one is just a special case of the other.
+ 
+* Round-robin (recommended)
+* Priority (use with caution!)
+
+### Round Robin Scheduling
+One of the first, fairest and most deterministic scheduling
+algorithms that trades throughput for determinism. 
+
+In essence, each task (or thread) is run in strict sequence with no prioritisation. Each task is given a fixed time slice before the next task is allowed to run. A task can finish early of course. This method also has the advantage of avoiding thread starvation (or priority inversion).
+
+For example, consider the diagram below. Three tasks are
+scheduled. Each is run in strict sequence A, B, C and is given the same time slice of `T`ms. On the third context switch, Task B finishes within it’s time slice and becomes inactive. The execution of Task C is brought forward, and now A and C share the CPU time evenly.
+
+<figure>
+<img src="../img/round-robin-schedule.png" width="600px">
+<figcaption>Round Robin Scheduling</figcaption>
+</figure>
+
+A key benefit of this scheme is that you can calculate the worst-case latency. For example, if a task were to become blocked. The figure below gives an example:
+
+<figure>
+<img src="../img/round-robin-blocks-schedule.png" width="600px">
+<figcaption>Round Robin Scheduling with Blocking</figcaption>
+</figure>
+
+When Task C blocks, it is marked as waiting, and is no longer scheduled. This means all the CPU resource can go to Tasks A and B.
+
+Consider the worst-case scenario where Task C unblocks just as Task A is about to run. The delay, and therefore latency is bounded to a maximum of (N-1)T, were N is the number of threads. (N-1 is the maximum number of tasks that can be scheduled before it).
+
+This may not be the most efficient in terms of throughput, but is suited to hard-real-time tasks where latency can be guaranteed.
+
+### Priority Scheduling
+A basic priority scheduler always gives priority to the thread with the highest priority. To avoid thread starvation, this means the highest priority thread must never use a spin-lock.
+
+<figure>
+<img src="../img/priority-schedule.png" width="600px">
+<figcaption>Priotity Scheduling with Blocking</figcaption>
+</figure>
+
+Unless TASK A enters the WAITING state, TASK B will never
+run. Task A can enter the WAITING state by waiting on a number of objects, including a Mutex, signal, semaphore or sleep.
+
+Mbed-os actually uses a priority scheduler, but by default, all threads are given the same priority. When this is the case, it becomes a round-robin scheduler.
+
+
+
 ## Reflection
 For the Mutex and semaphore, we see a common **condition** that causes blocking: that is attempting to acquire a lock when the value is zero. Being equal to zero is just one possible condition however.
 
@@ -1077,4 +1198,7 @@ For example, you can notify waiting threads when an integer is within a particul
 
 You can think of counting semaphores being a special case, where the value (of the semaphore) becomes greater than zero.
 
+---
 
+
+[Next - Lab8 - Thread Abstractions](thread_abstractions.md)

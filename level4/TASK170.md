@@ -321,7 +321,7 @@ Refer back to the lecture notes for more information.
 >
 > All the code inside the `LED_Latch.cpp` file is concerned with the LED display and nothing else. We call this _separation of concerns_
 
-So how do you move functions to other files? It's actually quite simple, but is often considered difficult for beginners.
+So how do you move functions to other files? It's actually quite simple, but is often considered confusing for beginners.
 
 
 
