@@ -275,3 +275,72 @@ payload = mail_box.try_get_for(10s);
 
 > Note that non-blocking variants exist
 
+## What about interrupts?
+In the examples above, data has been copied from an interrupt context to a thread. Other options to consider:
+
+* Interrupt to thread - a very useful way to cross from the ISR context to the thread context.
+* Thread to thread - useful for passing data between threads as the synchronisation and buffering is built in
+* Thread to interrupt - this requires use of the non-blocking APIs for get.  
+* Interrupt to interrupt - both ends use non-blocking APIs (although I've not tried this!)
+
+So yes, these can be used with interrupts for both put and get, but you need to ensure that interrupts should never be blocked.
+
+## Event Queues
+I confess this is my personal favourite and they deserve some exploration.
+
+One of the most interesting objects in mbed-os is the EventQueue. This is something that will feel familiar to developers on mobile and desktop computing platforms. In essence, for a given thread, it is possible to have a queue of jobs that will be performed **sequentially** (one after the other). Furthermore, tasks can be posted to a queue from any context (another thread or ISR). 
+
+> A task in this context is “calling a function, with optional parameters”.
+
+Some uses cases for this are:
+
+* An interrupt can easily defer non-real-time tasks to a background thread (allowing it to exit more quickly)
+* Queuing up non-re-entrant tasks - thus avoiding
+race conditions
+* Queues can also be chained together, and allow the developer to synchronise operations to avoid races and maximise throughput.
+
+Remember that you can do much more in a thread than you can in an ISR. Nearly every object in mbed os is protected and thread safe. A minority are interrupt safe. The same applies to the standard library (`printf`, `scanf` etc.).
+
+| TASK-386 | Event Queues |
+| --- | --- |
+| 1. | Make Task 386 your active program. Build and run it |
+| 2. | Monitor the serial terminal. Every time the red LED lights, press and release the blue user button |
+| -  | Note the number of switch bounces! |
+
+This task is not about switch-bounce per-se, but about how you can use event queues to simplify your code.
+
+This application has two threads:
+
+* main
+* `t1`
+
+For each thread, an instance of `EventQueue` has been created for illustrative purposes.
+
+```C++
+EventQueue mainQueue;
+EventQueue workerQueue;
+```
+
+Early in the code, the function `workerThread` is run in a parallel thread.
+
+```C++
+t1.start(workerThread);
+...
+void workerThread()
+{
+    workerQueue.dispatch_forever();
+}
+...
+```
+
+This function has only one task: to run `workerQueue.dispatch_forever()`
+
+From the documentation, it says "Dispatch events without a timeout." So what does this mean?
+
+> Dispatch queues initially block and wait for tasks to be sent to them.
+>
+> As tasks are received, these are held in a queue. Tasks are essentially functions and their parameters. These tasks are run in sequential order, and not concurrently. 
+>
+> From an ISR or another thread, you can add a task to the queue.
+>
+> There there are no tasks to perform, they block in the `WAITING` state. 

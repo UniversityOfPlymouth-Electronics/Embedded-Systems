@@ -18,8 +18,8 @@ void workerThread();
 InterruptIn btn(USER_BUTTON);
 
 //Creates a queue with the default size
-EventQueue workerQueue;
 EventQueue mainQueue;
+EventQueue workerQueue;
 
 Timer tmr1;
 Thread t1;
