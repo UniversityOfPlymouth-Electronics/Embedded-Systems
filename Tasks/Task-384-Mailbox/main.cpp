@@ -49,7 +49,8 @@ void switchISR() {
     uint32_t switch1State = buttonA;
     uint32_t switch2State = buttonB;
     
-    //Allocate a block from the memory pool (non blocking)
+    //Allocate a block from the memory pool (non blocking version)
+    //For a thread context, there is also a blocking version (with timeout)
     message_t* message = mail_box.try_alloc();
     if (message == NULL) {
         //Out of memory
@@ -58,15 +59,28 @@ void switchISR() {
     }
     
     //Fill in the data
-    message->fValue = sample;
+    message->fValue   = sample;
     message->sw1State = switch1State;
     message->sw2State = switch2State;
     
-    //Write to queue
-    osStatus stat = mail_box.put(message);    //Note we are sending the "pointer"
+    //Write pointer to the queue
+    osStatus stat = mail_box.put(message);    //Note we are sending the "pointer" not the data
     
+    /*
+    typedef enum {
+    osOK                      =  0,         ///< Operation completed successfully.
+    osError                   = -1,         ///< Unspecified RTOS error: run-time error but no other error message fits.
+    osErrorTimeout            = -2,         ///< Operation not completed within the timeout period.
+    osErrorResource           = -3,         ///< Resource not available.
+    osErrorParameter          = -4,         ///< Parameter error.
+    osErrorNoMemory           = -5,         ///< System is out of memory: it was impossible to allocate or reserve memory for the operation.
+    osErrorISR                = -6,         ///< Not allowed in ISR context: the function cannot be called from interrupt service routines.
+    osStatusReserved          = 0x7FFFFFFF  ///< Prevents enum down-size compiler optimization.
+    } osStatus_t;
+    */
+
     //Check if succesful
-    if (stat == osErrorResource) {
+    if (stat != osOK) {
         redLED = 1; 
         printf("mail_box.put() Error code: %4Xh, Resource not available\r\n", stat);   
         mail_box.free(message);
@@ -83,6 +97,9 @@ void thread1()
         //Block on the queue
         payload = mail_box.try_get();
         
+        //Also consider this
+        //payload = mail_box.try_get_for(10s);
+
         //Check status
         if (payload) {
             //Make a copy
@@ -94,6 +111,9 @@ void thread1()
             printf("Float Value: %.2f\t",    msg.fValue);
             printf("SW1: %u\t",              msg.sw1State);
             printf("SW2: %u\n\r",            msg.sw2State);
+        } else {
+            //ERROR HANDLER TO BE DONE
+
         }
              
     } //end while

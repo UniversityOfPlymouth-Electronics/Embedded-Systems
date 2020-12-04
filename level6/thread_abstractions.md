@@ -25,12 +25,12 @@ It has been recognised that there are some common tasks which can be identified 
 
 Pre-built solutions to such common tasks are what this section is about and includes:
 
-* FIFO Queues for safely moving data from an interrupt/thread to another thread
+* FIFO Queues for safely moving data from an interrupt/thread to another interrupt/thread
 * Memory pools for safe memory allocation and deallocation
 * Mailboxes which combine the above
 * EventQueues for safely "dispatching tasks" to run on other threads either once or periodically.
 
-All the above must bebe thread-safe and where blocking is employed, should block in the `WAITING` state.
+All the above must be thread-safe and where blocking is employed, should block in the `WAITING` state.
 
 > In some sense, we are introducing another layer of abstraction, protecting us from the complex details of certain multi-threaded tasks. 
 
@@ -38,7 +38,7 @@ All the above must bebe thread-safe and where blocking is employed, should block
 
 Where data is shared between threads, mbed offers some higher
 level objects to help data move across thread boundaries or
-between an interrupt and a thread.
+between an interrupt and a another interrupt or (more typically) thread.
 
 The first of these is the message queue. This is an object that can be used to safely move data between threads and/or
 interrupts. It is backed by a FIFO buffer.
@@ -54,14 +54,13 @@ below:
 The queue is backed by a fixed size (bounded) array. Data that is “put” in one end are added to the queue. If the queue is full, the put function will return an error code indicating that there are no more free resources.
 
 The consumer end will “get” samples from the queue. For an
-empty queue, this is blocking, although a timeout can be applied.
+empty queue, this is blocking if a timeout is specified. There are non-blocking versions as well.
 
 A key feature of this object is that the API for the message queue is both thread and interrupt safe.
 
 A limitation of this object is that it can only send 32-bit integers. These can be integer values, or more often **pointers**. In the case of the latter, further support is needed for thread-safe access to shared memory. See the entry on memory pools.
 
-In the next task, you will sample an analogue signal (convert a voltage to a number) at constant intervals using a timer interrupt. This interrupt (producer) will pass the data to a thread (consumer) via a message queue. The thread will get data from the queue and write it to the terminal.
-We will examine the impact of blocking in both the producer and consumer.
+In the next task, you will send data at constant intervals using a timer interrupt. This interrupt (producer) will pass the data to a thread (consumer) via a message queue. The thread will get data from the queue and write it to the terminal. We will examine the impact of blocking in both the producer and consumer.
 
 | TASK-380 | Message Queues |
 | --- | --- |
@@ -80,12 +79,12 @@ This exercise illustrates a few key points:
 * The buffering nature of the queue gives this system **timing slack**.
     * If the consumer end is busy, the producer (ISR) can still save the incoming data and is not held up.
     * If the producer end is busy, the consumer will read data as long as there is data in the buffer. Otherwise it will block
-* Writing to the message queue is always non-blocking
+* Writing to the message queue is usually non-blocking (although other variants exist)
     * A boolean false is returned if the buffer is full
     * A write can be safely performed in a thread context. The write is said to be both thread and interrupt safe
 * Reading from a message queue can be blocking
     * A timeout can be (optional) specified to detect deadlocks
-    * Read can be safely performed in a thread. It will block in the `WAITING` state when the buffer is empty. _If cannot be performed in an ISR because it is blocking_
+    * Read can be safely performed in a thread or an interrupt. However, if a timeout is specified, it will block in the `WAITING` state when the buffer is empty. In such cases, _it should not be performed in an ISR because it is blocking_ (see the non-blocking APIs)
 
 Note how you did not need to use any mutex locks, signals or semaphores? This is all done for you. You can put and fetch data and not concern yourself with thread synchronisation.
 
@@ -186,8 +185,8 @@ At the receiving end (thread), we see the blocking call to read data from the qu
 ```C++
 message_t* payload;
 
-//Block on the queue
-bool ok = queue.try_get(&payload);
+//Block on the queue (non blocking versions exist)
+bool ok = queue.try_get_for(10s, &payload);
 ```
 
 Note that the pointer is now copied into the variable `payload`. **The next two steps are very important**:
@@ -222,6 +221,7 @@ Dynamic memory allocation can be both slow and hazardous.
 * It takes time to locate and allocate a block of memory
 * It makes it harder to guarantee the total memory requirement does not exceed the system memory during any point of execution.
 * Memory can become fragmented
+* Do not assume `malloc/free` (C) or `new/delete` (C++) are re-entrant.
 
 > For these reasons, preallocating memory is recommended for embedded systems. It helps us guarantee that the system will not run out of memory if left to run for long periods of time.
 

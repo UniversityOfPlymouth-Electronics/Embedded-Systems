@@ -78,7 +78,7 @@ void thread1()
         message_t* payload;
 
         //Block on the queue
-        bool ok = queue.try_get(&payload);
+        bool ok = queue.try_get_for(10s, &payload);
         
         //Check status
         if (ok) {
@@ -91,6 +91,8 @@ void thread1()
             printf("Float Value: %.2f\t",    msg.fValue);
             printf("SW1: %u\t",              msg.sw1State);
             printf("SW2: %u\n\r",            msg.sw2State);
+        } else {
+            //TODO: Handle timeout
         }
              
     } //end while

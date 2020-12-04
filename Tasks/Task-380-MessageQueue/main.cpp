@@ -31,7 +31,7 @@ void ISR() {
     uint32_t sample = rand();
     
     //Write to queue as 32-bit integer (same size as pointer)
-    bool sent = queue.try_put((uint32_t*)sample);
+    bool sent = queue.try_put((uint32_t*)sample); //Non-blocking
     
     //Check if succesful
     if (!sent) {
@@ -45,7 +45,7 @@ void thread1()
     while (true) {
         //Read queue - block (with timeout)
         uint32_t* rx;   // Fancy type for a 32-bit integer :)
-        bool success = queue.try_get_for(10s, &rx);
+        bool success = queue.try_get_for(10s, &rx); //Blocks for 10s if there is no data
         
         if (success) {
             printf("value: %u\n", (uint32_t)rx);
