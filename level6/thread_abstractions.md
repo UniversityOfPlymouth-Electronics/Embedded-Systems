@@ -124,3 +124,116 @@ Can you predict the final values of `u` and `v`? Explain.
 
 *Hint:* If you use `printf`, you can use the `%p` placeholder for pointer types (instead of `%u`).
 
+## Memory Pool
+In the previous example, a message queue was used to (safely)
+pass a simple integer from an ISR to a thread. In the next task, we pass a more complex data structure with the aid of another object, a memory pool.
+
+A memory pool is a pre-allocated block of memory, divided up into equal size segments. It provides a thread-safe and interrupt-safe mechanism to "requesting" and "releasing" a block of memory.
+
+We then fill this segment of memory with some data and send the address through a message queue.
+
+| TASK-382 | Memory Pools |
+| --- | --- |
+| 1. | Build and run Task 382. Use the serial monitor to view the output |
+| 2. | Add some code to the ISR to busy-wait block on buttonA |
+| - | What happens if you hold down buttonA? |
+| 3. | Add some code to the consumer thread to busy-wait block on buttonB |
+| - | What happens if you hold down buttonA? |
+| 4. | For each interrupt, how many bytes are sent by the message queue to the consumer thread? |
+| 5. |  The objects use shared memory without any locks. Why is this code thread safe? |
+
+First, let's look at how we create the memory pool:
+
+```C++
+//Memory Pool - with capacity for 16 message_t types
+MemoryPool<message_t, 16> mpool;
+
+//Message queue - matched to the memory pool
+Queue<message_t, 16> queue;
+```
+
+Both the Memory Pool and Queue has the same dimensions (16). However:
+
+* The memory pool reserves `16 * sizeof(message_t)`
+* The queue reserves space for 16 pointers
+
+The angle brackets are a C++ feature known as **templates**. This is a somewhat advanced C++ topic, but one well worth researching.
+
+Note the following code in the ISR:
+
+```C++
+message_t* message = mpool.try_alloc();
+```
+
+This asks the memory pool for a block of memory (same size as the structure type `message_t`). It is NON BLOCKING and will return NULL if the memory is already fully allocated.
+It can also be called from an ISR context.
+
+Note that `message` is a pointer to a block of memory. This is now filled with data as follows:
+
+message->fValue = sample;
+message->sw1State = switch1State;
+message->sw2State = switch2State;
+```
+
+We then send the pointer to this block down the queue.
+
+```C++
+bool ok = queue.try_put(message);
+```
+
+At the receiving end (thread), we see the blocking call to read data from the queue:
+
+```C++
+message_t* payload;
+
+//Block on the queue
+bool ok = queue.try_get(&payload);
+```
+
+Note that the pointer is now copied into the variable `payload`. **The next two steps are very important**:
+
+1. You must copy the data pointed to by `payload` into a (local) variable, in this case `msg`
+
+```C++
+message_t msg(payload->fValue, payload->sw1State, payload->sw2State);
+```
+
+Here we use a constructor to create a new instance of `message_t` and copy the values.
+
+2. Once you have a copy, you must free the memory up for another sample:
+
+```C++
+mpool.free(payload);
+```
+
+If you forget to free the memory, the memory pool will fill and attempts to allocate will return a `NULL`.
+
+### Dynamic memory vs memory pools
+Some might be wondering why we need this given dynamic memory allocation already exists in C and C++.
+
+For those unsure what this means, this is where you also request a quantity of memory from the region of the system memory known as the **heap**.
+
+* In C you use `malloc` to request a block of bytes and `free` to return it
+* In C++ you use `new` and `delete`
+
+Dynamic memory allocation can be both slow and hazardous. 
+
+* Memory leaks can occur if you forget to free even 1 byte
+* It takes time to locate and allocate a block of memory
+* It makes it harder to guarantee the total memory requirement does not exceed the system memory during any point of execution.
+* Memory can become fragmented
+
+> For these reasons, preallocating memory is recommended for embedded systems. It helps us guarantee that the system will not run out of memory if left to run for long periods of time.
+
+The disadvantages of memory pools are:
+
+* You preallocate memory even if you never use it all
+* Each block must be the same size. Dynamic memory allocation allows you to allocate blocks of an arbitrary size.
+
+### Challenge
+Change the interrupt from a timer to a switch press. If **either** switch A or B are pressed and then released, the `switchISR` function should be invoked.
+
+* Use the same ISR for both switches
+* Add a watch-dog to reset the board if nothing is pressed within 30s.
+
+
