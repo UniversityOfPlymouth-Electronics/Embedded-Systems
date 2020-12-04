@@ -11,8 +11,6 @@ using namespace uop_msb_200;
 
 #define SWITCH1_RELEASE 1
 
-AnalogIn adcIn(AN_POT_PIN);
-
 void thread1();
 void thread2();
 void switchISR();
