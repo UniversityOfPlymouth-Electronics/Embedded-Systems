@@ -96,7 +96,7 @@ namespace uop_msb_200 {
         private:
             LEDMODE _mode;
             LEDGROUP _grp;
-            BusOut dataBus;
+
             DigitalOut LED_BAR_OE;
             DigitalOut LED_DIGIT_OE;
             DigitalOut LED_D1_LE;
@@ -104,6 +104,7 @@ namespace uop_msb_200 {
             DigitalOut LED_RED_LE;
             DigitalOut LED_GRN_LE;
             DigitalOut LED_BLUE_LE;     
+            BusOut dataBus;
 
             // Returns the currently selected latch enable pin
             DigitalOut& LE(LEDGROUP grp)
@@ -161,6 +162,7 @@ namespace uop_msb_200 {
 
         public:
             LatchedLED(LEDMODE mode, LEDGROUP grp=RED) :  _mode(mode), 
+                                        _grp(grp),
                                         LED_BAR_OE(LED_BAR_OE_PIN,1),
                                         LED_DIGIT_OE(LED_DIGIT_OE_PIN,1),
                                         LED_D1_LE(LED_D1_LE_PIN,0),
@@ -168,7 +170,6 @@ namespace uop_msb_200 {
                                         LED_RED_LE(LED_RED_LE_PIN),
                                         LED_GRN_LE(LED_GRN_LE_PIN),
                                         LED_BLUE_LE(LED_BLUE_LE_PIN),
-                                        _grp(grp),
                                         dataBus(LED_D0_PIN, LED_D1_PIN, LED_D2_PIN, LED_D3_PIN, LED_D4_PIN, LED_D5_PIN, LED_D6_PIN, LED_D7_PIN)                             
             {                                
                 //Further initialisation here 
@@ -348,7 +349,7 @@ namespace uop_msb_200 {
         LCD_16X2_DISPLAY(PinName rs=LCD_RS_PIN, PinName rw=LCD_RW_PIN, PinName e=LCD_E_PIN, PinName bkl=LCD_BKL_PIN, 
         PinName d0=LCD_D0_PIN, PinName d1=LCD_D1_PIN, PinName d2=LCD_D2_PIN, PinName d3=LCD_D3_PIN, 
         PinName d4=LCD_D4_PIN, PinName d5=LCD_D5_PIN, PinName d6=LCD_D6_PIN, PinName d7=LCD_D7_PIN,
-        LCDType type=LCD16x2) : _rs(rs), _e(e), _rw(rw), _bkl(bkl), _data(d0, d1, d2, d3, d4, d5, d6, d7),_type(type) 
+        LCDType type=LCD16x2) : _rs(rs), _e(e), _rw(rw), _bkl(bkl), _data(d0, d1, d2, d3, d4, d5, d6, d7), _type(type) 
         {
             //Power on wait
             wait_us(100000);
@@ -369,13 +370,13 @@ namespace uop_msb_200 {
             //cursorOrDisplayShift(CURSOR_MOVE, SHIFT_RIGHT);        
         }
 
-    protected:
-        LCDType _type;
+    protected:  
         DigitalOut _rs;
         DigitalOut _e;
         DigitalOut _rw;
         DigitalOut _bkl;
         BusOut _data;
+        LCDType _type;
         uint8_t _row;
         uint8_t _column;
 

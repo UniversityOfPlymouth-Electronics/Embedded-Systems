@@ -236,4 +236,42 @@ Change the interrupt from a timer to a switch press. If **either** switch A or B
 * Use the same ISR for both switches
 * Add a watch-dog to reset the board if nothing is pressed within 30s.
 
+## Mailbox
+As you probably appreciate, the queue and memory pool are designed to work together, so much so that the `Mailbox` class uses composition to combine them together.
+
+| TASK-384 | Mailbox |
+| --- | --- |
+| 1. | Make Task-384 your active program. |
+| -  | Study the code. Build and run, while watching the serial monitor |
+
+This code is quite similar to the previous examples. Instead of creating a queue and memory pool, you now only need one object:
+
+```C++
+Mail<message_t, 16> mail_box;
+```
+
+Acquiring memory is also similar:
+
+```C++
+message_t* message = mail_box.try_alloc();
+```
+
+What is slightly different is the `put` function:
+
+```C++
+osStatus stat = mail_box.put(message);
+```
+
+> **Note:** At the time of writing, this returns a value of type `osStatus`. If `message` is not `NULL`, then given the queue is the same size as the mailbox, there must be room so this should always succeed. The return type is somewhat redundant and is expected to be deprecated (see comments in `Mail.h`)
+
+In the consumer thread, we again use a blocking call with a timeout:
+
+```C++
+message_t* payload;
+
+//Block on the queue
+payload = mail_box.try_get_for(10s);
+```
+
+> Note that non-blocking variants exist
 

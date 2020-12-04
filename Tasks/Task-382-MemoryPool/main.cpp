@@ -93,6 +93,7 @@ void thread1()
             printf("SW2: %u\n\r",            msg.sw2State);
         } else {
             //TODO: Handle timeout
+            printf("Timeout!\n");
         }
              
     } //end while
