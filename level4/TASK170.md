@@ -283,7 +283,7 @@ Note the following about the solution in Task-172B:
 
 Note the keyword `static` on the front.
 
-| TASK-172B | Statics |
+| TASK-172B | Static Local Variables |
 | --- | --- | 
 | 4.  | Use the debugger to step into `getAverageDelay` |
 | -   | One the first occasion, note the initial value of `meanPotValue` |
@@ -297,7 +297,7 @@ A note about static local variables
 
 The advantage here was that a global variable is now local. It has the advantage of retaining it's value but avoids the risk of _name collisions_. It also means the function `getAverageDelay` is more self-contained.
 
-| TASK-172B | Statics |
+| TASK-172B | Static Local Variables |
 | --- | --- | 
 | 5.  | Remote the keyword static. Use the debugger to step into `getAverageDelay` again. What has changed? |
 
@@ -305,11 +305,20 @@ This will break the logic of this code as `meanPotValue` will we set to 0.0 ever
 
 Refer back to the lecture notes for more information.
 
+### Moving Functions into other files
+This is one of the most useful tricks in C and C++ programming, but also one that so often confuses students.
+
+Therefore, I have made a short video
+
+https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ed665b3a-7d19-4085-b8e7-ac8a0101dbe1
+
+
 | TASK-172C | Global Functions |
-| --- | --- | 
-| 1.  | Make Task-172C the active program |
-| 2.  | Build and run the code to see what it does |
-| 3.  | Study the code, read the comments. Note that some of the code is now moved into `LED_Latch.cpp` |
+| --- | --- |
+| 1.  | Using the link above, watch the video on moving functions into another file. | 
+| 2.  | Make Task-172C the active program |
+| 3.  | Build and run the code to see what it does |
+| 4.  | Study the code, read the comments. Note that some of the code is now moved into `LED_Latch.cpp` |
 
 > **Separation of Concerns**
 >
@@ -321,13 +330,23 @@ Refer back to the lecture notes for more information.
 >
 > All the code inside the `LED_Latch.cpp` file is concerned with the LED display and nothing else. We call this _separation of concerns_
 
-So how do you move functions to other files? It's actually quite simple, but is often considered confusing for beginners.
 
+| TASK-172C | Global Functions |
+| --- | --- |
+| 5.  | Move the following two functions to their own CPP file? |
+| -   | `getAverageDelay` |
+| -   | `getDelayMS` |
+| -   | Also move any related variables and make them `static` as appropriate |
+| 6.  | A solution is available (try not to peek until you have tried yourself!) |
 
-
-
-
-
+> **Note** - You should add the following lines to the top of every file in your project:
+>
+```C++
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
+```
+>
+> This provides support for your module support board, including all the pin names.
 
 # Quiz
 A quiz on functions is available on the DLE. Please complete this quiz.

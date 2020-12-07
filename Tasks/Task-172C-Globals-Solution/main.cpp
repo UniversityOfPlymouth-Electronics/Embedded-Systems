@@ -1,16 +1,14 @@
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
 using namespace uop_msb_200;
 
-AnalogIn pot(AN_POT_PIN);
-DigitalOut dispBackLight(LCD_BKL_PIN,1);
+
+DigitalOut dispBackLight(LCD_BKL_PIN, 1);
 LCD_16X2_DISPLAY disp;
 
 extern void setLatch(uint8_t dat, char col);
 extern void led_init(uint8_t dat, bool enabled=true);
 extern void setLEDDisplayON(bool on);
-
-int getAverageDelay(double alpha);
-int getDelayMS();
+extern int getAverageDelay(double alpha);
 
 uint8_t pattern_red[] =  {0,   1,  2,  4,  8,  16, 32, 64, 128,  0xFF};
 uint8_t pattern_grn[] =  {0,   3,  6,  12, 24, 48, 96, 192, 128, 0xFF};
@@ -57,24 +55,6 @@ int main()
 
 }
 
-int getDelayMS() 
-{
-    float p = pot; // 0 ... 1
-    int delay = 100 + 900*p;    //100...1000ms
-    return delay;
-}
 
-
-//Calculate average delay by filtering the potentiometer value
-int getAverageDelay(double alpha)
-{
-    static double meanPotValue = (double)getDelayMS();  //Mean pot value
-
-    for (unsigned int n=0; n<32; n++) {
-        int potValue = getDelayMS();                    //Get raw value (with noise)
-        meanPotValue = alpha*meanPotValue + (1.0-alpha)*potValue; //Handy forumula!
-    }
-    return (int)meanPotValue;
-}
 
 
