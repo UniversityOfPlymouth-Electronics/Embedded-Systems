@@ -26,7 +26,13 @@ Timer tmr;
 tmr.start();
 ```
 
-Once we do this, the timer will count on it's own, even if the CPU enters a sleep state.
+Once we do this, **the timer will count on it's own**, even if the CPU enters a sleep state.
+
+> This is a really important point. Behind the `Timer` type are on-chip hardware timers which count independently of of the CPU. The programmer does not need to do anything to control the timer except to start, stop and reset when needed.
+>
+> This means the timer is not affected by your code. It runs in parallel, making it very accurate and dependable.
+>
+> In C or C++, most accurate timings make use of hardware timers.
 
 We can then read the timer value at any point. A `wait` is performed by blocking on the timer:
 
@@ -61,35 +67,59 @@ What do we mean by state? In essence, where we are following a sequence, it's a 
 
 We see this concept being used for the LCD backlight. The signal driving the LCD back-light is depicted below.
 
-* The signal is ON for a proportion of the time Ton/Tp
-* The rate of switching is too fast for the human eye to notice (Tp is equal to 1ms or less)
+* The signal is ON for a proportion of the time Ton/Tp, known as the _duty_ (where 0.0 ≤ duty ≤ 1.0 )
+    * The larger the duty, the more power is delivered to the backlight
+    * For 3.3V logic, the **mean output voltage=3.3V*duty**
+    * When duty=0, the light will be off
+    * When duty=1.0, the light we be at full brightness
+    * When duty=0.5, the power delivered to the light will be at 50% of maximum 
+* The rate of switching must be too fast for the human eye to notice any flicker (e.g. Tp≤1ms)
 
 <figure>
 <img src="../img/fsm-pwm.png" width="600px">
-<figcaption>Pulse width modulation signal for controlling the LCD backlight (upper); Finite state diagram for the code (lower)</figcaption>
+<figcaption>Pulse Width Modulation (PWM) signal for controlling the LCD backlight. The duty=Ton/Tp. The mean output voltage is 3.3V * duty.</figcaption>
 </figure>
 
-The diagram below is the _finite state diagram_. 
+> Controlling the **mean** voltage in this way is known as **Pulse Width Modulation**.
+
+Later we may wish to communicate with other hardware, so to avoid any significant blocking in the code, we are going to use rapid polling and a _finite state machine_ to generate this signal. The diagram below is the _finite state diagram_ used to specify this solution. 
 
 <figure>
 <img src="../img/fsm-pwm-states.png" width="600px">
-<figcaption>Pulse width modulation signal for controlling the LCD backlight (upper); Finite state diagram for the code (lower)</figcaption>
+<figcaption>Finite state diagram for the code</figcaption>
 </figure>
 
+> Don't be put off by the word  _state_. In this example, it is just a variable that is equals to 0 (OFF) or 1 (ON). It tells us where we are in the sequence and what rules to apply.
 
-> The _state_ is just a variable that is equal to 0 (OFF) or 1 (ON)
+The state diagram can be described in words:
 
 * When in state ON
+    * If the timer has not yet reached Ton, do nothing
+    * Otherwise, set the state to OFF and turn ON the backlight
+* When in state OFF
+    * If the timer is less than Tp (1ms in this code), do nothing
+    * Otherwise, set the state to ON, turn ON the backlight, read the POT (for a new Tp) and reset the timer to 0.
 
+> Note the following:
+> * The variables `backLight` and `Tp` are only updated when certain events occur. This is simply for efficiency.
+> * In each state, the coding rules are adapted.
+
+First we need to keep track of the _state_. To make the code more readable and safer, we can create a new data type using an `enumerated` type
 
 ```C++
 typedef enum {OFF, ON} LCD_STATE;
+```
+
+We then create a simple variable of this type:
+
+```C++
 LCD_STATE state = ON;
 ```
 
+The variable `state` is actually an integer, but you can now assign it values `ON` (1) and `OFF` (0) in the code. The state machine code is shown below:
+
 ```C++
 while(true) {
-    
     switch (state)
     {
         case ON:
@@ -108,13 +138,26 @@ while(true) {
             }
             break;
     }
-
 }
 ```
 
-You should notice the LCD backlight brightness change. This is performed using digital outputs.
+| TASK-176 | Timers |
+| --- | --- |
+| 3. | By turning the dial on the potentiometer, note the change in the LCD backlight brightness. |
+| -  | Can you see any flicker? | 
+| 4. | Study the timing diagram, state diagram and the code. Can you match the code to the state diagram? |
 
-## PwmOut
+## Using PwmOut
+Pulse Width Modulation (PWM) is a common technique for controlling the power delivered to a range of devices, including LEDs (for brightness) and DC motors (for speed). 
 
-## Using PWM to deliver variable power
+The advantage of this method is that is only requires very simple drive electronics.
+
+Looking at the code above, it could quite a lot of work to generate a simple PWM signal. Luckily, on the device we have on this course, there are on-chip PWM devices designed to do this for you!
+
+| TASK-178 | `PwmOut` |
+| --- | --- |
+| 1. | Make Task-178 the active program. Build and run. |
+| 2. | By turning the dial on the potentiometer, note the change in the LCD backlight brightness. |
+
+
 
