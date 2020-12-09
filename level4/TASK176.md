@@ -158,6 +158,69 @@ Looking at the code above, it could quite a lot of work to generate a simple PWM
 | --- | --- |
 | 1. | Make Task-178 the active program. Build and run. |
 | 2. | By turning the dial on the potentiometer, note the change in the LCD backlight brightness. |
+| 3. | Study the code carefully and read the comments below |
+
+Note the following line:
+
+```C++
+PwmOut dispBackLight(LCD_BKL_PIN);
+```
+
+The type is `PwmOut` instead of `DigitalOut`. This encapsulates code to configure one of the on-chip PWM controllers.
+
+> Note that not all pins can be used with a PWM controller. Check the documentation for specifics.
+
+At this stage nothing will happen. We need to specify Tp (period) and the duty (from which Ton is derived).
+
+```C++
+dispBackLight.period(0.001f);   // 1ms
+dispBackLight.write(1.0);       // 100% duty
+```
+
+As soon as this is done, the PWM will start to generate it's output (on it's own - no further intervention is needed). In this case, the duty is 100%, so the output stays high.
+
+Now all that remains is to update the duty periodically. This is still performed within a rapid polling loop:
+
+```C++
+Timer tmr;
+tmr.start();
+
+while(true) {
+    
+    //Once every 100ms, re-read the POT and update the duty
+    if (tmr.elapsed_time() >= 250ms) {
+        float u = pot;              // Every 250ms, read the pot... 
+        dispBackLight.write(u);     // ... and update the brightness.
+        tmr.reset();
+    }
+    //Other non-blocking code could go here
+}
+```
+
+The duty is modified simply by writing a new floating point value `u`, where `0.0 ≤ u ≤ 1.0`
+
+```C++
+dispBackLight.write(u);
+```
+
+Note this is only performed every 250ms as we do not need to change it any more frequently.
+
+| TASK-178 | `PwmOut` |
+| --- | --- |
+| 4. | Modify the code so that the on-board LED (Pin `LED1`) is also controlled by the potentiometer |
+| 5. | Modify the code to also measure the value from the light dependent resistor (pin `AN_LDR_PIN`). Use the `AnalogIn` type to do this |
+| 6. | Once a second, display both the latest LDR and potentiometer values on the LCD display |
 
 
+## Reflection
+Pulse Width Modulation is a popular method for controlling how much power (on average) is delivered to a device. The output is a pulsed signal with a duty cycle and repetition rate.
 
+Examples include devices such as LEDs and DC Motors.
+
+* You can control the brightness for a LED as long as the pulse repetition rate is too fast for the human eye to notice (as flicker)
+* You can control the speed of a motor as it has mechanical inertia. Pulsing a motor on and off at too a rate that is too low would not work. Equally, too high and the reactive properties of the motor makes it inefficient.
+
+
+---
+
+[Up -Functions and Analogue Outram](Analogue_Output_1.md)

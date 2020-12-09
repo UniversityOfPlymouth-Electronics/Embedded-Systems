@@ -1,29 +1,29 @@
 #include "../lib/uopmsb/uop_msb_2_0_0.h"
 #include <chrono>
+#include <cstdint>
 using namespace uop_msb_200;
 extern int getAverageDelay(double alpha);
 
 AnalogIn pot(AN_POT_PIN);
 DigitalOut redLED(TRAF_RED1_PIN);
+DigitalOut lcdBackLight(LCD_BKL_PIN);
+
 LCD_16X2_DISPLAY disp;
-PwmOut dispBackLight(LCD_BKL_PIN);
+AnalogOut dac1(DAC1_AN_PIN);
 
 int main()
 {
-    //Configure the PWM for the backlight 
-    dispBackLight.period(0.001f);   // 1ms
-    dispBackLight.write(1.0);       // 100% duty
-
     //Update display
     disp.cls();
-    disp.printf("PwmOut");
+    disp.printf("AnalogueOut");
+    lcdBackLight = 1;
 
     //Implement a delay (BLOCKING)
     wait_us(2000000);
 
     //Update display
     disp.locate(1, 0);
-    disp.printf("Turn the POT");
+    disp.printf("Attach the scope");
 
     //Implement another delay (BLOCKING)
     wait_us(2000000);
@@ -32,13 +32,22 @@ int main()
     Timer tmr;
     tmr.start();
 
+    double Fs = 1000.0;
+    double T = 1.0/Fs;
+    double freq = 20.0;
+    double DELTA = 2.0*3.1415926*freq*T;
+    uint32_t n = 0;
+
     while(true) {
         
         //Once every 100ms, re-read the POT and update the duty
-        if (tmr.elapsed_time() >= 250ms) {
-            float u = pot;              // Every 250ms, read the pot... 
-            dispBackLight.write(u);     // ... and update the brightness.
+        if (tmr.elapsed_time() >= 1ms) {
             tmr.reset();
+
+            //Write a value every 1ms
+            double amplitude = pot;                     // Get amplitude from the POT
+            dac1 = 0.5f + amplitude * 0.5f * cos(n*DELTA); // Calculate the cosine
+            n = (n == 999) ? 0 : (n+1);
         }
         
         //Other non-blocking code could go here
