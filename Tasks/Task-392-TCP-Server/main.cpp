@@ -55,8 +55,6 @@ int main()
 
     // Show the network address
     printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
-
-
     disp.cls();
     disp.printf("%s\n", a.get_ip_address() ? a.get_ip_address() : "None");
     lcdBacklight = 1;
