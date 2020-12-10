@@ -36,7 +36,7 @@ int main() {
     workerQueue.call_in(3s, printf, "(Note the switch bounce)\n");
     workerQueue.call_in(1s, printf, "Press the BLUE button to as the RED lights up\n");
     workerQueue.call_in(20s, printf, "Noisy isn't it!\n");
-    
+
     //Set up ISR for button
     btn.rise(buttonPressedISR);
     

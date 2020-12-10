@@ -127,6 +127,11 @@ Can you predict the final values of `u` and `v`? Explain.
 In the previous example, a message queue was used to (safely)
 pass a simple integer from an ISR to a thread. In the next task, we pass a more complex data structure with the aid of another object, a memory pool.
 
+<figure>
+<img src="../img/memory-pool.png" width="600px">
+<figcaption>Memory pool. A pre-allocated block of memory divided into equal size segments. Each segment is enough space for the specified data type</figcaption>
+</figure>
+
 A memory pool is a pre-allocated block of memory, divided up into equal size segments. It provides a thread-safe and interrupt-safe mechanism to "requesting" and "releasing" a block of memory.
 
 We then fill this segment of memory with some data and send the address through a message queue.
@@ -239,6 +244,12 @@ Change the interrupt from a timer to a switch press. If **either** switch A or B
 ## Mailbox
 As you probably appreciate, the queue and memory pool are designed to work together, so much so that the `Mailbox` class uses composition to combine them together.
 
+<figure>
+<img src="../img/mail-queue.png" width="600px">
+<figcaption>Mailbox - encapsulating both a message queue and memory pool</figcaption>
+</figure>
+
+
 | TASK-384 | Mailbox |
 | --- | --- |
 | 1. | Make Task-384 your active program. |
@@ -288,18 +299,34 @@ So yes, these can be used with interrupts for both put and get, but you need to 
 ## Event Queues
 I confess this is my personal favourite and they deserve some exploration.
 
-One of the most interesting objects in mbed-os is the EventQueue. This is something that will feel familiar to developers on mobile and desktop computing platforms. In essence, for a given thread, it is possible to have a queue of jobs that will be performed **sequentially** (one after the other). Furthermore, tasks can be posted to a queue from any context (another thread or ISR). 
+One of the most interesting objects in Mbed os is the EventQueue. This is something that will feel familiar to developers on mobile and desktop computing platforms. In essence, for a given thread, it is possible to have a queue of jobs that will be performed **sequentially** (one after the other). Furthermore, tasks can be posted to a queue from any context (another thread or ISR). 
 
 > A task in this context is “calling a function, with optional parameters”.
+
+<figure>
+<img src="../img/event-queue.png" width="600px">
+<figcaption>Event Queue Concept: </figcaption>
+</figure>
+
+The event queue will "dispatch" each task in a defined sequence on the thread in which it is running.
+
+Tasks can be set to run in the following ways:
+
+* Periodically
+* After a delay (which can be zero)
+
+A key point is that all queued tasks (in given queue, running in a dedicated thread) will run atomically and in  sequence with respect to each other. In other words, non of the tasks in an event queue can pre-empt each other.
+
+Of course, they can pre-empt tasks on other threads.
 
 Some uses cases for this are:
 
 * An interrupt can easily defer non-real-time tasks to a background thread (allowing it to exit more quickly)
-* Queuing up non-re-entrant tasks - thus avoiding
+* Queuing up non re-entrant functions - thus helping to avoid
 race conditions
 * Queues can also be chained together, and allow the developer to synchronise operations to avoid races and maximise throughput.
 
-Remember that you can do much more in a thread than you can in an ISR. Nearly every object in mbed os is protected and thread safe. A minority are interrupt safe. The same applies to the standard library (`printf`, `scanf` etc.).
+Remember that you can do much more in a thread than you can in an ISR. Nearly every object in Mbed os is protected and thread safe whereas only a minority are interrupt safe. The same applies to the standard library (`printf`, `scanf` etc.).
 
 | TASK-386 | Event Queues |
 | --- | --- |
@@ -339,8 +366,61 @@ From the documentation, it says "Dispatch events without a timeout." So what doe
 
 > Dispatch queues initially block and wait for tasks to be sent to them.
 >
-> As tasks are received, these are held in a queue. Tasks are essentially functions and their parameters. These tasks are run in sequential order, and not concurrently. 
+> As tasks are received, these are held in a queue and dispatched in turn. Tasks are essentially functions and their parameters. These tasks are run in sequential order, and not concurrently. 
 >
 > From an ISR or another thread, you can add a task to the queue.
 >
 > There there are no tasks to perform, they block in the `WAITING` state. 
+
+We can see a number of examples in this application:
+
+```C++
+workerQueue.call_in(3s, printf, "(Note the switch bounce)\n");
+```
+
+This requests that the queue `workerQueue` (on thread `t1`) dispatches the function `printf("(Note the switch bounce)\n")` in 3 seconds time.
+
+```C++
+mainQueue.call_every(2s, heartBeat);
+```
+
+This requests that the queue (on the main thread) dispatches the function `heartBeat()` every 2 seconds
+
+```C++
+workerQueue.call(addSample, t);
+```
+
+Called from the switch ISR, this requests that the function `addSample(t)` is dispatched at the next opportunity(on thread `t1`). 
+
+* `addSample` is non-reentrant and not thread safe as it uses static local variables. It does not contain any mutex locks either.
+    * However, is it is always called on the same event queue, there is no danger of it pre-empting itself, so this is permitted
+* Similarly, all the `printf` operations are performed on the same thread `t1` via it's event queue.
+    * Although this does contain locks, this is still  useful as it ensures that each `printf` is allowed to fully complete before the next, thus avoiding their output being interleaved.
+
+| TASK-386 | Event Queues |
+| --- | --- |
+| 3. | Can you modify the `hearBeat()` function to call `printf("Main Thread Alive\n")` by posting this to the workerQueue on thread `t1` |
+| - | For your reference, the current `heartBeat` function is as follows |
+
+```C++
+void heartBeat() {
+    redLED = !redLED;
+}
+```
+
+## Reflection
+Event queues are incredibly useful and can really simplify your code.
+
+A critical points are:
+
+* Each event queue runs in it's own thread
+* All functions dispatched by an event queue are allowed to complete and are atomic with respect to each other
+
+A useful use-case it to separate different tasks to run on different event queues.
+
+* If all functions sharing some mutable data can be run on the same event queue, then races can be avoided
+* Functions that are non-re-entrant do not need locks if only run on the same event queue
+
+---
+
+[Back to Contents](README.md)
