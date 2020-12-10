@@ -2,7 +2,9 @@
     #error [NOT_SUPPORTED] LWIP not supported for this target
 #endif
  */
-#include "mbed.h"
+#include "../lib/uopmsb/uop_msb_2_0_0.h"
+using namespace uop_msb_200;
+
 #include "EthernetInterface.h"
 #include "TCPSocket.h"
  
@@ -36,6 +38,8 @@
 //const char *const myHTTP = HTTP_RESPONSE; //This if you wish to set above Compiler defines into Flash Silicon
 
 EthernetInterface net;
+LCD_16X2_DISPLAY disp;
+DigitalOut lcdBacklight(LCD_BKL_PIN);
 
 int main()
 {
@@ -45,17 +49,23 @@ int main()
     //net.set_network(IP, NETMASK, GATEWAY);  //For static IP
     net.connect();
 
-    // Show the network address
+    // Get the network address
     SocketAddress a;
     net.get_ip_address(&a);
-    printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
 
-    // Open a socket on the network interface, and create a TCP connection on port 80
+    // Show the network address
+    printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
+    disp.cls();
+    disp.printf("IP Address");
+    disp.locate(1, 0);
+    disp.printf("%s:%u\n", a.get_ip_address() ? a.get_ip_address() : "None", a.get_port());
+    lcdBacklight = 1;
+
+    // Open a TCP socket on the network interface, and create a TCP connection on port 80
     TCPSocket socket;
     socket.open(&net);
     socket.bind(80);
 
-    
     //Set socket to listening mode
     int err=socket.listen(5);
     if(err==0) {
@@ -84,7 +94,7 @@ int main()
         //You are responsible to close this
         clt_sock->close();
 
-        wait_us(1000000);//Delay 1 second
+        ThisThread::sleep_for(1s);
     }
 
 
