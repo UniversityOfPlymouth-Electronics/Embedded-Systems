@@ -55,10 +55,10 @@ int main()
 
     // Show the network address
     printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
+
+
     disp.cls();
-    disp.printf("IP Address");
-    disp.locate(1, 0);
-    disp.printf("%s:%u\n", a.get_ip_address() ? a.get_ip_address() : "None", a.get_port());
+    disp.printf("%s\n", a.get_ip_address() ? a.get_ip_address() : "None");
     lcdBacklight = 1;
 
     // Open a TCP socket on the network interface, and create a TCP connection on port 80
@@ -81,7 +81,7 @@ int main()
     {
         // ACCEPT Accepting connections
         TCPSocket* clt_sock=socket.accept();    //Blocking
-
+        
         //Unblocks with each connection
 
         //Send response (blocking until completed)
