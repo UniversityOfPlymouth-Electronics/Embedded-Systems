@@ -28,77 +28,66 @@
 #define HTTP_BOTTOM "</html>" "\r\n"
 
  
-
+//For the static IP version
 #define IP        "10.0.0.10"
 #define NETMASK   "255.255.255.0"
 #define GATEWAY   "10.0.0.1"
 
- 
-
-
 //const char *const myHTTP = HTTP_RESPONSE; //This if you wish to set above Compiler defines into Flash Silicon
 
- 
-
-void ReadFlag_ISR(void);
-bool ReadFlag=true;
-
- 
+EthernetInterface net;
 
 int main()
 {
     printf("\r\nBasic HTTP server example\r\n");
     
-    //generic error code handle
-    int err=0;
-    
-    // Ethernet Interface 
-    EthernetInterface eth;
-    eth.set_network(IP, NETMASK, GATEWAY); // comment this line out if you wish to use DHCP
-    eth.connect();
-    printf("\r\nThe target IP address is '%s'\r\n", eth.get_ip_address());
-    
-    // Use to be :- TCPServer srv;!!!
-    TCPSocket srv;
-    TCPSocket *clt_sock;
-    
-    // Open the server on ethernet stack
-    srv.open(&eth);
-    
-    // BIND the server to the HTTP port (TCP 80)
+    // Connect the ethernet interface
+    //net.set_network(IP, NETMASK, GATEWAY);  //For static IP
+    net.connect();
+
+    // Show the network address
     SocketAddress a;
-    eth.get_ip_address(&a);
-    err=srv.bind(a.get_ip_address(), 80);
-    
-    printf("IP Address confirm at : %s\n\r",eth.get_ip_address());
-    
-    if(err==0){printf("Bind OK\n\r");}
-    else  printf("Bind error=%d\n\r",err);
+    net.get_ip_address(&a);
+    printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
 
- 
+    // Open a socket on the network interface, and create a TCP connection on port 80
+    TCPSocket socket;
+    socket.open(&net);
+    socket.bind(80);
 
-    // LISTEN Can handle 5 simultaneous connections
-    err=srv.listen(5);
-    if(err==0){printf("Listening OK\n\r");}
-    else  printf("Listen error=%d\n\r",err);
     
-    // ACCEPT Accepting connections now.....
-    //clt_sock=srv.accept();
-
- 
+    //Set socket to listening mode
+    int err=socket.listen(5);
+    if(err==0) {
+        printf("Listening OK\n\r");
+    }
+    else {
+        printf("Listen error=%d\n\r",err);
+        socket.close();
+        while(1);
+    }
 
     while (true)
     {
-        // ACCEPT Accepting connections now.....
-        clt_sock=srv.accept();
-        printf("Waiting.....\n\r");
-        printf("%s STRING LENGTH is:%d\n\r",HTTP_RESPONSE,strlen(HTTP_RESPONSE)); // the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
-        clt_sock->send(HTTP_RESPONSE, strlen(HTTP_RESPONSE));  //myHTTP,mydatasize)the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
-        if(err==0){printf("Sent OK!\n\r");}
-        else printf("Send error=%d\n\r",err);
+        // ACCEPT Accepting connections
+        TCPSocket* clt_sock=socket.accept();    //Blocking
+
+        //Unblocks with each connection
+
+        //Send response (blocking until completed)
+        printf("%s STRING LENGTH is: %d\n\r", HTTP_RESPONSE, strlen(HTTP_RESPONSE)); // the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
+        nsapi_size_or_error_t ret = clt_sock->send(HTTP_RESPONSE, strlen(HTTP_RESPONSE));  //myHTTP,mydatasize)the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
+        
+        //Echo how many bytes were sent
+        printf("Sent %d bytes\n", ret);
+
+        //You are responsible to close this
         clt_sock->close();
+
         wait_us(1000000);//Delay 1 second
     }
+
+
 }
  
 //have to close socket to re-enter
