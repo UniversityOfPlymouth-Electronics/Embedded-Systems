@@ -23,7 +23,7 @@ using namespace std;
 "  </body>" "\r\n"                                               \
 "</html>" "\r\n"
     
-#define HTTP_RESPONSE HTTP_STATUS_LINE "\r\n"   \
+#define HTTP_TEMPLATE HTTP_STATUS_LINE "\r\n"   \
                       HTTP_HEADER_FIELDS "\r\n" \
                       "\r\n"                    \
                       HTTP_MESSAGE_BODY "\r\n"
@@ -95,18 +95,18 @@ int main()
     
         float p = pot;  //Get pot value
 
-        //Construct string (in C++)
-        string html = string(HTTP_RESPONSE);
         char buff[6];
-        sprintf(buff, "%5.3f", p);
-        size_t index = html.find("{{0}}");
+        sprintf(buff, "%5.3f", p);  //Convert float to string
+        
+        //Construct response string (in C++)
+        string html = string(HTTP_TEMPLATE);
+        size_t index = html.find("{{0}}");  //Find placeholder {{0}}
         if (index) {
-            html.replace(index, 5, buff);
-            std::cout << index << endl;
+            html.replace(index, 5, buff);   //Replace with pot value string
         }
-        cout << html << endl;        
+        cout << html << endl;               //For debug purposes
 
-        //Send response (blocking until completed)
+        //Send response string (blocking until completed)
         printf("%s STRING LENGTH is: %d\n\r", html.c_str(), strlen(html.c_str())); // the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
         nsapi_size_or_error_t ret = clt_sock->send(html.c_str(), strlen(html.c_str()));  //myHTTP,mydatasize)the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
         
