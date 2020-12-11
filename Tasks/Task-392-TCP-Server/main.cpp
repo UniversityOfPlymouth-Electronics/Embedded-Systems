@@ -85,7 +85,7 @@ int main()
 
         //Unblocks with each connection
         disp.locate(1, 0);
-        disp.printf("Connected...     ");
+        disp.printf("Connected...    ");
 
 
         //Send response (blocking until completed)
@@ -98,7 +98,7 @@ int main()
         //You are responsible to close this
         clt_sock->close();
         disp.locate(1, 0);
-        disp.printf("Closed...        ");
+        disp.printf("Closed...       ");
 
         ThisThread::sleep_for(1s);
     }
