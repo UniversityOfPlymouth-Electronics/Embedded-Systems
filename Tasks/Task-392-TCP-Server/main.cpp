@@ -64,7 +64,7 @@ int main()
     socket.open(&net);
     socket.bind(80);
 
-    //Set socket to listening mode
+    //Set socket to listening mode (up to 5 connections)
     int err=socket.listen(5);
     if(err==0) {
         printf("Listening OK\n\r");
@@ -77,10 +77,16 @@ int main()
 
     while (true)
     {
+        disp.locate(1, 0);
+        disp.printf("Waiting...      ");
+
         // ACCEPT Accepting connections
         TCPSocket* clt_sock=socket.accept();    //Blocking
-        
+
         //Unblocks with each connection
+        disp.locate(1, 0);
+        disp.printf("Connected...     ");
+
 
         //Send response (blocking until completed)
         printf("%s STRING LENGTH is: %d\n\r", HTTP_RESPONSE, strlen(HTTP_RESPONSE)); // the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
@@ -91,6 +97,8 @@ int main()
 
         //You are responsible to close this
         clt_sock->close();
+        disp.locate(1, 0);
+        disp.printf("Closed...        ");
 
         ThisThread::sleep_for(1s);
     }
