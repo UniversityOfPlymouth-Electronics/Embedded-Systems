@@ -18,6 +18,7 @@ int seg7num(int);
 void seg7clear();
 void count_thread();
 float potav();
+float ldrav();
 void environment_data();
 int write_sdcard();
 int read_sdcard();
@@ -64,7 +65,7 @@ int main()
     t6.start(environment_data);
 
     myLCD.cls();
-    myLCD.printf("SECaM PU");
+    myLCD.printf("SECaM LDR");
     myLCD.locate(0,1);myLCD.printf("Switch=");
     buzzer.period_us(2273);
     buzzer=0.5f;wait_us(200000);buzzer=0;
@@ -84,6 +85,7 @@ int main()
         //Voltage = 3.3f * Pot_AN_INPUT.read();
         myLCD.locate(7, 1);myLCD.printf("%c",switchNum);
         myLCD.locate(10,1);myLCD.printf("%4.2fV",potav());
+        myLCD.locate(10,0);myLCD.printf("%4.2fV",ldrav());
         //spk=0;
         switchNum=0;
         wait_us(200000);
@@ -97,6 +99,18 @@ float potav(){
     adc_sample[0]=0;
     for(int i=1; i<=SAMPLES; i++){
         adc_sample[i] = pot_an_input.read_u16();
+        adc_sample[0]+=adc_sample[i];
+    }
+    Voltage = 3.3f * ((float)adc_sample[0]/(float)SAMPLES)/65535.0f;
+    return Voltage;
+}
+
+float ldrav(){
+    unsigned int adc_sample[SAMPLES+1];
+    float Voltage;
+    adc_sample[0]=0;
+    for(int i=1; i<=SAMPLES; i++){
+        adc_sample[i] = ldr.read_u16();
         adc_sample[0]+=adc_sample[i];
     }
     Voltage = 3.3f * ((float)adc_sample[0]/(float)SAMPLES)/65535.0f;
