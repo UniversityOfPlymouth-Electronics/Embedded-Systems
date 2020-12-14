@@ -20,8 +20,10 @@ The lectures for this week cover some basic programming concepts
 | Topic |
 | --- |
 | `DigitalIn` and `BusIn` |
+| Conditional statements |
+| State machines |
 | Switch noise and debounce |
-
+| Interrupts |
 
 ## Tasks
 Now attempt each of the following tasks in sequence.
