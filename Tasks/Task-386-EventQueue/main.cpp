@@ -32,7 +32,7 @@ int main() {
     //Start worker queue
     t1.start(workerThread);
 
-    //Dispatch deferred one-off tasks to the queue in the main queue
+    //Dispatch deferred one-off tasks to the queue in the worker thread
     workerQueue.call_in(3s, printf, "(Note the switch bounce)\n");
     workerQueue.call_in(1s, printf, "Press the BLUE button to as the RED lights up\n");
     workerQueue.call_in(20s, printf, "Noisy isn't it!\n");
