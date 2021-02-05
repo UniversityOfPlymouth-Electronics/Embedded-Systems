@@ -116,12 +116,22 @@ At some point, the tutor will email you a link to obtain a copy of various proje
 
 [Click here to watch a video explaining how to do this](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e15dcb65-dbcc-404f-a4f1-abfe00ee6f33)
 
-> **IMPORTANT** - Clone the files **outside** of any folder that is synchronized to the cloud (such as OneDrive, DropBox or iCloud). Building software generates thousands (even millions) of small temporary files which you probably do NOT want to synchronize to the cloud. To do so would use unnecessary CPU and network bandwidth.
+> **IMPORTANT - PLEASE READ**
 >
-> On a personal machine (not shared with anyone else), I clone all my files in the folder `C:\git`. You could also clone in `C:\Users\<username>` _where `<username>` refers to your username_.
+> Clone the files **outside** of any folder that is synchronized to the cloud (such as OneDrive, DropBox or iCloud). Building software generates thousands (even millions) of small temporary files which you probably do NOT want to synchronize to the cloud. To do so would use unnecessary CPU and network bandwidth.
+>
+> On a personal machine (not shared with anyone else), I strongly suggest you use a folder with a short path and no spaces, such as `C:\git`. You could also clone in `C:\Users\<username>` _where `<username>` refers to your username_.
+>
+> GitHubDesktop tends to default to your `Documents` folder. **I DO NOT RECOMMEND YOU USE THIS** when using Mbed
 
 ### Pulling Updates
 Occasionally, the notes and sample code will be changed. Before you start any work, it is strongly suggested you click the "Fetch Origin" button in GitHub desktop.
+
+### Making your own edits
+I suggest you create your own repository for your own work. Copy the tasks from the Embedded-Systems repository into your own workspace. This way:
+
+* You can push your changes to your own private repository
+* You can easy obtain updates to the tasks / notes without having to merge them into your own code
 
 ### Different between GitHub and a Cloud Provider
 You may already be using a cloud service, such as OneDrive, iCloud or DropBox. These services monitor a collection of folders and mirror everything in the cloud. This is often done in the background while you work.
