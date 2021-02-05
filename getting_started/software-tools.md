@@ -145,6 +145,15 @@ A key difference is:
 
 There is much more than could be said about these tools, but for now, we will leave this and focus on coding.
 
+### Pull Requests (advanced)
+GitHub has great support for "Pull Requests". If you find an error in the notes or the Tasks, you can do the following:
+
+* Create a branch for the fix using the Embedded-Systems repository
+* Make the edit
+* Commit the change and push (it will offer a pull request)
+
+This will generate an email for the tutor to review your proposed changes and the option to merge them in.
+
 ## PuTTY Serial Terminal
 This is useful and may be used at different times
 
