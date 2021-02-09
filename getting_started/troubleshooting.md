@@ -20,7 +20,7 @@ For Microsoft Windows, run Device Manager and check to see if the drivers are co
 
 <img src="../img/DeviceManager.png" width="300px">
 
-If there are exclaimation marks next to any of the ST devices, it probably means your ST Link drivers are not installed.
+If there are exclamation marks next to any of the ST devices, it probably means your ST Link drivers are not installed.
 
 ## ST Link Drivers and Utilities
 If there are exclamation marks against any of the ST devices, you may need to install the driver manually.  There are also some additional tools that you may need from time to time.

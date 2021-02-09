@@ -53,8 +53,8 @@ int main()
 | --- |
 | Read all the comments in the code. |
 | 1. Build and run Task 301. |
-| 2. Now run the code in debug mode |
-| 3. What is the state of the red LED when the code enters main? |
+| 2. Now run the code in debug mode (single step) |
+| 3. What is the state of the red LED **before** the code enters main? |
 | 4. Modify the code so that all the LEDs are on at the start of main |
 | 5. Find the traffic lights in the schematics. Confirm these are compatible with PUSH-PULL outputs |
 | |
