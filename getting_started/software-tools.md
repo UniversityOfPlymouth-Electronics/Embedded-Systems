@@ -50,11 +50,17 @@ Once you have created your account, please tell us what your username is:
 This will help us better support you. Never disclose your password!
 
 ### Installing Mbed Studio
-The first step is to download and install the version of Mbed Studio for your computer.
+The first step is to download and install the version of Mbed Studio for your computer, but there are a couple checks you should do first.
 
 > [Click this link to download Mbed-Studio](https://os.mbed.com/studio/)
 
-Run the installer and you will probably find it is mostly self-explanatory. You can choose default options. Since version `1.0`, many of the additional tools needed for this software come included.
+**Failing to ensure the following risks the software install to (silently) fail.**
+* Check there are no pending restarts due to a Windows update. 
+* Check there is sufficient disk space on your system drive.
+
+Once you system is ready, run the installer and you will probably find it is mostly self-explanatory. It is suggested you install "for all users". Other than that, choose default options. Since version `1.0`, many of the additional tools needed for this software come included.
+
+In the event you do need to reinstall, see the [section on troubleshooting](troubleshooting.md#Failed-installations-and-Reinstalling-Mbed-Studio) first.
 
 ### Connecting your Target Board
 The software that allows your PC to recognize your target board comes with Mbed Studio. The most important of these is the ST Link Driver.

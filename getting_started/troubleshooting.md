@@ -3,6 +3,24 @@
 ---
 
 # Troubleshooting
+If you are having problems with Mbed studio, please check the sections below, and certainly before uninstalling and reinstalling. 
+
+## Summary of the most common sources of problems
+There are a number of issues which can cause problems with Mbed-studio. A quick summary is provided here:
+
+* Ensure your source files are in a short path preferably without any spaces, such as `c:\git` (on Windows)
+
+* Whatever you do, do not put your source files in a folder managed by tools such as OneDrive (or other cloud services).
+
+* One of the common mistakes is to forget to click the library tab and ensure that the project has an `mbed-os` folder. If you don’t do this you will notice that many lines in the editor have read underscores.
+
+* `mbed-os.lib` is a file in every project that contains a URL. This points to get up and a specific version of the mbed libraries. It is suggested you use version 6.3
+
+* Consider updating the firmware on your Nucleo board (see below).
+
+* In the event that Mbed studio crashes (or a debug session crashes), go into task manager and ensure that all instances of Mbed Studio and any python applications are closed.
+
+## Firmware
 
 If any of the previous steps fail, it is best to contact a member of staff, either in person, or via Teams.
 
@@ -38,7 +56,6 @@ If you right-click a mbed project, and the option to make it the "Active Program
 >
 > For your convenience, a copy of this file for different versions of mbed-os can be found in the `mbed-os-versions` folder.
    
-
 ## Squiggly Lines under my Code
 If you open a project and see lots of "squiggly" underlines, you probably don't have the mbed-os libraries included in your project.
 
@@ -72,20 +89,17 @@ If you are trying to start a debug session, and you are getting error messages a
 
 https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=54f0b0ff-eb0f-41d7-bc19-ac0600e5f949
 
-# Summary of the most common sources of problems
-Many of the issues listed here are already covered above. A quick summary is provided here:
+# Failed installations and Reinstalling Mbed Studio
+This should be a last resort. However, there are situations where an Mbed studio install fails:
 
-* Ensure your source files are in a short path preferably without any spaces, such as `c:\git` (on Windows)
+* When there was a pending Windows update when you installed Mbed Studio.
+* When disk space is very low.
 
-* Whatever you do, do not put your source files in a folder managed by tools such as OneDrive (or other cloud services).
+In such cases, I suggest you completely uninstall Mbed Studio and reinstall "for all users".
 
-* One of the common mistakes is to forget to click the library tab and ensure that the project has an `mbed-os` folder. If you don’t do this you will notice that many lines in the editor have read underscores.
+This forum post tells you how to ensure Mbed studio is completely removed:
 
-* `mbed-os.lib` is a file in every project that contains a URL. This points to get up and a specific version of the mbed libraries. It is suggested you use version 6.3
-
-* Consider updating the firmware on your Nucleo board.
-
-* In the event that Mbed studio crashes (or a debug session crashes), go into task manager and ensure that all instances of Mbed Studio and any python applications are closed.
+https://forums.mbed.com/t/installation-aborted-on-win10/8220/3
 
 ---
 
