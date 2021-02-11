@@ -89,7 +89,7 @@ If you are trying to start a debug session, and you are getting error messages a
 
 https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=54f0b0ff-eb0f-41d7-bc19-ac0600e5f949
 
-# Failed installations and Reinstalling Mbed Studio
+# Failed installations and Reinstalling Mbed Studio (Windows)
 This should be a last resort. However, there are situations where an Mbed studio install fails:
 
 * When there was a pending Windows update when you installed Mbed Studio.
@@ -97,9 +97,17 @@ This should be a last resort. However, there are situations where an Mbed studio
 
 In such cases, I suggest you completely uninstall Mbed Studio and reinstall "for all users".
 
-This forum post tells you how to ensure Mbed studio is completely removed:
+This forum post contains instruction on how to ensure Mbed studio is completely removed:
 
 https://forums.mbed.com/t/installation-aborted-on-win10/8220/3
+
+To quote:
+
+1. Please run an uninstaller for Mbed Studio. You can use either Add/Remove Programs or find uninstaller in your Mbed Studio install location.
+
+1. Please check that following paths do not exist. Please delete those folders in case that they are still there: C:\Program Files\Mbed Studio, C:\ProgramData\Mbed Studio, ~\AppData\Local\Programs\Mbed Studio, ~\AppData\Local\Mbed Studio.
+
+1. Install Mbed Studio again
 
 ---
 
