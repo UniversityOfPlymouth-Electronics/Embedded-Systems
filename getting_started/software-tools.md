@@ -177,7 +177,7 @@ Each of these can be viewed as separate projects in their own right, and that co
 Anecdotally, some report that debugging is more predictable with the GCC compiler than the ARM C6 Compiler. If you wish to try the GCC_ARM toolchain with Mbed Studio, you can do this as follows (for Windows and Mac OS):
 
 1. Download and install the [GNU ARM Embedded Toolchain GGC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) - check the supported versions. At the time of writing, this was version 9 (9-2019-q4-major)
-2. [Instructions are here](https://os.mbed.com/docs/mbed-studio/current/installing/switching-to-gcc.html)
+2. Follow the [instructions here](https://os.mbed.com/docs/mbed-studio/current/installing/switching-to-gcc.html)
 
 ### Example (for Windows)
 Below are the instructions given to University of Plymouth students:
