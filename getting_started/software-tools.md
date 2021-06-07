@@ -176,7 +176,7 @@ Each of these can be viewed as separate projects in their own right, and that co
 
 If you are experiencing difficulty debugging your code in Mbed Studio, you could try the GCC_ARM toolchain. You can do this as follows (for Windows and Mac OS):
 
-1. Download and install the [GNU ARM Embedded Toolchain GGC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) - check the supported versions. At the time of writing, this was version 9 (9-2019-q4-major)
+1. Download and install the [GNU ARM Embedded Toolchain GGC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) - check the supported versions.
 2. Follow the [instructions here](https://os.mbed.com/docs/mbed-studio/current/installing/switching-to-gcc.html)
 
 ### Example (for Windows)
@@ -186,7 +186,7 @@ Below are the instructions given to University of Plymouth students:
 ```JSON
 {
     "bundled": {
-        "gcc": "C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/bin"
+        "gcc": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/9 2020-q2-update/bin"
     },
     "defaultToolchain": "GCC_ARM",
     "_defaultToolchain": "ARMC6"
@@ -203,7 +203,7 @@ If you want to switch back to ARMC6, simply edit `external_tools.json` and move 
 ```JSON
 {
     "bundled": {
-        "gcc": "C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/bin"
+        "gcc": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/9 2020-q2-update/bin"
     },
     "_defaultToolchain": "GCC_ARM",
     "defaultToolchain": "ARMC6"
