@@ -195,10 +195,8 @@ Below are the instructions given to University of Plymouth students:
 
 * You may need to adjust the path in the JSON file to match your installation folder.
     * Note the forward slash `/` is used as a path delimiter.
-* Copy external_tools.json to C:\Users\<useraccount>\AppData\Local\Mbed Studio
+* Copy `external_tools.json` to `C:\Users\<useraccount>\AppData\Local\Mbed Studio` where `<useraccount>` is a folder with the same of your current user.
 * Restart Mbed Studio
-
-
 
 If you want to switch back to ARMC6, simply edit `external_tools.json` and move the underscore `_` as follows (and restart):
 
