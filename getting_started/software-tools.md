@@ -171,8 +171,8 @@ At the time of writing, [Mbed Studio](https://os.mbed.com/studio/) contains a nu
 
 Each of these can be viewed as separate projects in their own right, and that come bundled together as part of the Mbed Studio.
 
-* There is also the [Mbed Command Line Interface (CLI)](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html). 
-* This commonly uses the [GNU ARM Embedded Toolchain GGC_ARM)(https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+* There is also the [Mbed Command Line Interface (CLI)](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html) for experienced developers. 
+   * This commonly uses the [GNU ARM Embedded Toolchain GCC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
 
 Anecdotally, some report that debugging is more predictable with the GCC compiler than the ARM C6 Compiler. If you wish to try the GCC_ARM toolchain with Mbed Studio, you can do this as follows (for Windows and Mac OS):
 
