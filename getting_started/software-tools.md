@@ -12,6 +12,7 @@ During this course you will use a variety of software tools. This section includ
 1. [Mbed Studio](#Mbed-Studio)
 1. [Visual Studio Code](#Visual-Studio-Code)
 1. [GitHub Desktop](#GitHub-Desktop)
+1. [GCC Compiler (Optional)](#GCC-Compiler)
 
 We will now install each package in turn. Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
@@ -159,6 +160,59 @@ GitHub has great support for "Pull Requests". If you find an error in the notes 
 * Commit the change and push (it will offer a pull request)
 
 This will generate an email for the tutor to review your proposed changes and the option to merge them in.
+
+## GCC Compiler
+At the time of writing, [Mbed Studio](https://os.mbed.com/studio/) contains a number of components, including the following:
+
+* Mbed Studio IDE - a cross platform IDE for Windows, Mac OS and Linux operating systems
+* [ARM C6 Compiler](https://developer.arm.com/tools-and-software/embedded/arm-compiler) - specially licensed for Mbed Studio
+* [PyOCD Debugger](https://pypi.org/project/pyocd/)
+* [Mbed OS Libraries](https://os.mbed.com/docs/mbed-os)
+
+Each of these can be viewed as separate projects in their own right, and that come bundled together as part of the Mbed Studio.
+
+* There is also the [Mbed Command Line Interface (CLI)](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html). 
+* This commonly uses the [GNU ARM Embedded Toolchain GGC_ARM)(https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+
+Anecdotally, some report that debugging is more predictable with the GCC compiler than the ARM C6 Compiler. If you wish to try the GCC_ARM toolchain with Mbed Studio, you can do this as follows (for Windows and Mac OS):
+
+1. Download and install the [GNU ARM Embedded Toolchain GGC_ARM)(https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) - check the supported versions. At the time of writing, this was version 9 (9-2019-q4-major)
+2. [Instructions are here](https://os.mbed.com/docs/mbed-studio/current/installing/switching-to-gcc.html)
+
+### Example (for Windows)
+Below are the instructions given to University of Plymouth students:
+
+* Create a file `external_tools.json` with the following content:
+```JSON
+{
+    "bundled": {
+        "gcc": "C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/bin"
+    },
+    "defaultToolchain": "GCC_ARM",
+    "_defaultToolchain": "ARMC6"
+}
+```
+
+* You may need to adjust the path in the JSON file to match your installation folder.
+    * Note the forward slash `/` is used as a path delimiter.
+* Copy external_tools.json to C:\Users\<useraccount>\AppData\Local\Mbed Studio
+* Restart Mbed Studio
+
+
+
+If you want to switch back to ARMC6, simply edit `external_tools.json` and move the underscore `_` as follows (and restart):
+
+```JSON
+{
+    "bundled": {
+        "gcc": "C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/bin"
+    },
+    "_defaultToolchain": "GCC_ARM",
+    "defaultToolchain": "ARMC6"
+}
+```
+
+I personally like to have the option of either compiler.
 
 ## PuTTY Serial Terminal
 This is useful and may be used at different times

@@ -89,7 +89,12 @@ If you are trying to start a debug session, and you are getting error messages a
 
 https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=54f0b0ff-eb0f-41d7-bc19-ac0600e5f949
 
-# Failed installations and Reinstalling Mbed Studio (Windows)
+## Cannot Debug my Code
+If you are experiencing problems debugging your code in Mbed Studio, you might want to try the GCC compiler instead of the ARM C6 Compiler.
+
+[Instruction are here](software-tools.md#GNU-Compiler)
+
+## Failed installations and Reinstalling Mbed Studio (Windows)
 This should be a last resort. However, there are situations where an Mbed studio install fails:
 
 * When there was a pending Windows update when you installed Mbed Studio.
