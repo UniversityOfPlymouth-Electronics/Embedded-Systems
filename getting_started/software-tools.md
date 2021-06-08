@@ -184,7 +184,7 @@ Below are the instructions given to University of Plymouth students:
 
 * Install the [GNU ARM Embedded Toolchain GGC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) v9-2020-q2
 
-* Create a file `external_tools.json` with the following content:
+* Using a text editor, create a file `external_tools.json` with the following content:
 ```JSON
 {
     "bundled": {
