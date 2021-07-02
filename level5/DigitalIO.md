@@ -16,7 +16,7 @@ This is a deeper dive into digital IO with Mbed OS. Before we start, you should 
 ## GPIO
 The most familiar of interfaces is probably the General Purpose Input-Output (GPIO). 
 
-### Task 301 - Push Pull
+### Task 201 - Push Pull
 For a push-pull output, we use the `DigitalOut` **class**. What is a class? We will discuss this fairly soon. For now, let's look at an example using the "traffic lights".
 
 The code in Task-301 is shown below
@@ -49,10 +49,10 @@ int main()
 }
 ```
 
-| **TASK 301** |
+| **TASK 201** |
 | --- |
 | Read all the comments in the code. |
-| 1. Build and run Task 301. |
+| 1. Build and run Task 201. |
 | 2. Now run the code in debug mode (single step) |
 | 3. What is the state of the red LED **before** the code enters main? |
 | 4. Modify the code so that all the LEDs are on at the start of main |
@@ -69,10 +69,10 @@ In the example above, pins `PC_2`, `PC_3` and `PC_6` were configured as push-pul
 >
 > Do all the LEDs change at the same time? Why?
 
-### TASK-302-`BusOut`
+### TASK-202-`BusOut`
 In the previous example, we drive three LEDs using push-pull GPIOs. For the purpose of this task, this technique was fine. However, each LED state had to be controlled independently. Another option is to control a group of LEDs using the `BusOut` class.
 
-The code in Task-302 is shown below:
+The code in Task-202 is shown below:
 
 ```C++
 #include "mbed.h"
@@ -99,7 +99,7 @@ int main()
 }
 ```
 
-| **TASK 302** |
+| **TASK 202** |
 | --- |
 | 1. Build and run the code. |
 | 2. Now run the code in debug mode and step through each line |
@@ -130,7 +130,7 @@ We can set `leds` to a decimal value,
 
 With `BusOut` you can control up to 16 pins from _any_ port. It is intended to be flexible. Under the hood, `BusOut` simply maintains an array of `DigitalOut` objects. The code iterates through the array, changing each output in turn. This means the output pins _cannot_ change simultaneously. There will therefore be a small amount of _timing skew_ between them. This is the trade-off for convenience.
 
-### TASK-303-`PortOut`
+### TASK-203-`PortOut`
 Unlike `BusOut`, the `PortOut` class can only control pins from the same port. The reason you might want to do this is performance (especially if timing-skew is an issue).
 
 ```C++
@@ -156,7 +156,7 @@ int main()
 }
 ```
 
-| **TASK 303** |
+| **TASK 203** |
 | --- |
 | 1. Build and run the code. |
 | 2. Now run the code in debug mode and step through each line |
@@ -171,7 +171,7 @@ We saw in this exercise that `PortOut` is used to set outputs bits on a particul
 
 Now we look at another GPIO configuration, _Open Drain_.
 
-### TASK-304 - Open Drain with `DigitalInOut`
+### TASK-204 - Open Drain with `DigitalInOut`
 The module support board you are using has two set of "Traffic Lights", purposely configured in a slightly different way. Let us first consider Traffic Light Set 1:
 
 <figure>
@@ -264,7 +264,7 @@ DigitalInOut grnLED(TRAF_GRN2_PIN, PinDirection::PIN_OUTPUT, PinMode::OpenDrainN
 * `PinMode::OpenDrainNoPull` sets the output configuration to OPEN DRAIN, with no internal pull-up or pull-down resistors
 * The default output state is LOW
 
-| **TASK 304** |
+| **TASK 204** |
 | --- |
 | 1. Build and run the code. |
 | 2. Now run the code in debug mode and step through each line |
@@ -382,7 +382,7 @@ For SW3, we see how to use the explicit function `read()`
 
 Either method works thanks to some neat C++ code under the hood. We will learn how to achieve this later.
 
-| **TASK 305** |
+| **TASK 205** |
 | --- |
 | 1. Build and run the code. |
 | 2. Now run the code in debug mode and step through each line |
@@ -405,10 +405,10 @@ Similarly, for digital inputs, there are three types:
 
 Using the online documentation, you can read about these types.
 
-| **TASK 306** | - |
+| **TASK 206** | - |
 | --- | --- |
 | 1. | Watch [this video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=409e91ba-e2ef-42b1-8cc8-ac4e010b2022) to see how to create a new "bare-metal" project |
-| 2. | Create a new project Task 306 and copy the code from the previous task. |
+| 2. | Create a new project Task 206 and copy the code from the previous task. |
 | 3. | Now run the code in debug mode and check you can step through each line |
 | 4. | Modify the code such that when BOTH SW4 and SW5 are held down, all three LEDs light. |
 | 5. | Now modify the solution in 4 to use `BusOut` for the LEDs (in place of DigitalOut). Test to ensure it works. |
@@ -426,6 +426,7 @@ There are a few notable types that use hardware timers, including the following:
 
 * `Timer` - Creates a timer object which can be started, stopped and read (among other things).
 * `Ticker` - Used to create a timer that fires an interrupt on specific intervals. This is an important topic which we will cover these in more detail later in the course.
+* `TimeOut` - Used to create a one-shot timer that fires an interrupt after specific interval.
 * `PwmOut` - A digital output that autonomously pulses high and low at a specified rate and duty cycle.
 
 > Before Mbed-OS 6, the `Timer` type was much simpler to use. To keep that simplicity (for now), we will use a custom `Timer` type called `TimerCompat`. This is just Timer with some extra functions added.
@@ -484,9 +485,9 @@ Study the code above carefully. The code is not yet complete.
 
 Now then attempt the following tasks:
 
-| **TASK 307 (Part 1)** | |
+| **TASK 207 (Part 1)** | |
 | --- | --- |
-| 1. | Make the project `Task-307-Timer` the active program and click the View->Serial Monitor menu item. |
+| 1. | Make the project `Task-207-Timer` the active program and click the View->Serial Monitor menu item. |
 | 2. | Build and run the code, noting the serial output from `printf` statements. Note how long the `printf("Hello World")` statement takes |
 | 3. | Change the string from `Hello World\n` to `Hello World How Are You\n` |
 | 4. | Run the code again and compare the times. |
@@ -519,7 +520,7 @@ Busy-waiting / spinning is _one_ of the ways our code can become **blocked**. In
 
 In the examples above, the I/O operations were related to a GPIO input (connected to a switch) and a hardware timer. 
 
-| **TASK 307 (Part 2)** | |
+| **TASK 207 (Part 2)** | |
 | --- | --- |
 | 5. | Now you are to complete the program. |
 | | The intention is that each time the BLUE switch is pressed and released, the LED toggles (ON->OFF or OFF->ON) |
@@ -534,9 +535,9 @@ Implementing delays is a very common requirement in embedded software developmen
 wait_us(1000);    //1000 uS == 1ms
 ```  
 
-There is also a `wait_ns` function for even more fine-grained timing.
+There is also a `wait_ns` function for even more fine-grained timing (although 1ns resolution may not be possible!).
 
-| **TASK 307 (Part 3)** | |
+| **TASK 207 (Part 3)** | |
 | --- | --- |
 | 6. | Replace the timer loops with a suitable wait function |
 | |
@@ -547,7 +548,7 @@ Hopefully, you code is a little shorter and easier to read now.
 >
 >Currently, we are using "bare-metal" Mbed, which is a smaller and more lightweight version of the full implementation.
 >
-> Later in the course we will switch to the full implementation and begin to use the Real Time Operating System (RTOS) features, where some different wait functions will be used. These work quite differently. 
+> Later in level 6, we will switch to the full implementation and begin to use the Real Time Operating System (RTOS) features, where some different wait functions will be used. These work quite differently. 
 
 ### Brief Reflection
 
@@ -560,11 +561,11 @@ Given what we now know about blocking, let us now see how it can cause significa
 
 A video demonstrating the challenge is here.
 
-| **TASK 308** | The Two Switch Challenge |
+| **TASK 208** | The Two Switch Challenge |
 | --- | --- |
 | 1. | [CLICK THIS LINK TO SEE A VIDEO DEMONSTRATION OF THE CHALLENGE](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=71f9b678-4c7a-49fb-9229-ac5500a53879) |
 | | + Read the key points below |
-| 2. | Set the project Task-308-Challenge as the active program |
+| 2. | Set the project `Task-208-TwoSwitchChallenge` as the active program |
 | 3. | Modify the code to solve the problem  |
 | 4. | A number of solutions will be presented to you as we progress through the course |
 | |
@@ -604,9 +605,9 @@ Another commonly used peripheral is the UART (also known as a Serial Port). Mbed
 | **TASK 112** | Revision |
 | --- | --- |
 | 1. | Set Task-112 as your active project |
-| 2. | Ensure the serial monitor is visible (View->Serial Monitor) |
+| 2. | Ensure the serial monitor is visible (`View->Serial Monitor`)` |
 | 3. | Step through this example code. You will need to type responses into the serial monitor at certain points. Establish where blocking may be taking place. |
-| 4. | Now go to Task-308-Soln. Build and run the code. |
+| 4. | Now go to `Task-208-TwoSwitchChallenge-Soln`. Build and run the code. |
 | 5. | Now use the debugger to step through the code to help you understand it |
 | 6. | Now add support for the BLUE button. Add some code such that when the user presses the BLUE button, they can type an integer value into the serial terminal and set the flash speed for the yellow LED. |
 | 7. | Is it possible to keep the yellow LED flashing all the time? Explain.  | 
