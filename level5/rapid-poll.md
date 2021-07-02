@@ -2,7 +2,7 @@
 
 ---
 
-# Multi-Tasking with Rapid-Polling
+# Multi-Tasking with Rapid-Polling and State Machines
 If you remember back to the level 5 course, one of the challenges was with managing multiple devices at the same time.
 
 > Blocking has been recognised as a problem for computers for many years. In the absence of an alternative strategy, simply waiting on a device to change state can mean ignoring other device I/O, which can lead to data loss or integrity errors.

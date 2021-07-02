@@ -18,8 +18,8 @@ This course is divided logical blocks:
 
 | Block | Content | - | Weeks |
 | --- | --- | --- | --- |
-| 1. | Review of Mbed-OS and Interfacing | [Lab-1.1-DigitalIO](DigitalIO.md), [Lab-1.2-C and C++ Structures](Cplusplus-structures.md), [Lab-1.3-Interfacing-**TBD**](interfacing.md) | 1-3 |
-| 2. | Multi-tasking: Blocking, polling and interrupts | [Lab-2.1-Rapid Polling and State Machines](rapid-poll.md), [Lab6-Interrupts](interrupts.md) | 4 - 6 |
+| 1. | Review of Mbed-OS and Interfacing | [Lab-1-1-DigitalIO](DigitalIO.md), [Lab-1-2-C and C++ Structures](Cplusplus-structures.md), [Lab-1-3-Interfacing-**TBD**](interfacing.md) | 1-3 |
+| 2. | Multi-tasking 1: Blocking, Polling and State Machines | [Lab-2-1-Rapid Polling and State Machines](rapid-poll.md), [Lab-2-2-Interrupts](interrupts.md) | 4 - 6 |
 | 3. | Coursework | | 7 - 13 |
 | |
 

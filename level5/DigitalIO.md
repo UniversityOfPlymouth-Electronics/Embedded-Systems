@@ -646,5 +646,5 @@ It is very important you complete the quiz. These are formative, and do not cont
 
 ---
 
-[Next - C++ and Object Orientated Programming](Cplusplus-oop.md)
+[Next - C and C++ Structures](Cplusplus-structures.md)
 
