@@ -2,34 +2,25 @@
 
 ---
  
-# Advanced Embedded Programming - Level 6
+# Embedded Systems - Level 5
 
 ## What is new
 This content has been migrated from [a previous version](http://blogs.plymouth.ac.uk/embedded-systems/microcontrollers/mbed-os-2/courses/embedded-systems-in-context-level-4/foreward/) based on mbed-os 5.
 
 Changes for 2021:
 
-* Migration of materials on Blocking, Polling, FSM and Interrupts back to level 5
-* Writing bespoke device-drivers with bare-metal code in C++
-
-Changes for 2020:
-
-* Adoption of Mbed Studio v1.X
-* Adoption of Mbed-os 6.X
-* More content on the fundamentals of C++ and Object Orientated Programming (OOP)
-* Condition Variables
-* The [existing glossary](http://blogs.plymouth.ac.uk/embedded-systems/glossary-2/) is being migrated to a [new version](/glossary/README.md) 
-* Blended delivery model
+* Migration of materials on Blocking, Polling, FSM and Interrupts to level 5 (previously delivered in stage-3)
+ * Adoption of Mbed OS into stage-5
 
 
-# Level 6 Course
-This course is divided into logical blocks:
+# Level 5 Course
+This course is divided logical blocks:
 
 | Block | Content | - | Weeks |
 | --- | --- | --- | --- |
-| 1. | C++, OOP and Interfacing | [Lab-1-1-C++ Classes](Cplusplus-classes.md), [Lab-1-2-C++ and OOP](Cplusplus-oop.md), [Lab-1-3-Device Drivers-**TBD**] | 1-3 |
-| 2. | Multi-tasking 2: Multi-threaded programming and networking | [Lab-2.1-Threads and Thread Synchronisation](threads1.md), [Lab-2.2-Thread Abstractions](thread_abstractions.md), [Lab-2.3-Network Programming-**TBD**], [Lab-2.4-IoT-**TBD**] | 4 - 7 |
-| 3. | Coursework | Real-time programming task | 8 - 13 |
+| 1. | Review of Mbed-OS and Interfacing | [Lab-1.1-DigitalIO](DigitalIO.md), [Lab-1.2-C and C++ Structures](Cplusplus-structures.md), [Lab-1.3-Interfacing-**TBD**](interfacing.md) | 1-3 |
+| 2. | Multi-tasking: Blocking, polling and interrupts | [Lab-2.1-Rapid Polling and State Machines](rapid-poll.md), [Lab6-Interrupts](interrupts.md) | 4 - 6 |
+| 3. | Coursework | | 7 - 13 |
 | |
 
 
@@ -43,22 +34,18 @@ Remember that each student on the course may have a slightly a different backgro
 
 This module is designed on the assumption that you have some knowledge and experience of embedded C programming, and some familiarity with Mbed.  However, the first lab will be a refresher on interfacing with Mbed and Mbed Studio. 
 
-We will then recap on what we mean by **blocking hardware** and the problems is presents.
+We will discuss what we mean by **blocking hardware** and the problems it presents.
 
 We will then review some approaches to managing multiple hardware devices in real-time, namely:
 
 * Rapid polling loops
 * Interrupts (and interrupt safety)
 
-Then you will meet a new approach which can greatly simplify your code:
-
-* Multi-threaded programming with Real-Time Operating Systems
-
-Some of this may be a refresher of what you were taught in level 5. However, repetition is often helpful as students don't often grasp the concepts first time. 
+Some of this may be familiar from level 4. However, repetition is often helpful as students don't often grasp the concepts first time. 
 
 > Even if you have done some of the above before, beware of complacency and seek opportunities to push yourself and try to go deeper into the subject.
 
-As a final remark, this is a fairly intensive course. Multi-threaded programming will be new, but in our experience, students who grasp it take it further when they attempt their final year projects. If you master it, it is a gateway to access more advanced applications including networking, USB and Bluetooth.
+As a final remark, this is a fairly intensive course. Much of the programming will be new, but in our experience, students who grasp it take it further when they attempt to write their own projects. This content also underpins the content in level 6 (Real Time Operating Systems).
 
 
 ## Your Kits
@@ -103,4 +90,6 @@ There you will find links to recorded lectures. You can also subscribe to these 
 
 ---
 [NEXT - Lab1-DigitalIO](DigitalIO.md)
+
+
 
