@@ -10,7 +10,7 @@ This content has been migrated from [a previous version](http://blogs.plymouth.a
 Changes for 2021:
 
 * Migration of materials on Blocking, Polling, FSM and Interrupts to level 5 (previously delivered in stage-3)
- * Adoption of Mbed OS into stage-5
+ * Adoption of Mbed OS into level-5
 
 
 # Level 5 Course
