@@ -13,9 +13,11 @@ Today, when you buy a personal computer, it is likely to contain a CPU with mult
 
 For the remainder of this module, we mostly focus on techniques to implement multi-tasking. These include:
 
-* **Rapid Polling** - whereby we take responsibility for servicing all devices. We read input devices and service output devices at high enough speeds to prevent data loss or corruption.
-* **Interrupts** - whereby we utilise hardware-interrupts and the "Nested Vectored Interrupt Controller" (NVIC) to react to hardware events (whilst also saving power).
-* **Multi Threaded Programming** - using the Mbed Real Time Operating System components (based on CMSIS RTOS) to handle multi-tasking for us, so that we are able to write separate functions (containing sequential code) that "seems" to run in parallel, even on a single core. Using this method, we go full circle and discover we may use simple blocking code once again!
+* **Rapid Polling (Level 5)** - whereby we take responsibility for servicing all devices. We read input devices and service output devices at high enough speeds to prevent data loss or corruption.
+   * Finite State Machines are a very useful software pattern for managing more complex tasks
+   * A variation on this is time-division-multiplexing (a primitive type of scheduling)
+* **Interrupts (Level 5)** - whereby we utilise hardware-interrupts and the "Nested Vectored Interrupt Controller" (NVIC) to react to hardware events (whilst also saving power).
+* **Multi Threaded Programming (Levels 6+)** - using the Mbed Real Time Operating System components (based on CMSIS RTOS) to handle multi-tasking for us, so that we are able to write separate functions (containing sequential code) that "seems" to run in parallel, even on a single core. Using this method, we go full circle and discover we may use simple blocking code once again! This uses something known as *preemptive scheduling*. This is not covered until level-6.
 
 Let's begin with the concept of rapid-polling.
 
@@ -29,7 +31,7 @@ Rapid polling loops are simple in concept, but can be tricky and messy to write.
 
 This is probably explained with some examples. The first is a simple application which uses two buttons to increment or decrement a counter.
 
-## Task-344 - Rapid Polling
+## Task-244 - Rapid Polling
 In this task, you will have three input devices controlling two outputs.
 
 **Inputs**
@@ -41,9 +43,9 @@ In this task, you will have three input devices controlling two outputs.
 * 7-Segment Display - displays a count
 * Green LED - flashes twice a second
 
-| TASK-344 | Rapid Polling |
+| TASK-244 | Rapid Polling |
 | --- | --- |
-| 1. | Make Task-344 the Active Program |
+| 1. | Make Task-244 the Active Program |
 | 2. | Build and run. |
 | -  | Press A a few times to increment the count |
 | -  | Press B a few times to decrement the count |
@@ -160,14 +162,14 @@ This delay noticeably slows the loop time, but luckily not enough to notice. It 
 
 An improvement would be to poll two more timers, one per switch and remove blocking entirely. This is the purpose of the next task. This change is going to add more complexity to our code however.
 
-## Task-346 - Using a State Machine pattern
+## Task-246 - Using a State Machine pattern
 We will now remote any blocking code from the previous task. So that the code does not become too complex, a state machine is used for each input/output combination. In fact we employ 3 state machines.
 
 > A state machine allows us to keep track of where we are in a sequence. As you will see, this removes the need to record the previous input values and we can avoid blocking entirely.
 
-| Task-346 | Using a State Machine for Rapid Polling |
+| Task-246 | Using a State Machine for Rapid Polling |
 | --- | --- |
-| 1.  | Make Task-346 the active program |
+| 1.  | Make Task-246 the active program |
 | 2.  | Build and run the code |
 | -   | Press A and B to see the count change. Note the flashing green LED is unaffected |
 | 3.  | Use the debugger to step through the code to make sure you understand it |
@@ -186,12 +188,12 @@ Write a C++ class that encapsulates all the behaviour of the switch-timer state 
 
 The next task as one possible solution.
 
-## Task-427
+## Task-247
 This task contains one possible solution to the challenge in the previous task.
 
-| Task-347 | Using a State Machine for Rapid Polling |
+| Task-247 | Using a State Machine for Rapid Polling |
 | --- | --- |
-| 1.  | Make Task-347 the active program |
+| 1.  | Make Task-247 the active program |
 | 2.  | Build and run the code |
 | -   | Press A and B to see the count change. Note the flashing green LED is unaffected |
 | 3.  | Use the debugger to step through the code to make sure you understand it |
@@ -201,7 +203,7 @@ This task contains one possible solution to the challenge in the previous task.
 | -  | Add instances for the red and yellow LED |
 | -  | Make them all flash at different rates |
 
-A solution is provided (Task427B-Solution). Note how the code is easily reused by encapsulating logic in a class.
+A solution is provided (Task247B-Solution). Note how the code is easily reused by encapsulating logic in a class.
 
 ## Reflection
 That is all I want to do with rapid polling. There are a few observations that need to be summarised:
