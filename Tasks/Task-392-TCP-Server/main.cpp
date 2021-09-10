@@ -12,6 +12,7 @@ using namespace uop_msb_200;
 #define HTTP_HEADER_FIELDS "Content-Type: text/html; charset=utf-8"
 #define HTTP_MESSAGE_BODY ""                                     \
 "<html>" "\r\n"                                                  \
+"<head><title> Plymouth Uni Weather Page </title></head>" "\r\n" \
 "  <body style=\"display:flex;text-align:center\">" "\r\n"       \
 "    <div style=\"margin:auto\">" "\r\n"                         \
 "      <h1>Hello World</h1>" "\r\n"                              \
@@ -46,7 +47,7 @@ int main()
     printf("\r\nBasic HTTP server example\r\n");
     
     // Connect the ethernet interface
-    //net.set_network(IP, NETMASK, GATEWAY);  //For static IP
+    net.set_network(IP, NETMASK, GATEWAY);  //For static IP
     net.connect();
 
     // Get the network address

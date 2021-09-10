@@ -4,6 +4,7 @@
 #include "mbed.h"
 //#include "TextLCD.h"
 //#include "BMP280_SPI.h"
+//#include "SPL06-001.h"
 
 // Blinking rate in milliseconds
 #define BLINKING_RATE_MS     500ms
@@ -93,9 +94,12 @@ DigitalOut LatE1(PE_10,0);
 DigitalOut LatE2(PE_11,0);
 DigitalOut nOE(PE_15,0);
 
-// Environmetal sensor
+// Environmetal sensors
 #include "BMP280_SPI.h"
 BMP280_SPI bmp280(PB_5, PB_4, PB_3, PB_2);
+#include "SPL06-001.h"
+SPL06_001_SPI sensor(PB_5, PB_4, PB_3, PB_2);
+
 
 // SD Card 
 #include "SDBlockDevice.h"

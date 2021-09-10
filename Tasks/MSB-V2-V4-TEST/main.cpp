@@ -33,8 +33,14 @@ Timer stopwatch;
 
 int main()
 {
-    write_sdcard();
-    read_sdcard();
+
+    printf("\n\nstarting...\n");
+    //write_sdcard();
+
+  //  read_sdcard();
+
+//printf("read second time\n");
+        //read_sdcard();
     
     seg7clear();
 
@@ -55,7 +61,7 @@ int main()
     oe=0;                       //Enable Output NB can be more selective than this if you wish
     
     char switchNum=' ';
-    printf("Staring Program..\n");
+    printf("Starting Program..\n");
     t1.start(Traffic_Lights);
     t2.start(LCD_BackLight_Effect);
     t3.start(Bar_Flash);
@@ -67,7 +73,7 @@ int main()
     myLCD.printf("SECaM PU");
     myLCD.locate(0,1);myLCD.printf("Switch=");
     buzzer.period_us(2273);
-    buzzer=0.5f;wait_us(200000);buzzer=0;
+    //buzzer=0.5f;wait_us(200000);buzzer=0;
 
     while(true){
         if (swA)switchNum='A';
@@ -249,7 +255,7 @@ void count_thread(){
         seg7num(counter);
         counter++;
         if (counter>99){counter=0;}
-        thread_sleep_for(1000);
+        thread_sleep_for(250);
     }
 }
 
@@ -290,16 +296,30 @@ void seg7clear(void){
 }
  
 void environment_data(void)
-{
-    float temperature, pressure;
+{   int err=0;
+    float temperature,pressure;
+    
+    err = sensor.initialize();
+    DEBUG_PRINT("ERROR CODE IS %d\n",err);
+    switch (err){
+        case 280: sensor.~SPL06_001_SPI(); bmp280.initialize();printf("BMP280 found\n");break;      //BMP280 found so Destruct SPL06 driver and initialize BMP280 !!
+        case   6: bmp280.~BMP280_SPI();sensor.initialize();printf("SPL06_001 found\n");break;                           //SPL06_001 found so Destruct BMP280
+        case  -1: printf("No Environmental Sensor found!\n");break;            //None found
+        default : break;                                 
+    }
 
-    bmp280.initialize();
-
-    while (true)
+    while(true)
     {
-        temperature=bmp280.getTemperature();
-        pressure=bmp280.getPressure();
-        printf("%.1fC %.1fmBar\n",temperature,pressure);
+        switch (err)
+        {
+            case 280:temperature=bmp280.getTemperature();pressure=bmp280.getPressure();break;
+            case 6:temperature=sensor.getTemperature();pressure=sensor.getPressure();break;
+            case -1:break;
+            default:break;
+        }
+
+        printf("Temperature = %4.1f ",temperature);
+        printf("Pressure = %4.1f\n",pressure);
         thread_sleep_for(WAIT_TIME_MS);
     }
 }
@@ -307,10 +327,12 @@ void environment_data(void)
 int write_sdcard()
 {
     printf("Initialise and write to a file\n");
-
+ int err;
     // call the SDBlockDevice instance initialisation method.
-    if ( 0 != sd.init()) {
-        printf("Init failed \n");
+
+    err=sd.init();
+    if ( 0 != err) {
+        printf("Init failed %d\n",err);
         return -1;
     }
     

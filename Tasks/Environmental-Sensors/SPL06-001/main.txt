@@ -1,0 +1,25 @@
+#include "mbed.h"
+#include "SPL06-001.h"
+
+SPL06_001_SPI sensor(PB_5, PB_4, PB_3, PB_2); // mosi, miso, sclk, cs
+
+// main() runs in its own thread in the OS
+int main()
+{
+//    printf("Hello World\n");
+
+    sensor.initialize();
+
+printf("Temperature = %4.1f\n\n",sensor.getTemperature());
+
+//    int a;
+
+//    for (a=0; a < 5; a = a + 1) 
+//    {
+//        printf("a = %d\n",a);
+//    }
+
+//    printf("Final value of a is %d\n", a);
+
+
+}

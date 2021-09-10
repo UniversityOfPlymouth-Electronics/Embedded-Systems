@@ -24,15 +24,25 @@ int main()
     {
         switch (err)
         {
-            case 280:temperature=bmp280.getTemperature();pressure=bmp280.getTemperature();break;
-            case 6:temperature=sensor.getTemperature();pressure=sensor.getTemperature();break;
+            case 280:temperature=bmp280.getTemperature();pressure=bmp280.getPressure();break;
+            case 6:temperature=sensor.getTemperature();pressure=sensor.getPressure();break;
             case -1:break;
             default:break;
         }
 
         printf("Temperature = %4.1f ",temperature);
-        printf("Pressure = %4.1f\n\n",pressure);
-        printf("hello %d\n",err);
-        wait_us(1000000);
+        printf("Pressure = %4.1f\n",pressure);
+        wait_us(5000000);
     }
 }
+
+/*
+    int a;
+
+    for (a=0; a < 5; a = a + 1) 
+    {
+        printf("a = %d\n",a);
+    }
+
+    printf("Final value of a is %d\n", a);
+*/

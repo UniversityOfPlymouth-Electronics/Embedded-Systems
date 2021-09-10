@@ -30,7 +30,7 @@ BMP280_SPI::BMP280_SPI(PinName mosi, PinName miso, PinName sclk, PinName cs)
     _cs(cs),
     t_fine(0)
 {
-    initialize();
+    //initialize();
 }
 
 
