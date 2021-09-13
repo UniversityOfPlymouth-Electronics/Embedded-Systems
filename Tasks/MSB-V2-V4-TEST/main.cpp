@@ -7,6 +7,7 @@
 #include "F429_Mega_Shell_Header.h"
 #include "TextLCD/TextLCD.h"
 #include <cstdio>
+#include "EnvSensor/BMP_280_MSB.hpp"
 
 //prototypes
 void Traffic_Lights();
@@ -21,6 +22,8 @@ float potav();
 void environment_data();
 int write_sdcard();
 int read_sdcard();
+
+BMP280_SPI_MSB sen(PB_5, PB_4, PB_3, PB_2);
 
 Thread t1;
 Thread t2;

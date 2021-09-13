@@ -21,6 +21,11 @@
  * limitations under the License.
  */
 
+// EDITED BY Nicholas Outram for MBED OS 6.X
+//
+// wait was deprecated.
+// changed private: to protected:
+//
  
 #ifndef MBED_BMP280_SPI_H
 #define MBED_BMP280_SPI_H
@@ -100,7 +105,7 @@ public:
      */
     float getPressure(void);
 
-private:
+protected:
 
     SPI         _spi;
     DigitalOut  _cs;

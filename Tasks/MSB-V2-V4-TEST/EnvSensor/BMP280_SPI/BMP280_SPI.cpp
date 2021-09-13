@@ -21,6 +21,12 @@
  * limitations under the License.
  */
  
+ // EDITED BY Nicholas Outram
+//
+// wait was deprecated.
+// changed private: to protected:
+//
+
 #include "mbed.h"
 #include "BMP280_SPI.h"
 
@@ -30,7 +36,7 @@ BMP280_SPI::BMP280_SPI(PinName mosi, PinName miso, PinName sclk, PinName cs)
     _cs(cs),
     t_fine(0)
 {
-    //initialize();
+    initialize();
 }
 
 
@@ -63,7 +69,7 @@ void BMP280_SPI::initialize()
     _spi.write((5<<5) | (0<<2) | 0); // Standby 1000ms, Filter off, 4-wire SPI interface
     _cs = 1;
 
-    wait_us(1000000);
+    wait_us(1000000);       //UPDATED by NJO
     
     _cs = 0;
     _spi.write(0x88); // read dig_T regs

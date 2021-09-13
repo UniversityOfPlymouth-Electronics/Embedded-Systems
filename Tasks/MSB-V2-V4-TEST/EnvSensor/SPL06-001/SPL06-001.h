@@ -129,7 +129,7 @@ public:
      *  Configure sensor setting and read parameters for calibration
      *
      */
-    int initialize(void);
+    void initialize(void);
 
     /** Read the current temperature value (degree Celsius) from SPL06_001 sensor
      *
@@ -143,7 +143,8 @@ public:
      */
     float getPressure(void);
 
-private:
+
+protected:
     SPI         _spi;
     DigitalOut  _cs;
     uint8_t cmd[15]={0};

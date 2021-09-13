@@ -29,7 +29,7 @@ SPL06_001_SPI::SPL06_001_SPI(PinName mosi, PinName miso, PinName sclk, PinName c
     _spi(mosi, miso, sclk),
     _cs(cs,1)                  // Chip Select active LOW so assert HIGH ",1" on instantiation
 {
-    //initialize();
+    initialize();
 }
 
 
@@ -37,60 +37,45 @@ SPL06_001_SPI::~SPL06_001_SPI()
 {
 }
 
-int SPL06_001_SPI::initialize()
+void SPL06_001_SPI::initialize()
 {
     _cs = 1;                    // make sure SPI device not selected
     _spi.format(8, 0);          // 8-bit, mode=0
     _spi.frequency(1000000);    // 1MHZ
 
     _cs = 0;                    // Select Device nCS active low
-        _spi.write(regs::ID | spi_mask::SPL06_001_SPI_READ);
-        cmd[0] = _spi.write(0); // read
+    _spi.write(regs::ID | spi_mask::SPL06_001_SPI_READ);
+    cmd[0] = _spi.write(0); // read
     _cs = 1;                    // Deselect Device nCS active low
     DEBUG_PRINT("\nchip_id = 0x%X\n", cmd[0]); // display ID in ID Reg at 0x04 content should be 0x10
 
     if (cmd[0] != 0x10) // if NOT SPL06_001 then do further checks else carry on initializing
     {
-        _cs = 0;
-            _spi.write(0xd0); // read chip_id
-            cmd[0] = _spi.write(0); // read chip_id
-        _cs = 1;
-        if (cmd[0] == 0x58)
-        {
-            DEBUG_PRINT("BMP280 found\n");
-            return 280;
-        }
-        else 
-        {
-            DEBUG_PRINT("NO Environmental Sensor found!");
-            return -1;
-        }
+        return;
+    } 
     
-    }
     DEBUG_PRINT("SPL06_001 found\n");
     
     _cs = 0;                    // Select Device nCS active low
-        _spi.write(regs::MEAS_CFG & spi_mask::SPL06_001_SPI_WRITE); // ctrl_meas register
-        _spi.write(7);          // 7(111)== continuous Temp Press
+    _spi.write(regs::MEAS_CFG & spi_mask::SPL06_001_SPI_WRITE); // ctrl_meas register
+    _spi.write(7);          // 7(111)== continuous Temp Press
     _cs = 1;                    // Deselect Device nCS active low
 
     _cs = 0;                    // Select Device nCS active low
-        _spi.write(regs::CFG_REG & spi_mask::SPL06_001_SPI_WRITE); // config
-        _spi.write(0);          // 4-wire SPI interface ---- No FIFO No Shift Bits 4 wires
+    _spi.write(regs::CFG_REG & spi_mask::SPL06_001_SPI_WRITE); // config
+    _spi.write(0);          // 4-wire SPI interface ---- No FIFO No Shift Bits 4 wires
     _cs = 1;                    // Deselect Device nCS active low
 
     _cs = 0;                    // Select Device nCS active low
-        _spi.write(regs::TMP_CFG & spi_mask::SPL06_001_SPI_WRITE); // config
-        _spi.write(0x80|0x30);  // Internal Sensor - 0x30 = 128 Measurement per second - Single Sample rate was 0x00
+    _spi.write(regs::TMP_CFG & spi_mask::SPL06_001_SPI_WRITE); // config
+    _spi.write(0x80|0x00);  // Internal Sensor - 0x30 = 128 Measurement per second - Single Sample rate was 0x00
                                 // 0x80 SET bit 7 see datasheet section 6.1 compare to section 8.4 case example works bit map is wrong - MRS 11/08/2021
     _cs = 1;                    // Deselect Device nCS active low
 
     _cs = 0;                    // Select Device nCS active low
-        _spi.write(regs::PRS_CFG & spi_mask::SPL06_001_SPI_WRITE); // config
-        _spi.write(0x00|0x30);       // Internal Sensor - 0x30 = 128 Measurement per second - Single Sample rate was 0x00
+    _spi.write(regs::PRS_CFG & spi_mask::SPL06_001_SPI_WRITE); // config
+    _spi.write(0x00|0x00);       // Internal Sensor - 0x30 = 128 Measurement per second - Single Sample rate was 0x00
     _cs = 1;                    // Deselect Device nCS active low
-
-
 
 
     // NOW Poll the ctrl_measure register to ascertain when device is ready!!
@@ -105,7 +90,6 @@ int SPL06_001_SPI::initialize()
     }
     */
     wait_us(1000000); // wait 1 second for config removed since Polling see above!!
-    return 6; //
 }
 
 // Member function will return a float in degrees Celcius
