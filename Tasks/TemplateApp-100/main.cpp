@@ -1,6 +1,5 @@
 //#include "mbed.h"
-#include "../lib/uopmsb/uop_msb.h"
-
+#include "uop_msb.h"
 using namespace uop_msb;
 
 //On board LEDs
