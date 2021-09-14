@@ -6,7 +6,7 @@ DigitalOut led1(LED1);
 
 // main() runs in its own thread in the OS
 LCD_16X2_DISPLAY lcd;
-EnvSensor sensor(PB_5, PB_4, PB_3, PB_2);
+EnvSensor sensor;
 
 int main()
 {
@@ -22,7 +22,13 @@ int main()
     while (true) {
         led1 = !led1;
         wait_us(500000);
-        lcd.write(LCD_16X2_DISPLAY::DATA, '1');
+        float t = sensor.getTemperature();
+        float p = sensor.getPressure();
+        lcd.cls();
+        lcd.locate(0, 0);
+        lcd.printf("Temp=%4.3f", t);
+        lcd.locate(1, 0);
+        lcd.printf("Pres=%4.3f", p);
     }
 }
 
