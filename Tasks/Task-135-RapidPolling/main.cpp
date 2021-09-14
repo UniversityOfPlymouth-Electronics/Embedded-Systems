@@ -1,5 +1,5 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
-using namespace uop_msb_200;
+#include "../lib/uopmsb/uop_msb.h"
+using namespace uop_msb;
 
 BusIn buttons(BTN1_PIN, BTN2_PIN, BTN3_PIN, BTN4_PIN);
 // DigitalIn buttonA(BTN1_PIN);    //ButtonA is synonamous with buttons[0]

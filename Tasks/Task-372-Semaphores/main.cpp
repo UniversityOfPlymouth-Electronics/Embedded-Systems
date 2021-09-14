@@ -1,10 +1,10 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include "../lib/uopmsb/uop_msb.h"
 #include "PushSwitch.hpp"
 
 #include <chrono>
 #include <cstdint>
 #include <cstdio>
-using namespace uop_msb_200;
+using namespace uop_msb;
  
 Semaphore sem1;
 Semaphore sem2(10);

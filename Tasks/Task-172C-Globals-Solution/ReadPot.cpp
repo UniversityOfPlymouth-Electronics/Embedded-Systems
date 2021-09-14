@@ -1,5 +1,5 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
-using namespace uop_msb_200;
+#include "../lib/uopmsb/uop_msb.h"
+using namespace uop_msb;
 
 //Declare functions
 static int getDelayMS();

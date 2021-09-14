@@ -1,6 +1,6 @@
 // You need this to use the Module Support Board
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
-using namespace uop_msb_200;
+#include "../lib/uopmsb/uop_msb.h"
+using namespace uop_msb;
 
 #define WAIT_TIME_MS 500 
 DigitalOut greenLED(TRAF_GRN1_PIN);

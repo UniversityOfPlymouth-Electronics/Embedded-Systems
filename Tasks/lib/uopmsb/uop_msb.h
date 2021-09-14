@@ -12,19 +12,19 @@
 // ******************************************** IMPORTANT ********************************************
 // *             Set the value below to match the board version you are using                        *
 // ******************************************** IMPORTANT ********************************************
-
+#include "mbed.h"
 //#define MSB_VER 2
 #define MSB_VER 4
 
-#include "mbed.h"
+
 #include "Stream.h"
 
 // Use the sensor for the appropriate board version
 #if MSB_VER == 2
-#include "BMP280_SPI.h"
+#include "../lib/EnvSensor/BMP280_SPI/BMP280_SPI.h"
 #define SENSOR_T BMP280_SPI
 #elif MSB_VER == 4
-#include "SPL06-001.h"
+#include "../lib/EnvSensor/SPL06-001/SPL06-001.h"
 #define SENSOR_T SPL06_001_SPI
 #else
 #error Valid Module Support Board Version is Needed
@@ -36,7 +36,7 @@
 #include <map>
 using namespace std::chrono;
 
-namespace uop_msb_200 {
+namespace uop_msb {
 
     // *****************************
     // Traffic Lights (individual) *
@@ -618,9 +618,15 @@ namespace uop_msb_200 {
     public:
         typedef enum {NONE, BMP280, SPL06_001} ENV_SENSOR_TYPE;
 
+        //PB_5, PB_4, PB_3, PB_2
+
         EnvSensor(PinName mosi, PinName miso, PinName sclk, PinName cs) : sensor(mosi, miso, sclk, cs)
         {
-
+            //Initialise the mocked humidity algorithm
+            hum = hum0 = 50.0f + 30.0f*fRand(); //20.0% .. 80.0%
+            delta = 0.1f*fRand();
+            set_time(0);
+            prevTime = currTime = time(NULL);
         }
         ~EnvSensor();
 
@@ -651,8 +657,8 @@ namespace uop_msb_200 {
         ENV_SENSOR_TYPE getSensorType()
         {
             #if MSB_VER == 2
-            return BMP2080;
-            #elsif MSB_VER == 4
+            return BMP280;
+            #elif MSB_VER == 4
             return SPL06_001;
             #else
             return NONE;

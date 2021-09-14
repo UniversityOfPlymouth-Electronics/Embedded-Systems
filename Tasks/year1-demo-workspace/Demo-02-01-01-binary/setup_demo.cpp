@@ -1,4 +1,4 @@
-#include "../../lib/uopmsb/uop_msb_2_0_0.h"
+#include "../../lib/uopmsb/uop_msb.h"
 PortOut LED_PORTE(PortE, LED_MASK);
 
 DigitalOut LED_BAR_OE(PE_0,1);      //Off by default

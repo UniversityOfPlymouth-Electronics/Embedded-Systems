@@ -1,11 +1,11 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include "../lib/uopmsb/uop_msb.h"
 #include <chrono>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
 #include <string.h>
 
-using namespace uop_msb_200;
+using namespace uop_msb;
 using namespace chrono;
 
 //Output

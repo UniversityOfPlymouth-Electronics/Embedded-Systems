@@ -29,7 +29,7 @@ SPL06_001_SPI::SPL06_001_SPI(PinName mosi, PinName miso, PinName sclk, PinName c
     _spi(mosi, miso, sclk),
     _cs(cs,1)                  // Chip Select active LOW so assert HIGH ",1" on instantiation
 {
-    //initialize();
+    initialize();
 }
 
 
