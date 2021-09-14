@@ -1,0 +1,6 @@
+[submodule "Tasks/LCD_TEST/Tasks/LCD_TEST/libuopmsb"]
+	path = Tasks/LCD_TEST/Tasks/LCD_TEST/libuopmsb
+	url = https://github.com/UniversityOfPlymouth-Electronics/libuopmsb
+[submodule "Tasks/TemplateApp-100/Tasks/TemplateApp-100/libuopmsb"]
+	path = Tasks/TemplateApp-100/Tasks/TemplateApp-100/libuopmsb
+	url = https://github.com/UniversityOfPlymouth-Electronics/libuopmsb

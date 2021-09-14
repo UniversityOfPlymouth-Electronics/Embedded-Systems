@@ -2,10 +2,8 @@
 #include "SPL06-001.h"
 #include "BMP280_SPI.h"
 
-SPL06_001_SPI sensor(PB_5, PB_4, PB_3, PB_2); // mosi, miso, sclk, cs
-BMP280_SPI bmp280(PB_5, PB_4, PB_3, PB_2); // mosi, miso, sclk, cs
 
-//main() runs in its own thread in the OS
+// main() runs in its own thread in the OS
 int main()
 {
     int err=0, count=0;

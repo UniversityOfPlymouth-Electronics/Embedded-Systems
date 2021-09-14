@@ -1,6 +1,6 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include "uop_msb.h"
 #include <cstring>
-using namespace uop_msb_200;
+using namespace uop_msb;
 
 // Inputs
 DigitalIn SWB(USER_BUTTON); // THIS IS THE BLUE BUTTON

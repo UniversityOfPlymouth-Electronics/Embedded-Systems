@@ -1,8 +1,8 @@
 #ifndef __sample_hardware__
 #define __sample_hardware__
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include "uop_msb.h"
 #include <chrono>
-using namespace uop_msb_200;
+using namespace uop_msb;
 
 extern DigitalOut onBoardLED;
 extern DigitalOut redLED;

@@ -12,6 +12,7 @@ During this course you will use a variety of software tools. This section includ
 1. [Mbed Studio](#Mbed-Studio)
 1. [Visual Studio Code](#Visual-Studio-Code)
 1. [GitHub Desktop](#GitHub-Desktop)
+1. [GCC Compiler (Optional)](#GCC-Compiler)
 
 We will now install each package in turn. Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
@@ -50,11 +51,17 @@ Once you have created your account, please tell us what your username is:
 This will help us better support you. Never disclose your password!
 
 ### Installing Mbed Studio
-The first step is to download and install the version of Mbed Studio for your computer.
+The first step is to download and install the version of Mbed Studio for your computer, but there are a couple checks you should do first.
 
 > [Click this link to download Mbed-Studio](https://os.mbed.com/studio/)
 
-Run the installer and you will probably find it is mostly self-explanatory. You can choose default options. Since version `1.0`, many of the additional tools needed for this software come included.
+**Failing to ensure the following risks the software install to (silently) fail.**
+* Check there are no pending restarts due to a Windows update. 
+* Check there is sufficient disk space on your system drive.
+
+Once you system is ready, run the installer and you will probably find it is mostly self-explanatory. It is suggested you install "for all users". Other than that, choose default options. Since version `1.0`, many of the additional tools needed for this software come included.
+
+In the event you do need to reinstall, see the [section on troubleshooting](troubleshooting.md#Failed-installations-and-Reinstalling-Mbed-Studio) first.
 
 ### Connecting your Target Board
 The software that allows your PC to recognize your target board comes with Mbed Studio. The most important of these is the ST Link Driver.
@@ -116,12 +123,22 @@ At some point, the tutor will email you a link to obtain a copy of various proje
 
 [Click here to watch a video explaining how to do this](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e15dcb65-dbcc-404f-a4f1-abfe00ee6f33)
 
-> **IMPORTANT** - Clone the files **outside** of any folder that is synchronized to the cloud (such as OneDrive, DropBox or iCloud). Building software generates thousands (even millions) of small temporary files which you probably do NOT want to synchronize to the cloud. To do so would use unnecessary CPU and network bandwidth.
+> **IMPORTANT - PLEASE READ**
 >
-> On a personal machine (not shared with anyone else), I clone all my files in the folder `C:\git`. You could also clone in `C:\Users\<username>` _where `<username>` refers to your username_.
+> Clone the files **outside** of any folder that is synchronized to the cloud (such as OneDrive, DropBox or iCloud). Building software generates thousands (even millions) of small temporary files which you probably do NOT want to synchronize to the cloud. To do so would use unnecessary CPU and network bandwidth.
+>
+> On a personal machine (not shared with anyone else), I strongly suggest you use a folder with a short path and no spaces, such as `C:\git`. You could also clone in `C:\Users\<username>` _where `<username>` refers to your username_.
+>
+> GitHubDesktop tends to default to your `Documents` folder. **I DO NOT RECOMMEND YOU USE THIS** when using Mbed
 
 ### Pulling Updates
 Occasionally, the notes and sample code will be changed. Before you start any work, it is strongly suggested you click the "Fetch Origin" button in GitHub desktop.
+
+### Making your own edits
+I suggest you create your own repository for your own work. Copy the tasks from the Embedded-Systems repository into your own workspace. This way:
+
+* You can push your changes to your own private repository
+* You can easy obtain updates to the tasks / notes without having to merge them into your own code
 
 ### Different between GitHub and a Cloud Provider
 You may already be using a cloud service, such as OneDrive, iCloud or DropBox. These services monitor a collection of folders and mirror everything in the cloud. This is often done in the background while you work.
@@ -134,6 +151,68 @@ A key difference is:
 * With Git and GitHub, **we** choose when the files are synchronized and in which direction. However, this does mean getting into the habit of doing this.
 
 There is much more than could be said about these tools, but for now, we will leave this and focus on coding.
+
+### Pull Requests (advanced)
+GitHub has great support for "Pull Requests". If you find an error in the notes or the Tasks, you can do the following:
+
+* Create a branch for the fix using the Embedded-Systems repository
+* Make the edit
+* Commit the change and push (it will offer a pull request)
+
+This will generate an email for the tutor to review your proposed changes and the option to merge them in.
+
+## GCC Compiler
+At the time of writing, [Mbed Studio](https://os.mbed.com/studio/) contains a number of components, including the following:
+
+* Mbed Studio IDE - a cross platform IDE for Windows, Mac OS and Linux operating systems
+* [ARM C6 Compiler](https://developer.arm.com/tools-and-software/embedded/arm-compiler) - specially licensed for Mbed Studio
+* [PyOCD Debugger](https://pypi.org/project/pyocd/)
+* [Mbed OS Libraries](https://os.mbed.com/docs/mbed-os)
+
+Each of these can be viewed as separate projects in their own right, and that come bundled together as part of the Mbed Studio.
+
+* There is also the [Mbed Command Line Interface (CLI)](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html) for experienced developers. 
+   * This commonly uses the [GNU ARM Embedded Toolchain GCC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+
+If you are experiencing difficulty debugging your code in Mbed Studio, you could try the GCC_ARM toolchain. You can do this as follows (for Windows and Mac OS):
+
+1. Download and install the [GNU ARM Embedded Toolchain GGC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) - check the supported versions.
+2. Follow the [instructions here](https://os.mbed.com/docs/mbed-studio/current/installing/switching-to-gcc.html)
+
+### Example (for Windows)
+Below are the instructions given to University of Plymouth students:
+
+* Install the [GNU ARM Embedded Toolchain GGC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) v9-2020-q2
+
+* Using a text editor, create a file `external_tools.json` with the following content:
+```JSON
+{
+    "bundled": {
+        "gcc": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/9 2020-q2-update/bin"
+    },
+    "defaultToolchain": "GCC_ARM",
+    "_defaultToolchain": "ARMC6"
+}
+```
+
+* You may need to adjust the path in the JSON file to match your installation folder.
+    * Note the forward slash `/` is used as a path delimiter.
+* Copy `external_tools.json` to `C:\Users\<useraccount>\AppData\Local\Mbed Studio` (where `<useraccount>` is a folder with the same of your current user).
+* Restart Mbed Studio
+
+If you want to switch back to ARMC6, simply edit `external_tools.json` and move the underscore `_` as follows (and restart):
+
+```JSON
+{
+    "bundled": {
+        "gcc": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/9 2020-q2-update/bin"
+    },
+    "_defaultToolchain": "GCC_ARM",
+    "defaultToolchain": "ARMC6"
+}
+```
+
+I personally like to have the option of using either compiler.
 
 ## PuTTY Serial Terminal
 This is useful and may be used at different times

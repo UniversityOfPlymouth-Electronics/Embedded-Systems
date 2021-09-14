@@ -1,5 +1,7 @@
 BUILD
 .mbed
 mbed-os
+libuopmsb
+.DS_Store
 .DS_Store
 *.zip

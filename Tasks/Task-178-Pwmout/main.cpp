@@ -1,6 +1,6 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include "uop_msb.h"
 #include <chrono>
-using namespace uop_msb_200;
+using namespace uop_msb;
 extern int getAverageDelay(double alpha);
 
 AnalogIn pot(AN_POT_PIN);

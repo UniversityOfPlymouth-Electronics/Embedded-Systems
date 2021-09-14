@@ -1,10 +1,10 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include "uop_msb.h"
 #include "CanBeEnabled.hpp"
 #include <chrono>
 #include <cstdint>
 #include <ratio>
 
-using namespace uop_msb_200;
+using namespace uop_msb;
 using namespace chrono;
 
 // This class now inherits TWO parent classes

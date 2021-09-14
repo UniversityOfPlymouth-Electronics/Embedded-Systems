@@ -1,5 +1,4 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
-using namespace uop_msb_200;
+#include "mbed.h"
 
 // Create a DigitalOut “object” called greenLED. Pass constant LED1 as a “parameter”
 DigitalOut greenLED(LED1);
@@ -21,12 +20,12 @@ int main()
         greenLED = 1; 
 
         // Wait 1 second (1 million microseconds)
-        wait_us(1000000); 
+        wait_us(500000); 
 
         // Turn LED OFF
         greenLED = 0;
 
         // Wait 1 second
-        wait_us(1000000); 
+        wait_us(500000); 
     }
 }

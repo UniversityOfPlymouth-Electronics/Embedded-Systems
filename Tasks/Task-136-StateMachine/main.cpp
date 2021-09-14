@@ -1,7 +1,7 @@
-#include "../lib/uopmsb/uop_msb_2_0_0.h"
+#include "uop_msb.h"
 #include <chrono>
 #include <ratio>
-using namespace uop_msb_200;
+using namespace uop_msb;
 using namespace chrono;
 
 BusIn buttons(BTN1_PIN, BTN2_PIN, BTN3_PIN, BTN4_PIN);
