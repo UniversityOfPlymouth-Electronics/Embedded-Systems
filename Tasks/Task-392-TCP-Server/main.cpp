@@ -2,7 +2,7 @@
     #error [NOT_SUPPORTED] LWIP not supported for this target
 #endif
  */
-#include "../lib/uopmsb/uop_msb.h"
+#include "uop_msb.h"
 using namespace uop_msb;
 
 #include "EthernetInterface.h"

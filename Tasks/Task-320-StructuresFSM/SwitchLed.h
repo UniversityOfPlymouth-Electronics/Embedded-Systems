@@ -1,7 +1,7 @@
 #ifndef _SWITCH_LED_
 #define _SWITCH_LED_
 
-#include "../lib/uopmsb/uop_msb.h"
+#include "uop_msb.h"
 using namespace uop_msb;
 
 typedef enum {

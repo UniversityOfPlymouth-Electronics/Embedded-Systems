@@ -1,4 +1,4 @@
-#include "../lib/uopmsb/uop_msb.h"
+#include "uop_msb.h"
 using namespace uop_msb;
 
 BusIn buttons(BTN1_PIN, BTN2_PIN, BTN3_PIN, BTN4_PIN);

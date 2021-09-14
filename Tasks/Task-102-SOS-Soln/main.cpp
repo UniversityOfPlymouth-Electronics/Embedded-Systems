@@ -15,7 +15,7 @@
 // Chris Tipney September 2020 V1.0
 
 // You need this to use the Module Support Board
-#include "../lib/uopmsb/uop_msb.h"
+#include "uop_msb.h"
 using namespace uop_msb;
  
 DigitalOut greenLED(TRAF_GRN1_PIN);

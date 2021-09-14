@@ -1,4 +1,4 @@
-#include "../lib/uopmsb/uop_msb.h"
+#include "uop_msb.h"
 using namespace uop_msb;
 
 BusIn buttons(PG_0, PG_1, PG_2, PG_3);
