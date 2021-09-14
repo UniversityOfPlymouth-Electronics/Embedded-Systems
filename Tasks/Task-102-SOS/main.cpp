@@ -1,5 +1,5 @@
 // You need this to use the Module Support Board
-#include "../lib/uopmsb/uop_msb.h"
+#include "uop_msb.h"
 using namespace uop_msb;
 
 #define WAIT_TIME_MS 500 
