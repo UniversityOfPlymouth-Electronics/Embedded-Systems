@@ -11,12 +11,10 @@ EnvSensor sensor;
 int main()
 {
     lcd.cls();
-    lcd.write(LCD_16X2_DISPLAY::DATA, 'X');
-    lcd.write(LCD_16X2_DISPLAY::DATA, 'Y');
-    lcd.character(1,1,'*');
-
-    lcd.locate(1,5);
-    lcd.printf("Hello");
+    lcd.locate(0, 0);
+    lcd.printf("Welcome to the");
+    lcd.locate(1, 0);
+    lcd.printf("University");
     wait_us(1000000);
 
     while (true) {
@@ -26,9 +24,9 @@ int main()
         float p = sensor.getPressure();
         lcd.cls();
         lcd.locate(0, 0);
-        lcd.printf("Temp=%4.3f", t);
+        lcd.printf("Temp:     %4.1f", t);
         lcd.locate(1, 0);
-        lcd.printf("Pres=%4.3f", p);
+        lcd.printf("Pressure: %4.1f", p);
     }
 }
 
