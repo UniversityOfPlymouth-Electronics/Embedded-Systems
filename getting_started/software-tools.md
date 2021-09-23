@@ -184,7 +184,7 @@ Below are the instructions given to University of Plymouth students:
 
 * Install the [GNU ARM Embedded Toolchain GGC_ARM](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) v9-2020-q2
 
-* Using a text editor, create a file `external_tools.json` with the following content:
+* Using a text editor, create a file `external-tools.json` with the following content:
 ```JSON
 {
     "bundled": {
@@ -197,10 +197,10 @@ Below are the instructions given to University of Plymouth students:
 
 * You may need to adjust the path in the JSON file to match your installation folder.
     * Note the forward slash `/` is used as a path delimiter.
-* Copy `external_tools.json` to `C:\Users\<useraccount>\AppData\Local\Mbed Studio` (where `<useraccount>` is a folder with the same of your current user).
+* Copy `external-tools.json` to `C:\Users\<useraccount>\AppData\Local\Mbed Studio` (where `<useraccount>` is a folder with the same of your current user).
 * Restart Mbed Studio
 
-If you want to switch back to ARMC6, simply edit `external_tools.json` and move the underscore `_` as follows (and restart):
+If you want to switch back to ARMC6, simply edit `external-tools.json` and move the underscore `_` as follows (and restart):
 
 ```JSON
 {
