@@ -142,7 +142,7 @@ We then fill this segment of memory with some data and send the address through 
 | 2. | Add some code to the ISR to busy-wait block on buttonA |
 | - | What happens if you hold down buttonA? |
 | 3. | Add some code to the consumer thread to busy-wait block on buttonB |
-| - | What happens if you hold down buttonA? |
+| - | What happens if you hold down buttonB? |
 | 4. | For each interrupt, how many bytes are sent by the message queue to the consumer thread? |
 | 5. |  The objects use shared memory without any locks. Why is this code thread safe? |
 
