@@ -5,7 +5,7 @@
 # Digital Outputs - `BusOut`
 This is a first look at digital outputs with Mbed OS. Before we start, you are advised to download a copy of the module support board schematics (circuit diagram) for future reference.
 
-[A direct link to the schematics is here](../Hardware/ModuleSupportBoard/msb_schematics.pdf)
+[Refer to the schematics here](../getting_started/hardware.md#Schematics)
 
 > **TIP:** To open this link in a separate window, hold down CTRL and click. 
 >

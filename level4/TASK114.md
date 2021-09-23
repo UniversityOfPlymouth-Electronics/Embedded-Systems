@@ -5,7 +5,7 @@
 # Digital Outputs - `DigitalOut`
 This is a first look at digital outputs with Mbed OS. Before we start, you are advised to download a copy of the module support board schematics (circuit diagram) for future reference.
 
-[A direct link to the schematics is here](../Hardware/ModuleSupportBoard/msb_schematics.pdf)
+[Refer to the schematics here](../getting_started/hardware.md#Schematics)
 
 > **TIP:** To open this link in a separate window, hold down CTRL and click. 
 >
@@ -56,9 +56,15 @@ On a circuit diagram (also known as a schematic), we do not draw lines between a
 
 | TASK-114 | Details |
 | --- | --- |
-| 1. | Download [schematics for the module support board](../Hardware/ModuleSupportBoard/msb_schematics.pdf) |
+| 1. | [Download the schematics for the module support board](../getting_started/hardware.md#Schematics) |
 | 2. | Look at the first page. Find the labels listed above |
 | 3. | Write down the microcontroller pins they are connected to. Hint. The pin name will begin with a `P` |
+| |
+
+| Version | Link |
+| - | - |
+| 2 | [Schematics for v2](../Hardware/ModuleSupportBoard/msb_schematics_v2.pdf) |
+| 4 | [Schematics for v4](../Hardware/ModuleSupportBoard/msb_schematics_v4.pdf) |
 | |
 
 [CLICK HERE FOR A HINT](../img/circuit/traffic1_mcu.png)

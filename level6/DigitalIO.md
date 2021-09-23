@@ -5,7 +5,7 @@
 # DigitalIO
 This is a deeper dive into digital IO with Mbed OS. Before we start, you should download a copy of the module support board schematics.
 
-[A direct link to the schematics is here](../Hardware/ModuleSupportBoard/msb_schematics.pdf)
+[Refer to the schematics here](../getting_started/hardware.md#Schematics)
 
 > **TIP:** To open this link in a separate window, hold down CTRL and click. 
 >
