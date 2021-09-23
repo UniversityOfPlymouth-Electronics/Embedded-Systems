@@ -10,9 +10,9 @@ The lectures for this lab cover some basic concepts
 
 | Related Slides |
 | --- |
-| 07+01- functions |
-| 08+01 - function and variable scope |
-| 08+02 - PWM for DAC |
+| [07+01- functions](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/Eae0lkactPdAnkcDpR7oSS8BAiLhSaFRxg5rz1Hq4_G8AQ?e=4ChCok) |
+| [08+01 - function and variable scope](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EbnF0DmbO0RMsFk7uUkvOYABmsLHdBLHH1whuE3OgcHv7Q?e=UKtovD) |
+| [08+02 - PWM for DAC](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EfuOWP_RnjNLjc2UJrMAB9gB5SOTS8IDGtI9r0i1hl_Hwg?e=z8wjs6) |
 
 
 ## Topics Covered 
