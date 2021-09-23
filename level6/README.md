@@ -7,6 +7,19 @@
 ## What is new
 This content has been migrated from [a previous version](http://blogs.plymouth.ac.uk/embedded-systems/microcontrollers/mbed-os-2/courses/embedded-systems-in-context-level-4/foreward/) based on mbed-os 5.
 
+**Changes for 2021:**
+
+The following changes are confirmed.
+
+* Module Support Board v4 provided to all stage-1. 
+   * This has an extra switch mute the buzzer (by popular demand!)
+   * The MPU6050 is populated by default (motion sensor)
+   * The BMP was replaced with an alternative SPL06-001
+   * New schematics have been includes
+* [New Driver Library](https://github.com/UniversityOfPlymouth-Electronics/libuopmsb) is now used to assist with managing different board versions. This includes support for the new devices. These notes have been updated to reflect this.
+* All projects are updated to Mbed-OS 6.13 and use Mbed Studio 1.4.2 onwards
+* Various corrections and typos fixed
+
 Changes for 2020:
 
 * Adoption of Mbed Studio v1.X
