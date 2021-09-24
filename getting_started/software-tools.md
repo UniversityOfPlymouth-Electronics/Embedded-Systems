@@ -134,13 +134,21 @@ At some point, the tutor will email you a link to obtain a copy of various proje
 ### Pulling Updates
 Occasionally, the notes and sample code will be changed. Before you start any work, it is strongly suggested you click the "Fetch Origin" button in GitHub desktop.
 
-### Making your own edits
+### Making and saving your own edits
 I suggest you create your own repository for your own work. Copy the tasks from the Embedded-Systems repository into your own workspace. This way:
 
 * You can push your changes to your own private repository
 * You can easy obtain updates to the tasks / notes without having to merge them into your own code
 
-### Different between GitHub and a Cloud Provider
+Watch the following video to show you how to make a copy of each task:
+
+[VIDEO: Making a copy of the tasks for editing](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a231fa66-1072-4057-8902-adad00daf7fc)
+
+If you want to keep your edits on GitHub (recommended), then watch the following video:
+
+[VIDEO: Saving your work on GitHub](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7f378c52-3df6-48af-9012-adad00dded03)
+
+### Difference between GitHub and a Cloud Provider
 You may already be using a cloud service, such as OneDrive, iCloud or DropBox. These services monitor a collection of folders and mirror everything in the cloud. This is often done in the background while you work.
 
 This is fine for office documents and photos, but less suited to software development.
