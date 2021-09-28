@@ -1,5 +1,7 @@
 <img src="img/Icon-jpg-small.jpg" width="300px">
 
+(c) 2021 Nicholas Outram
+
 # Embedded-Systems
 
 ## Course materials for Embedded Systems at the University of Plymouth

@@ -8,3 +8,5 @@ Add content on the following topics:
 * pointers
 * dynamic memory allocation
 * Bring picoscope in earlier with PWM
+
+Gave demo to ELEC143
