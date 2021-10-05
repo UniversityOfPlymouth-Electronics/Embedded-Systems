@@ -141,7 +141,10 @@ In the example above, the LEDs flash forever. The microcontroller will keep doin
 | 12 | Modify the code to count from 10 to 15, then stop. <p title="Change the initial value of counter">Hover the mouse here for a hint</p> |
 
 
+## Quiz
+Before you complete this section, please ensure you complete the quiz.
 
+https://dle.plymouth.ac.uk/mod/quiz/view.php?id=1161833
 
 ---
 

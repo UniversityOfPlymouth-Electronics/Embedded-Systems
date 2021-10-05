@@ -39,11 +39,7 @@ Sometimes I include some additional tasks to push those that finished early and 
 | Tip. | For the above, the documentation often includes example code. Also remember to use documentation for the latest version of mbed os |
 | |
 
-## Quiz
-Before you complete this section, please ensure you complete the quiz.
-
-https://dle.plymouth.ac.uk/mod/quiz/view.php?id=970323
 
 ---
 
-[Up - Digital Outputs: Week 1](Digital_Outputs_1.md)
+[Up - Digital Outputs: Week 2](Digital_Outputs_1.md)

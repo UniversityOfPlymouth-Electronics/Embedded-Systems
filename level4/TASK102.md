@@ -82,7 +82,7 @@ You will not always have access to a device driver, and sometimes we cannot avoi
 ## Quiz
 Please attempt all questions in the following Quiz. This is important and you should not proceed until you have done this.
 
-[Click here to complete the Quiz](https://dle.plymouth.ac.uk/mod/quiz/view.php?id=970322)
+[Click here to complete the Quiz](https://dle.plymouth.ac.uk/mod/quiz/view.php?id=1161832)
 
 Next, we are going to cover another type of output: text. For this, we will stick to tradition and meet the "Hello World" application, embedded style!
 
