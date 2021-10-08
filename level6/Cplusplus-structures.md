@@ -9,6 +9,11 @@ C++ is an "Object Orientated Language", whereas C is procedural. You can think o
 
 Central to this is the "Class". To understand Classes, we need to remind ourselves about structures.
 
+| Lecture | Title |
+| - | - |
+| 02-01 | [02-01 - Struct Enum Union](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162254) |
+
+
 ## Custom Types
 Until now, we have use the built-in "value types", `char, short, int, long, float, double`. We can create custom types using `typedef`
 
