@@ -10,6 +10,15 @@ To really understand classes, we will first write some C using structures to enc
 
 We then look at the C++ equivalent and hopefully see how classes make out code safer and cleaner.
 
+
+## Related Lectures
+For Plymouth students, the relevant lecture slides are here:
+
+| Lecture | Title |
+| - | - |
+| 02-02 | [02-02- Classes](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162257) |
+| |
+
 ## Creating a Simple Class
 To see how a class is built in C++, we will work through an example
 
