@@ -13,6 +13,17 @@ This is a deeper dive into digital IO with Mbed OS. Before we start, you should 
 
 **You will need to make frequent reference to the schematics**. At this level, we are encouraging the students to read the schematics and workout for themselves how to write software to control it.
 
+## Related Lectures
+For Plymouth students, the relevant lecture slides are here:
+
+| Lecture | Title |
+| - | - |
+| 01-01 | [01-01 - Introduction and block overview](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162250) |
+| 01-02 | [01-02 - Digital Outputs and Terminal IO in mbed](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162252) |
+| 01-03 | [01-03 - Digital Inputs in mbed](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162253) |
+| |
+
+
 ## GPIO
 The most familiar of interfaces is probably the General Purpose Input-Output (GPIO). 
 
