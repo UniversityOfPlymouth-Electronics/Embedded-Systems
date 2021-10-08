@@ -9,6 +9,15 @@ The focus of all the sections below is on C++ classes. This is one of the major 
 
 The examples are initially kept purposely simple to illustrate the key points. Then something closer to a real-world example is presented. These are arguably more interesting, but at the same time can quickly become complex. So my apologies in advance if some of the examples are somewhat contrived. Be reassured the concepts are the same and we will look at more real-world examples later.
 
+## Related Lectures
+For Plymouth students, the relevant lecture slides are here:
+
+| Lecture | Title |
+| - | - |
+| 02-03 | [02-03- Object Orientated Programming in C++](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162257) |
+| 02-04 | [02-04- Function Templates and Operators](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162259) |
+| |
+
 ## Function overloading
 The first feature we will look at is functional overloading. The idea is that you can create multiple functions with the same name, as long as the parameters differ.
 
