@@ -473,7 +473,7 @@ pChar[0] = 3.14f;    //Warning!
 
 This is known as **type safety**. The C and C++ languages come from a family of type-safe languages, where the emphasis is for the compiler to help you spot errors by enforcing additional language rules.
 
-### Functions as pointers
+### Function Pointers
 Functions are program code, and program code (blocks of machine code) also reside in the memory of the microcontroller computer. Like data, program code is simply blocks bytes in a computer memory (albeit in a different region). The only fundamental difference is machine code is permitted to be read into the CPU and executed as instructions.
 
 > As program code resides in memory, it therefore follows that we can obtain the address of a function. Such an address can be stored in a variable, and this is known as a **function pointer**.
