@@ -481,19 +481,19 @@ Functions are program code, and program code (blocks of machine code) also resid
 A function typically has a return type, a name and a list of typed parameters:
 
 ```
-<return type> name ([type parameter1, type paremeter2, ...])
+<return type> name ([type parameter1, type parameter2, ...])
 ```
 
-Unlike data, there are potentially multiple types to content with, so the syntax for a function pointer is more complex (and easy to forget!).
+Unlike data, there are potentially multiple types to contend with, so the syntax for a function pointer is more complex (and easy to forget!).
 
 ```
 <return type> (*name) ([type, type, ...]);
 ```
 
-For example, if we define the following function in out code, it will reside in somewhere in the computer memory:
+For example, if we define the following function in our code, it will reside in somewhere in the computer memory:
 
 ```C++
-bool myFunc(int a, int v) {
+bool myFunc(int a, int b) {
     return (a > b) ? true : false;
 } 
 ```
@@ -518,26 +518,54 @@ We can use this to call the function:
     bool res = fPointer(2,3);   //Type safety in action again!
 ```
 
-More useful, we can pass it as a parameter to another function:
+Note again that the compiler can check the data types are correct. More useful, we can pass it as a parameter to another function:
 
 ```C++
-    bool sort(int[] data, bool (*sortRule)(int,int) ) {
-        bool hasupdated = false;
-        for (unsigned int n=0; n < sizeof(data)-1; n++) {
-            int u = data[n];
-            int v = data[n+1];
+bool sort(int *data, unsigned N, bool(*sortRule)(int,int) ) 
+{
+    bool hasupdated = false;
+    for (unsigned int n=0; n < (N-1); n++) {
+        int u = data[n];
+        int v = data[n+1];
 
-            //Apply criteria for sort
-            bool swap = sortRule(u,v);
-            
-            if (swap == true) {
-                data[n]   = v; 
-                data[n+1] = u;
-                hasUpdated = true;
-            }
+        //Apply criteria for sort
+        bool swap = sortRule(u,v);
+        
+        if (swap == true) {
+            data[n]   = v; 
+            data[n+1] = u;
+            hasupdated = true;
         }
-        return hasUpdated;
     }
+    //Recurse until there are no more changes
+    if (hasupdated) {
+        return sort(data, N, sortRule);
+    } else {
+        return hasupdated;
+    }
+}
+
+
+    
+int main()
+{
+    bool (*fPointer)(int, int);
+
+    fPointer = &myFunc1; 
+    
+    bool res = fPointer(3,2);
+    cout << (res ? "True" : "False") << endl;
+    
+    int x[] = {4, 2, 3, 1};
+    sort(x, 4, &myFunc);
+    
+    for (unsigned n=0; n<(sizeof(x)/sizeof(int)); n++) {
+        cout << x[n] << endl;    
+    }
+    
+    return 0;
+}
+
 ```
 
 
