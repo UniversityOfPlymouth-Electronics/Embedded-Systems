@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <functional>
 #include <iostream>
-#include "../../lib/uopmsb/uop_msb.h"
+#include "uop_msb.h"
 using namespace uop_msb;
 
 // The author would like to acknowledge the following helpful article!

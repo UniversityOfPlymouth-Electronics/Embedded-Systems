@@ -408,6 +408,140 @@ void heartBeat() {
 }
 ```
 
+## Call-backs, function pointers and lambdas
+Something that we have seen multiple times, but possibly did not question, are statements such as this:
+
+```C++
+workerQueue.call(addSample, t);
+```
+
+You might have wondered why the name of a *function* is passed as a parameter?
+
+### Data Pointers 
+Up until this point, you have already used pointers to data. A pointer is a variable that stores an **address**. This variable is a 32-bit integer on the Arm Cortex M4. The syntax for a pointer variable, 
+
+```type* pointerName;```
+
+If pointers are always 32-bit integers, you might wonder why we need a type? The key to this is in *pointer arithmetic* and type-safety (where the compiler tries to help you avoid errors).
+
+Let's consider pointer arithmetic, commonly used in arrays.
+
+```C++
+char* pChar;
+float* pFloat;
+
+pChar  = 0x1000000000000000; //32-bit address
+pFloat = 0x2000000000000000;
+
+//Increment the address values to the next element
+pChar  += 1;
+pFloat += 1;
+```
+
+The result of the two increment operations is very revealing:
+
+`pChar` will equal `0x1000000000000001`
+`pFloat` will equal `0x2000000000000004`
+
+The data-type tells the compiler about *the size of the data stored at the pointer address*. This gives it the necessary information to perform integer arithmetic on the pointer itself.
+
+As a consequence, the following operations store data correctly at the correct alignment:
+
+```C++
+pChar[0] = 0xFF;    // Address 0x1000000000000000
+pChar[1] = 0xAA;    // Address 0x1000000000000001
+pFloat[0] = 0.1234; // Address 0x2000000000000000
+pFloat[1] = 9.8765; // Address 0x2000000000000004
+```
+
+> Another word for a pointer is a reference. When we refer to data using the `*` operator or square brackets `[]`, we call this de-referencing.
+
+The equivalent code is as follows:
+
+```C++
+*pChar      = 0xFF;    // Address 0x1000000000000000
+*(pChar+1)  = 0xAA;    // Address 0x1000000000000001
+*pFloat     = 0.1234;  // Address 0x2000000000000000
+*(pFloat+1) = 9.8765;  // Address 0x2000000000000004
+```
+
+Equally, the compiler can use this information to help you. The following code would produce a compiler warning or even error:
+
+```C++
+pChar[0] = 3.14f;    //Warning!
+```
+
+This is known as **type safety**. The C and C++ languages come from a family of type-safe languages, where the emphasis is for the compiler to help you spot errors by enforcing additional language rules.
+
+### Functions as pointers
+Functions are program code, and program code (blocks of machine code) also reside in the memory of the microcontroller computer. Like data, program code is simply blocks bytes in a computer memory (albeit in a different region). The only fundamental difference is machine code is permitted to be read into the CPU and executed as instructions.
+
+> As program code resides in memory, it therefore follows that we can obtain the address of a function. Such an address can be stored in a variable, and this is known as a **function pointer**.
+
+A function typically has a return type, a name and a list of typed parameters:
+
+```
+<return type> name ([type parameter1, type paremeter2, ...])
+```
+
+Unlike data, there are potentially multiple types to content with, so the syntax for a function pointer is more complex (and easy to forget!).
+
+```
+<return type> (*name) ([type, type, ...]);
+```
+
+For example, if we define the following function in out code, it will reside in somewhere in the computer memory:
+
+```C++
+bool myFunc(int a, int v) {
+    return (a > b) ? true : false;
+} 
+```
+
+Let's now obtain the address of this function and store it in a function pointer.
+
+```C++
+int main() {
+    bool (*fPointer)(int, int);
+
+    fPointer = &myFunc; // Store the address of the function - the & is optional
+
+    //Code continues
+
+    ...
+}
+```
+
+We can use this to call the function:
+
+```C++
+    bool res = fPointer(2,3);   //Type safety in action again!
+```
+
+More useful, we can pass it as a parameter to another function:
+
+```C++
+    bool sort(int[] data, bool (*sortRule)(int,int) ) {
+        bool hasupdated = false;
+        for (unsigned int n=0; n < sizeof(data)-1; n++) {
+            int u = data[n];
+            int v = data[n+1];
+
+            //Apply criteria for sort
+            bool swap = sortRule(u,v);
+            
+            if (swap == true) {
+                data[n]   = v; 
+                data[n+1] = u;
+                hasUpdated = true;
+            }
+        }
+        return hasUpdated;
+    }
+```
+
+
+
 ## Reflection
 Event queues are incredibly useful and can really simplify your code.
 
