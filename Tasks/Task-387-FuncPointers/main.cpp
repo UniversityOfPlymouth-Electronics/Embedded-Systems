@@ -7,7 +7,7 @@ using namespace std;
 class PressAndRelease {
 private:
     typedef enum {BTN_PRESS=1, BTN_RELEASE=2} ISR_EVENT;
-    typedef const function<void()>& FUNC;
+    typedef void(*funcPointer_t)(void);
     Thread t1;
     InterruptIn button;
     DigitalOut gpioOutput;
@@ -40,10 +40,10 @@ private:
         }
     }
     //Hook into the button press
-    std::function<void()> onPress;
+    void(*onPress)(void);
 
 public:
-    PressAndRelease(PinName buttonPin = BTN1_PIN, PinName ledPin = TRAF_RED1_PIN, FUNC press = [](){}) : button(buttonPin), gpioOutput(ledPin), onPress(press)
+    PressAndRelease(PinName buttonPin = BTN1_PIN, PinName ledPin = TRAF_RED1_PIN, funcPointer_t press = NULL) : button(buttonPin), gpioOutput(ledPin), onPress(press)
     {
         t1.start(callback(this, &PressAndRelease::handler));
         button.rise(callback(this, &PressAndRelease::button_rise));  
@@ -54,21 +54,32 @@ public:
     }
 };
 
+//Globals
+DigitalOut led1(LED1);
+DigitalOut led2(LED2);
+
+//Event queue for main
+EventQueue ledFlashQueue;
+
+//Flash a given LED - parameter passed by reference
+void flashLed(DigitalOut& led) {
+    led = !led;
+}
+//Flash on calling thread
+void flashLed1() {
+    flashLed(led1);
+    ledFlashQueue.call(printf, "Flash on calling thread\n");
+}
+//Flash on main thread
+void flashLed2() {
+    ledFlashQueue.call(flashLed, led2);
+    ledFlashQueue.call(printf, "Flash on main thread\n");
+}
+
 int main() {  
-    DigitalOut led1(LED1);
-    DigitalOut led2(LED2);
-    EventQueue ledFlashQueue;
-
-    auto pA = [&]() {
-        ledFlashQueue.call( [&](){ led1 = !led1; } );
-    };
-    auto pB = [&]() {
-        led2 = !led2;
-    };    
-
-    PressAndRelease btnA(BTN1_PIN, TRAF_RED1_PIN, pA);
-    PressAndRelease btnB(BTN2_PIN, TRAF_YEL1_PIN, pB);
-
+    PressAndRelease btnA(BTN1_PIN, TRAF_RED1_PIN, &flashLed1);
+    PressAndRelease btnB(BTN2_PIN, TRAF_YEL1_PIN, &flashLed2);
+    //Start main queue - dispatch
     ledFlashQueue.dispatch_forever();
 }
 
