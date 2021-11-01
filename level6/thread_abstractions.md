@@ -498,7 +498,7 @@ bool myFunc(int a, int b) {
 } 
 ```
 
-Let's now obtain the address of this function and store it in a function pointer.
+Let's now obtain the address of this function and store it in a function pointer named `fPointer`.
 
 ```C++
 int main() {
@@ -518,7 +518,7 @@ We can use this to call the function:
     bool res = fPointer(2,3);   //Type safety in action again!
 ```
 
-Note again that the compiler can check the data types are correct. More useful, we can pass it as a parameter to another function:
+Note again that the compiler can check the data types are correct. More useful, we can pass it as a parameter to another function. Here is an example:
 
 ```C++
 bool sort(int *data, unsigned N, bool(*sortRule)(int,int) ) 
@@ -537,38 +537,44 @@ bool sort(int *data, unsigned N, bool(*sortRule)(int,int) )
             hasupdated = true;
         }
     }
-    //Recurse until there are no more changes
-    if (hasupdated) {
-        return sort(data, N, sortRule);
-    } else {
-        return hasupdated;
-    }
+    return hasupdated;
 }
 
-
-    
+bool myFunc(int a, int b) {
+    return (a > b) ? true : false;
+} 
+     
 int main()
 {
     bool (*fPointer)(int, int);
-
-    fPointer = &myFunc1; 
+    fPointer = &myFunc; 
     
-    bool res = fPointer(3,2);
-    cout << (res ? "True" : "False") << endl;
+    int x[] = {4, 2, 3, 1, 7};
+    uint16_t N = (sizeof(x)/sizeof(int));
     
-    int x[] = {4, 2, 3, 1};
-    sort(x, 4, &myFunc);
+    bool updated = false;
+    do {
+        updated = sort(x, N, fPointer);
+    } while (updated == true);
     
-    for (unsigned n=0; n<(sizeof(x)/sizeof(int)); n++) {
+    for (unsigned n=0; n<N; n++) {
         cout << x[n] << endl;    
     }
     
     return 0;
 }
-
 ```
 
+| TASK-387 | Function Pointer Sort |
+| --- | --- |
+| 1. | Modify the code above to sort in descending order |
+| 2. | Can you see scenarios where this code could deadlock? |
 
+Now let's look at something more relevant to embedded systems:
+
+### Task-388
+
+TBD
 
 ## Reflection
 Event queues are incredibly useful and can really simplify your code.
