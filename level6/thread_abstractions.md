@@ -537,6 +537,11 @@ bool sort(int *data, unsigned N, bool(*sortRule)(int,int) )
             hasupdated = true;
         }
     }
+    /*  Recursive method
+        if (hasupdated) {
+            return sort(data, N, sortRule);
+        }
+    */
     return hasupdated;
 }
 
@@ -570,10 +575,99 @@ int main()
 | 1. | Modify the code above to sort in descending order |
 | 2. | Can you see scenarios where this code could deadlock? |
 
-Now let's look at something more relevant to embedded systems:
+Now let's look at something more closely aligned with embedded systems: function call-backs.
 
-### Task-388
+### Task-388 - Function Callbacks
+In C++, we have learned how we can use both class inheritance, composition, overloading and overriding to extend/adapt functionality. There is another pattern we can use which pre-dates object orientated programming, and that is the "function callback".
 
+| TASK-388 | Function Call-back |
+| --- | --- |
+| 1. | Open and build Task-388. Read through the code and all the comments |
+| 2. | Run the code. Press and release buttons A and B |
+
+Let's highlight some points of interest in this code.
+
+
+The class has a type definition. The syntax is a different to a regular type definition.
+
+```C++
+typedef void(*funcPointer_t)(void);
+```
+
+The new type is `funcPointer_t`, and it is a pointer to function that takes no parameters and returns nothing.
+
+We see this used in the class constructor:
+
+```C++
+PressAndRelease(    PinName buttonPin = BTN1_PIN, 
+                    PinName ledPin = TRAF_RED1_PIN, 
+                    funcPointer_t press = &PressAndRelease::doNothing   ) : 
+                          button(buttonPin), gpioOutput(ledPin), onPress(press)
+    {
+        t1.start(callback(this, &PressAndRelease::handler));
+        button.rise(callback(this, &PressAndRelease::button_rise));  
+    }
+```
+
+When the class is instantiated, we see the function pointer being passed as the third parameter:
+
+```C++
+    PressAndRelease btnA(BTN1_PIN, TRAF_RED1_PIN, &flashLed1);
+    PressAndRelease btnB(BTN2_PIN, TRAF_YEL1_PIN, &flashLed2);
+```
+
+where `flashLed1` and `flashLed2` are C-functions. `flashLed1` is shown below:
+
+```C++
+void flashLed1() {
+    flashLed(led1);     // This is NOT on the main thread
+    ledFlashQueue.call(printf, "Flash on calling thread\n");    //Dispatch om main thread
+}
+```
+
+These functions are invoked from within the class. The chain of events is as follows:
+
+* User presses a button
+* ISR runs and signals (unblocks) the waiting thread
+* The thread then invokes the call-back
+
+The code sample below highlights some of these steps. Note the call back `onPress()`.
+
+```C++
+    void handler() 
+    {
+        while (true) {
+            ThisThread::flags_wait_all(BTN_PRESS);                          //Wait for ISR to signal, then unblock
+            button.rise(NULL);                                              //Turn off interrupt
+            gpioOutput = 1;     
+            onPress();                                                      //Callback (from this thread)
+            ThisThread::sleep_for(50ms);                                    //Debounce
+            ThisThread::flags_clear(BTN_PRESS);                             //Clear any additional signals (due to bounce)
+            button.fall(callback(this, &PressAndRelease::button_fall));     //Enable ISR for switch release
+            ...
+```
+
+> **Important**
+>
+>  `onPress()` is called from a separate thread.
+>
+> We have **three** threads in this code. One for each button, and the main thread. It would be very easy to mistakenly assume `flashLed()` is called on the main thread and inadvertently create a race condition. 
+
+| TASK-388 | Continued |
+| --- | --- |
+| 3. | Modify `flashLed1` and `flashLed2` to perform the LED flash on the main thread. |
+| 2. | What might be the impact on the timing of the LEDs by doing this? |
+| -  |  <p title="The LED toggle will be queued with other jobs, including the (slow) printf statements. This adds significant latency.">Hover over this for a suggested answer</p> |
+| 3. | Create a separate lower-priority thread and event queue. Dispatch all  `printf` statements on this thread |
+
+A point to note about this code. The code in main that instantiates the `PressAndRelease` objects passes a function pointer as a parameter. Note how this is now separated in the source file from the call back functions, `flashLed1` and `flashLed2`. It would be nice if such code could be kept together, so that it is easier to understand. In C, this is not always possible. In C++ however, we have an alternative, known as *closures* or *lambdas*.
+
+## Task-389 - C++ Closures
+Function pointers are used extensively in the C language. We also see them used in Mbed OS when we start a thread or attach and interrupt. 
+
+
+
+ 
 TBD
 
 ## Reflection
@@ -588,7 +682,7 @@ A useful use-case it to separate different tasks to run on different event queue
 
 * If all functions sharing some mutable data can be run on the same event queue, then races can be avoided
 * Functions that are non-re-entrant do not need locks if only run on the same event queue
-
+* Function pointers and closures are another technique for extending and customising functionality. A call-back mechanism is a useful way to add 'hooks' into your software design. Care needs to be exercised about which thread a function is run on. 
 ---
 
 [Back to Contents](README.md)

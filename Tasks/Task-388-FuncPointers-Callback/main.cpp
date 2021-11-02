@@ -8,8 +8,10 @@ class PressAndRelease {
 private:
     typedef enum {BTN_PRESS=1, BTN_RELEASE=2} ISR_EVENT;
     typedef void(*funcPointer_t)(void);
-    Thread t1;
-    InterruptIn button;
+    
+    //Composition
+    Thread t1;                              
+    InterruptIn button;                     
     DigitalOut gpioOutput;
 
     void button_rise() {
@@ -23,27 +25,33 @@ private:
     void handler() 
     {
         while (true) {
-            ThisThread::flags_wait_all(BTN_PRESS);
-            button.rise(NULL);
-            gpioOutput = 1;
-            onPress();
-            ThisThread::sleep_for(50ms);
-            ThisThread::flags_clear(BTN_PRESS);
-            button.fall(callback(this, &PressAndRelease::button_fall));
+            ThisThread::flags_wait_all(BTN_PRESS);                          //Wait for ISR to signal, then unblock
+            button.rise(NULL);                                              //Turn off interrupt
+            gpioOutput = 1;     
+            onPress();                                                      //Callback (from this thread)
+            ThisThread::sleep_for(50ms);                                    //Debounce
+            ThisThread::flags_clear(BTN_PRESS);                             //Clear any additional signals (due to bounce)
+            button.fall(callback(this, &PressAndRelease::button_fall));     //Enable ISR for switch release
 
-            ThisThread::flags_wait_all(BTN_RELEASE);
+            ThisThread::flags_wait_all(BTN_RELEASE);                    
             button.fall(NULL);
             gpioOutput = 0;
             ThisThread::sleep_for(50ms);
             ThisThread::flags_clear(BTN_RELEASE);
-            button.rise(callback(this, &PressAndRelease::button_rise));
+            button.rise(callback(this, &PressAndRelease::button_rise));     //Enable ISR for switch press
         }
     }
     //Hook into the button press
-    void(*onPress)(void);
+    void(*onPress)(void);                                                   //Member variable (function pointer)
+
+    //Dummy function
+    void doNothing() { }
 
 public:
-    PressAndRelease(PinName buttonPin = BTN1_PIN, PinName ledPin = TRAF_RED1_PIN, funcPointer_t press = NULL) : button(buttonPin), gpioOutput(ledPin), onPress(press)
+    PressAndRelease(    PinName buttonPin = BTN1_PIN, 
+                        PinName ledPin = TRAF_RED1_PIN, 
+                        funcPointer_t press = &PressAndRelease::doNothing   ) : 
+                                                        button(buttonPin), gpioOutput(ledPin), onPress(press)
     {
         t1.start(callback(this, &PressAndRelease::handler));
         button.rise(callback(this, &PressAndRelease::button_rise));  
@@ -65,14 +73,14 @@ EventQueue ledFlashQueue;
 void flashLed(DigitalOut& led) {
     led = !led;
 }
-//Flash on calling thread
+
 void flashLed1() {
-    flashLed(led1);
-    ledFlashQueue.call(printf, "Flash on calling thread\n");
+    flashLed(led1);     // This is NOT on the main thread
+    ledFlashQueue.call(printf, "Flash on calling thread\n");    //Dispatch om main thread
 }
-//Flash on main thread
+
 void flashLed2() {
-    ledFlashQueue.call(flashLed, led2);
+    flashLed(led2);     // This is NOT on the main thread
     ledFlashQueue.call(printf, "Flash on main thread\n");
 }
 
