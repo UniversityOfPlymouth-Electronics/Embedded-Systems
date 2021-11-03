@@ -585,6 +585,7 @@ In C++, we have learned how we can use both class inheritance, composition, over
 | 1. | Open and build Task-388. Read through the code and all the comments |
 | 2. | Run the code. Press and release buttons A and B |
 
+
 Let's highlight some points of interest in this code.
 
 The class has a type definition. The syntax is a different to a regular type definition.
@@ -605,14 +606,20 @@ PressAndRelease(PinName buttonPin, funcPointer_t press=NULL) : button(buttonPin)
 }
 ```
 
-When the class is instantiated, we see the function pointer being passed as the third parameter:
+When the class is instantiated, we see the function pointer being passed as the second parameter:
 
 ```C++
     PressAndRelease btnA(BTN1_PIN, &flashLed1);
     PressAndRelease btnB(BTN2_PIN, &flashLed2);
 ```
 
-where `flashLed1` and `flashLed2` are C-functions. `flashLed1` is shown below:
+where `flashLed1` and `flashLed2` are C-functions. Each are stored in a class member `onPress`.  
+
+```C++
+void(*onPress)(void);  
+```
+
+The function `flashLed1` is shown below:
 
 ```C++
 void flashLed1() {
