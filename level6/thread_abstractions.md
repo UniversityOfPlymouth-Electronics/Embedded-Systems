@@ -870,11 +870,140 @@ Let's modify the example in the previous section to use closures.
 | --- | --- |
 | 1. | Make Task-389 the active program |
 | 2. | Read through the code and all the comments |
-| 3. | Run the application. Press button A and observe both the LEDs and the serial output |
+| 3. | Run the application. Press button A and observe the LED and the serial output |
 
-Let's now look at what has changed. 
+Let's now look at what has changed. First, the `PressAndRelease` class
 
-**TBD**
+```C++
+class PressAndRelease {
+private:
+    typedef enum {BTN_PRESS=1, BTN_RELEASE=2} ISR_EVENT;
+    Thread t1;
+    InterruptIn button;
+
+    void handler() 
+    {
+        while (true) {
+            ThisThread::flags_wait_all(BTN_PRESS);
+            button.rise(NULL);
+            onPress();      //Call back
+
+            ThisThread::sleep_for(50ms);
+            ThisThread::flags_clear(BTN_PRESS);
+            button.fall( [&]() { t1.flags_set(BTN_RELEASE); } );
+
+            ThisThread::flags_wait_all(BTN_RELEASE);
+            button.fall(NULL);
+            onRelease();    //Call back
+
+            ThisThread::sleep_for(50ms);
+            ThisThread::flags_clear(BTN_RELEASE);
+            button.rise( [&]() { t1.flags_set(BTN_PRESS); } );
+        }
+    }
+
+    //Hooks into the button press and release events
+    function<void()> onPress;
+    function<void()> onRelease;
+
+public:
+    PressAndRelease(PinName buttonPin, function<void()> press = [](){},  function<void()> rel = [](){}) : 
+        button(buttonPin), onPress(press), onRelease(rel)
+    {
+        t1.start(callback(this, &PressAndRelease::handler));
+        button.rise( [&]() { t1.flags_set(BTN_PRESS); } );
+    }
+
+    Thread& getThread() {
+        return t1;
+    }
+};
+```
+
+First note that the two private functions (interrupt service routines) have been removed. They have been replaced with closures.
+
+```C++
+button.rise( [&]() { t1.flags_set(BTN_PRESS); } );
+```
+
+and
+
+```C++
+button.fall( [&]() { t1.flags_set(BTN_RELEASE); } );
+```
+
+This serves to keep the code together in one place.
+
+In the `main` function, we also see more use of closures:
+
+```C++
+int main() {  
+    //Event queue for main (normal priority thread)
+    EventQueue mainQueue;
+
+    //Setup a lower-priority event queue for printf statements
+    EventQueue msgQueue;
+    Thread t1(osPriorityBelowNormal);
+    t1.start([&]() {msgQueue.dispatch_forever();});
+
+    //Instantiate a couple DigitalOut objects for controlling LEDs 
+    DigitalOut led1(LED1);
+    DigitalOut led2(LED2);
+
+    //Write closures for capturing the LEDs (by reference) and performing call-back operations
+    auto lFuncApress = [&]() {
+        led1 = 1;                                   
+        msgQueue.call(printf, "Button A pressed\n");
+    };
+    auto lFuncArel = [&]() {
+        led1 = 0;
+    };    
+
+    // Note that no DigitalOut type needs to be passed via the constructor.
+    // It is all "captured" inside the two closures
+    PressAndRelease btnA(BTN1_PIN, lFuncApress, lFuncArel);
+
+    //Dispatch jobs on the main thread
+    mainQueue.dispatch_forever();
+}
+```
+
+The thread and event queue for logging text to the serial terminal is written very concisely:
+
+```C++
+EventQueue msgQueue;
+Thread t1(osPriorityBelowNormal);
+t1.start([&]() {msgQueue.dispatch_forever();});
+```
+
+The `PressAndRelease` class is instantiated with two closures as parameters.
+
+```C++
+PressAndRelease btnA(BTN1_PIN, lFuncApress, lFuncArel);
+```
+
+The first is used as a call-back when the switch is pressed, and the second for when the switch is released. Note however that these closes run on the thread encapsulated in the object `btnA`. 
+
+If we look at the first of these closures:
+
+```C++
+auto lFuncApress = [&]() {
+    led1 = 1;                                   
+    msgQueue.call(printf, "Button A pressed\n");
+};
+```
+
+We note the following:
+
+* The LED is flashed using a different thread to `main`. 
+   * This is ok as `led1` has the type `DigitalOut` which is thread-safe.
+* `printf` is always dispatched to a queue on a lower priority thread.
+   * This ensures the serial interface does not slow down other operations and prevents text from becoming interleaved.
+
+| TASK-389 | Continued |
+| --- | --- |
+| 4. | Update the code to use Button B to control `led2` |
+| -  | Try and keep your changes minimal |
 
 ## Reflection
 Event queues are incredibly useful and can really simplify your code.
@@ -888,7 +1017,9 @@ A useful use-case it to separate different tasks to run on different event queue
 
 * If all functions sharing some mutable data can be run on the same event queue, then races can be avoided
 * Functions that are non-re-entrant do not need locks if only run on the same event queue
-* Function pointers and closures are another technique for extending and customising functionality. A call-back mechanism is a useful way to add 'hooks' into your software design. Care needs to be exercised about which thread a function is run on. 
+* Using call-backs is another technique for extending and customising functionality. Care needs to be exercised about which thread a call-back (function pointer or closure) is run on. 
+* Closures are difficult to understand, so be aware that even if you understand them, others may not. The capturing behaviour in particular may be unfamiliar to many people. Remember to comment your code.
+
 ---
 
 [Back to Contents](README.md)

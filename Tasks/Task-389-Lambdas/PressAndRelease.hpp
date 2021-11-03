@@ -6,14 +6,6 @@ private:
     Thread t1;
     InterruptIn button;
 
-    void button_rise() {
-        t1.flags_set(BTN_PRESS);
-    }
-
-    void button_fall() {
-        t1.flags_set(BTN_RELEASE);    
-    }
-
     void handler() 
     {
         while (true) {
@@ -23,7 +15,7 @@ private:
 
             ThisThread::sleep_for(50ms);
             ThisThread::flags_clear(BTN_PRESS);
-            button.fall(callback(this, &PressAndRelease::button_fall));
+            button.fall( [&]() { t1.flags_set(BTN_RELEASE); } );
 
             ThisThread::flags_wait_all(BTN_RELEASE);
             button.fall(NULL);
@@ -31,7 +23,7 @@ private:
 
             ThisThread::sleep_for(50ms);
             ThisThread::flags_clear(BTN_RELEASE);
-            button.rise(callback(this, &PressAndRelease::button_rise));
+            button.rise( [&]() { t1.flags_set(BTN_PRESS); } );
         }
     }
 
@@ -44,7 +36,7 @@ public:
         button(buttonPin), onPress(press), onRelease(rel)
     {
         t1.start(callback(this, &PressAndRelease::handler));
-        button.rise(callback(this, &PressAndRelease::button_rise));  
+        button.rise( [&]() { t1.flags_set(BTN_PRESS); } );
     }
 
     Thread& getThread() {

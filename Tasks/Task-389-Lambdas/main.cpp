@@ -12,11 +12,8 @@ int main() {
 
     //Setup a lower-priority event queue for printf statements
     EventQueue msgQueue;
-    auto printThreadEventLoop = [&]() {
-        msgQueue.dispatch_forever();
-    };
     Thread t1(osPriorityBelowNormal);
-    t1.start(printThreadEventLoop);
+    t1.start([&]() {msgQueue.dispatch_forever();});
 
     //Instantiate a couple DigitalOut objects for controlling LEDs 
     DigitalOut led1(LED1);
@@ -24,12 +21,10 @@ int main() {
 
     //Write closures for capturing the LEDs (by reference) and performing call-back operations
     auto lFuncApress = [&]() {
-        //mainQueue.call([&]() {led1 = 1;});
         led1 = 1;                                   
         msgQueue.call(printf, "Button A pressed\n");
     };
     auto lFuncArel = [&]() {
-        //mainQueue.call([&]() {led1 = 0;});
         led1 = 0;
     };    
 
