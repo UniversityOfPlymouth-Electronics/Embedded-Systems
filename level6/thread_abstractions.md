@@ -587,7 +587,6 @@ In C++, we have learned how we can use both class inheritance, composition, over
 
 Let's highlight some points of interest in this code.
 
-
 The class has a type definition. The syntax is a different to a regular type definition.
 
 ```C++
@@ -599,37 +598,42 @@ The new type is `funcPointer_t`, and it is a pointer to function that takes no p
 We see this used in the class constructor:
 
 ```C++
-PressAndRelease(    PinName buttonPin = BTN1_PIN, 
-                    PinName ledPin = TRAF_RED1_PIN, 
-                    funcPointer_t press = &PressAndRelease::doNothing   ) : 
-                          button(buttonPin), gpioOutput(ledPin), onPress(press)
-    {
-        t1.start(callback(this, &PressAndRelease::handler));
-        button.rise(callback(this, &PressAndRelease::button_rise));  
-    }
+PressAndRelease(PinName buttonPin, funcPointer_t press=NULL) : button(buttonPin), onPress(press)
+{
+    t1.start(callback(this, &PressAndRelease::handler));
+    button.rise(callback(this, &PressAndRelease::button_rise));  
+}
 ```
 
 When the class is instantiated, we see the function pointer being passed as the third parameter:
 
 ```C++
-    PressAndRelease btnA(BTN1_PIN, TRAF_RED1_PIN, &flashLed1);
-    PressAndRelease btnB(BTN2_PIN, TRAF_YEL1_PIN, &flashLed2);
+    PressAndRelease btnA(BTN1_PIN, &flashLed1);
+    PressAndRelease btnB(BTN2_PIN, &flashLed2);
 ```
 
 where `flashLed1` and `flashLed2` are C-functions. `flashLed1` is shown below:
 
 ```C++
 void flashLed1() {
-    flashLed(led1);     // This is NOT on the main thread
-    ledFlashQueue.call(printf, "Flash on calling thread\n");    //Dispatch om main thread
+    // This is NOT on the main thread
+    flashLed(led1);                         
+    //Dispatch printf on main thread
+    mainQueue.call(printf, "Button A\n");    
 }
 ```
 
 These functions are invoked from within the class. The chain of events is as follows:
 
 * User presses a button
-* ISR runs and signals (unblocks) the waiting thread
-* The thread then invokes the call-back
+* ISR runs and signals (unblocks) the waiting thread which does the following:
+   * Turns off the press interrupt and invokes the call-back
+   * Waits for switch bounce to clear
+   * Clears any pending signals (caused by switch bounce)
+   * Sets up the falling edge interrupt
+   * Blocks waiting for a signal
+
+This sequence is then mostly mirrored for the falling edge detection.
 
 The code sample below highlights some of these steps. Note the call back `onPress()`.
 
@@ -637,21 +641,27 @@ The code sample below highlights some of these steps. Note the call back `onPres
     void handler() 
     {
         while (true) {
-            ThisThread::flags_wait_all(BTN_PRESS);                          //Wait for ISR to signal, then unblock
-            button.rise(NULL);                                              //Turn off interrupt
-            gpioOutput = 1;     
-            onPress();                                                      //Callback (from this thread)
-            ThisThread::sleep_for(50ms);                                    //Debounce
-            ThisThread::flags_clear(BTN_PRESS);                             //Clear any additional signals (due to bounce)
-            button.fall(callback(this, &PressAndRelease::button_fall));     //Enable ISR for switch release
-            ...
+            //Wait for ISR to signal, then unblock
+            ThisThread::flags_wait_all(BTN_PRESS);                          
+            //Turn off interrupt 
+            button.rise(NULL);                                              
+            //Callback (from this thread)
+            if (onPress) onPress();
+            //Debounce
+            ThisThread::sleep_for(50ms);                                    
+            //Clear any additional signals (due to bounce)
+            ThisThread::flags_clear(BTN_PRESS);                             
+            //Enable ISR for switch release
+            button.fall(callback(this, &PressAndRelease::button_fall));
+            ... (continued)
 ```
 
 > **Important**
 >
->  `onPress()` is called from a separate thread.
+>  Note that `onPress()` is called from a separate thread.
 >
-> We have **three** threads in this code. One for each button, and the main thread. It would be very easy to mistakenly assume `flashLed()` is called on the main thread and inadvertently create a race condition. 
+> We have **three** threads in this code. One for each button, and the main thread. It would be very easy to mistakenly assume `flashLed()` is called on the main thread (and inadvertently create a race condition). 
+
 
 | TASK-388 | Continued |
 | --- | --- |
@@ -660,15 +670,211 @@ The code sample below highlights some of these steps. Note the call back `onPres
 | -  |  <p title="The LED toggle will be queued with other jobs, including the (slow) printf statements. This adds significant latency.">Hover over this for a suggested answer</p> |
 | 3. | Create a separate lower-priority thread and event queue. Dispatch all  `printf` statements on this thread |
 
-A point to note about this code. The code in main that instantiates the `PressAndRelease` objects passes a function pointer as a parameter. Note how this is now separated in the source file from the call back functions, `flashLed1` and `flashLed2`. It would be nice if such code could be kept together, so that it is easier to understand. In C, this is not always possible. In C++ however, we have an alternative, known as *closures* or *lambdas*.
+A point to note about this code. Where the code in main instantiates a `PressAndRelease` object, it also *passes a function pointer as a parameter*.
+
+```C++
+PressAndRelease btnA(BTN1_PIN, &flashLed1);
+```
+
+> The callback function allows us to hook into the `PressAndRelease` event cycle and add custom behaviours.
+
+What is maybe appealing is that the callback code is located in the same file as main, thus keeping related code together. However, we have to create separate functions, so in that sense, related code is still separated within the source file (C does not permit nested functions). It would be really nice if all related code could be kept close together, so that it is easier to understand and debug. In C, this is not always possible. In C++ however, we have an alternative, known as *lambda functions*. These also lead us to a new concept, *closures*.
+
+| TASK-388 | Continued |
+| --- | --- |
+| 4. | Add a call-back for a switch-release event. Simple use this to print a message about which button has been released. Again, make sure `printf` is performed on the main thread |
 
 ## Task-389 - C++ Closures
 Function pointers are used extensively in the C language. We also see them used in Mbed OS when we start a thread or attach and interrupt. 
 
+Borrowing from other languages, C++ takes this idea further, and now offers *lambda functions* and *closures*. Here is a brief summary of closures.
+
+### C++ function type
+If we have a C-style function
+
+```C++
+int increment(int a) {
+    return a+1;
+}
+```
+
+we could write
+
+```C++
+function<int(int)> f1;
+f1 = increment;
+int y = f1(2);
+cout << y << endl;
+```
+
+This would output the value 3. Note how variable `f1` is a `function` type, that takes an `int` as a parameter and returns an `int`.
+
+###  Simple lambda function
+
+Instead of writing a global function, you can use an inline lambda function as shown below:
+
+```C++
+    function<int(int)> f2;
+    f2 = [](int a){
+        return a-1;
+    };
+
+    y = f2(2);
+    cout << y << endl;
+```
+
+where the output would be `1`. Note the syntax of the function. The square brackets `[]` are used to specify the 'capturing behaviour' (see below). What is noticeable here is how the function and it's invokation are written alongside each other. 
+
+### Using auto - inferring the type
+
+The closure in the code below does not use the `function` keyword. Instead, the **type** of `f3` is automatically determined by the compiler. This is not only convenient, but also essential in some cases (shown below).
+
+```C++ 
+auto f3 = [](int a) {
+    return a*10;
+};
+
+y = f3(2);
+cout << y << endl;
+```
+The output of this code will be `20`.
+
+### Passing a lambda as a parameter
+
+One of the most useful facilities is the ability to pass functions as a parameter. Consider the function below. This takes a parameter of type `function<void(void)>`
+
+```C++
+void doThis( function<void(void)> fn ) {
+    cout << "***********" << endl;
+    fn();
+    cout << "***********" << endl;
+}
+```
+
+Elsewhere, this function can be called, passing in another function as a parameter.
+
+```C++
+function<void(void)> fp;
+fp = []() {
+    cout << "Hello" << endl;
+};
+doThis(fp); //Pass function as a parameter
+```
+
+This is useful for making functions more customisable.
+
+### Capture by value
+
+So far we have focused on lambda functions. However, C++ can do more than a simple function pointer. Lambda functions can actually "capture" data that is in scope. For example:
+
+```C++
+    int a = 16;
+    auto f4 = [a](void) {
+        return a >> 1;
+    };
+    cout << "By value: y=" << f4() << endl;
+    a = 32;
+    cout << "By value: y=" << f4() << endl;
+```
+
+Note how `a` is in the same scope as `f4`. It is also listed within the square brackets `[a]` which tells the compiler to "capture a copy of `a`". A **copy** of `a` will become available to `f4`. Later when `a` is changed to `32`, this has no impact on the value captured inside `f4`. The output is `8` each time.
+
+You therefore visualise `f4` not just as a function, but as a class. This class would have a new (constant) private property `a`, which is initialised to `16`. In other words, `f4` is not just a simple function (as we saw with function pointers), but an object. We call this type of object a **closure**.
+
+Interestingly, if `f4` is now passed as a parameter (as was done in the previous section), both the data and the function are passed together as one data structure.
+
+> You might wonder why `d4` has an automatically determined type (using the `auto` keyword). This is related to the capturing behaviour, which in turn, changes it's type (according to the rules of C++). In fact, in this instance you must use `auto`.
+
+There are different rules for *capturing behaviour*, and it is worth looking at some of these now.
+
+### Capture by reference
+In the previous section, we saw an example of *capture by value*. This implies that any data captured by a closure is copied. Conversely, we can also **capture by reference**.
+
+A modified example from the previous section is shown below:
+
+```C++
+a = 16;
+auto f5 = [&a](void) {
+    return a >> 1;
+};
+cout << "By reference: y=" << f5() << endl;
+a = 32;
+cout << "By reference: y=" << f5() << endl;
+```
+
+Note how the capture rules in the square brackets have changed to `[&a]`. This means capture `a` by reference. You can think of a reference as another word for address. Therefore, if `a` were to change outside the closure, this will impact on the value inside. In the example, here the outputs is first `8` and then `16`.
+
+###  Capture by reference and value
+If it possible to use both value and reference semantics. Consider the example below. Can you predict the outputs?
+
+```C++
+    int b = 10;
+    auto f6 = [&a,b]() {
+        cout << a << endl;
+        cout << b << endl;
+        a = b;
+    };
+
+    cout << "a = " << a << endl;
+    cout << "b = " << b << endl;
+    f6();
+    cout << "a = " << a << endl;
+    cout << "b = " << b << endl;
+
+```
+
+`b` is captured by value, so external changes have no effect on `f6`. However, `a` is captured by reference, so the `a` inside and outside the closure are same (they have the same address).
+
+### Returning a closure 
+Not only is it possible to pass closures as parameters, it is also possible to return them. Consider the following example:
+
+```C++
+    // Return another closure
+    auto f7 = [](int a) {
+        //Create another lambda that captures a
+        auto f = [a]() {
+            static int sum = a;
+            sum++;
+            return sum;
+        };
+        return f;
+    };
+
+    auto acc = f7(10);
+    y = acc();
+    cout << "y = " << y << endl;
+    y = acc();
+    cout << "y = " << y << endl;
+```
+
+Look closely at `f7`. Within this closure, another closure is created. This closure captures `a` (by value) and maintains a copy in a static local variable `sum`. This `closure` is then returned and held in `acc`. Remember it is a closure that is returned, not just data.
+
+This closure is then invoked twice as shown. The outputs are `11` and `12`.
+
+This might all seem rather confusing (especially this last example). It really does take practise to understand them. There is also more that could be said of course.
+
+### Capturing Rules
+The capturing rules are listed in the square brackets `[]`
+
+* [] - nothing is captured
+* [=] - default is to capture by value
+* [&] - default is to capture by reference
+* [&,a] - capture by reference, except for `a` which is captured by value
+* [=,&a] - capture by value, except for `a` which is captured by reference
 
 
- 
-TBD
+## Task 389 - Using Lambda Functions and Closures for call-backs | 
+Let's modify the example in the previous section to use closures.
+
+| TASK-389 | Lambda Functions and Closures |
+| --- | --- |
+| 1. | Make Task-389 the active program |
+| 2. | Read through the code and all the comments |
+| 3. | Run the application. Press button A and observe both the LEDs and the serial output |
+
+Let's now look at what has changed. 
+
+**TBD**
 
 ## Reflection
 Event queues are incredibly useful and can really simplify your code.
