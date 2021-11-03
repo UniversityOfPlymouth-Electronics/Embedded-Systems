@@ -665,7 +665,7 @@ The code sample below highlights some of these steps. Note the call back `onPres
 
 > **Important**
 >
->  Note that `onPress()` is called from a separate thread.
+>  Note that `onPress()` is a C-function located in `main.cpp`, but is called from a separate thread encapsulated in `PressAndRelease`.
 >
 > We have **three** threads in this code. One for each button, and the main thread. It would be very easy to mistakenly assume `flashLed()` is called on the main thread (and inadvertently create a race condition). 
 
@@ -692,7 +692,7 @@ What is maybe appealing is that the callback code is located in the same file as
 | 4. | Add a call-back for a switch-release event. Simple use this to print a message about which button has been released. Again, make sure `printf` is performed on the main thread |
 
 ## Task-389 - C++ Closures
-Function pointers are used extensively in the C language. We also see them used in Mbed OS when we start a thread or attach and interrupt. 
+Function pointers are used extensively in the C language. We also see them used in Mbed OS when we start a thread or attach an interrupt. 
 
 Borrowing from other languages, C++ takes this idea further, and now offers *lambda functions* and *closures*. Here is a brief summary of closures.
 
@@ -768,11 +768,19 @@ fp = []() {
 doThis(fp); //Pass function as a parameter
 ```
 
-This is useful for making functions more customisable.
+The output is
+
+```
+***********
+Hello
+***********
+```
+
+(The `doThis` function is known as a decorator!. Accepting functions as a parameter is useful for making a function more customisable.
 
 ### Capture by value
 
-So far we have focused on lambda functions. However, C++ can do more than a simple function pointer. Lambda functions can actually "capture" data that is in scope. For example:
+So far we have focused on lambda functions. However, C++ can do more than a simple function pointer. Lambda functions can actually "capture" data that is in scope (technically, this is becomes known as a *closure* as will be explained). For example:
 
 ```C++
     int a = 16;
