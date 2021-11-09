@@ -1020,6 +1020,10 @@ We note the following:
 | 4. | Update the code to use Button B to control `led2` |
 | -  | Try and keep your changes minimal |
 
+| Challenge |
+| --- |
+| Write an application that updates the LCD with the time once a second. Use the real time clock and an event queue. Use closures where possible to keep your code compact |
+
 ## Reflection
 Event queues are incredibly useful and can really simplify your code.
 
