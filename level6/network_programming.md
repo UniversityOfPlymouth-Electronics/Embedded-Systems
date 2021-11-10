@@ -39,25 +39,56 @@ This is formatted using the all-pervasive `HTTP` text protocol.
 
 2. The client now blocks waiting for a response.
 3. The listening *server* receives the request, interprets it and constructs a response. 
-   * This is typically performed by a *server side application* which runs when the request is received and outputs `HTTP` responses 
+   * This is typically performed by a *server side application*, which runs when the request is received, and outputs `HTTP` responses 
    * The response is typically formatted in either HTTP (such that it can be viewed by a web browser) or a protocol such as XML or JSON (so that it can be easily ready by a computer).
 4. The response is returned (over the Internet)
 5. The client unblocks and reads the response until all bytes have been received.
-6. The connection is closed
+6. The connection is then closed (and forgotten)
 
-This request-response cycle will close and does not persist (we say it is stateless).
+This request-response cycle will close and does not persist - we say it is *stateless*.
 
 > Note the request is formatted using the `HTTP` protocol. This widely used text-based protocol is the basis of the *World Wide Web*. 
 >
-> This exchange was performed using the TCP protocol, which is a lower-level protocol that expects a request and a response (or timeout). Other protocols could have been used, but TCP (e.g. UDP) is the most common
+> This exchange was performed using the TCP protocol, which is a lower-level protocol that expects a request and a response (or timeout). Other protocols could have been used, but TCP (e.g. UDP) is the most common.
 >
-> All the TCP data is sent over the *Internet* using the `IP` protocol. The binary `IP` protocol` is the system to route data over a world-wide network of computers.
+> All the TCP data is sent over the *Internet* using the `IP` protocol. The binary `IP` protocol is the system used to route data over a world-wide network of computers.
 >
 > You often see the expression `TCP/IP` which reads as `TCP` over `IP`. 
 
 Our software is mostly concerned with the `TCP/IP` protocol layers. 
 
+** TO BE CONTINUED **
 
+## Network Time Protocol (NTP) Client
+Not all Internet data is HTTP or text.
+
+```C++
+    NetworkInterface *_defaultSystemNetwork;
+    
+    _defaultSystemNetwork = NetworkInterface::get_default_instance();
+    if (_defaultSystemNetwork == nullptr) {
+        LogError("No network interface found");
+        return -1;
+    }
+
+    int ret = _defaultSystemNetwork->connect();
+    if (ret != 0) {
+        LogError("Connection error: %d", ret);
+        return -1;
+    }
+    cout << _defaultSystemNetwork->get_mac_address()) << endl;
+
+    NTPClient ntp(_defaultSystemNetwork);
+    ntp.set_server("time.google.com", 123);
+    time_t timestamp = ntp.get_timestamp();
+    if (timestamp < 0) {
+        LogError("Failed to get the current time, error: %ld", timestamp);
+        return -1;
+    }
+
+    cout <<"Time: " << ctime(&timestamp) << endl;
+    set_time(timestamp);
+```
 **TO BE CONTINUED**
 
 
