@@ -89,6 +89,38 @@ Not all Internet data is HTTP or text.
     cout <<"Time: " << ctime(&timestamp) << endl;
     set_time(timestamp);
 ```
+
+## Cloud Services with Azure IoT Central
+Before you start this section, make sure you set up a [student account](https://azure.microsoft.com/en-gb/free/students/) or a [free account](https://azure.microsoft.com) if not a student.
+
+For this example, we are going to use Microsoft Azure IoT Central. IoT is described as "Software as a Service" (SaaS). This provides a very convenient way to upload data from an embedded device to the cloud, where is can easily be logged and displayed on charts and in tables.
+
+> SaaS is a method of software delivery and licensing in which software is accessed online via a subscription, rather than bought and installed on individual computers.
+
+
+
+[Video 1 - Creating the Application](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0604b16b-38de-43f1-8828-addd010e6e9a)
+
+[Video 2 - Device Templates](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=3d8eedf1-63f9-48c6-a1d5-addd010f0c2f)
+
+[Video 3 - Views](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=aef77cd6-b58d-49d9-a99a-addd010fe2b1)
+
+[Video 4 - Devices](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0c2b3d7e-c736-4343-ae7a-addd0110973c)
+
+[Video 5 - Configure the Target Board](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=93466dc5-325a-4a1f-869e-addd01123210)
+
+[Video 6 - Adding Additional Parameters](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7714d640-75b6-44a9-a923-addd0117f2d9)
+
+[Video 7 - Sending Back Commands](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b536473-e042-4e6a-86cd-addd01257498)
+
+
+
+
+## Further Learning
+A good place to go is the following tutorial from Microsoft Learn:
+
+[Create your first Azure IoT Central app](https://docs.microsoft.com/learn/modules/create-your-first-iot-central-app/)
+
 **TO BE CONTINUED**
 
 
