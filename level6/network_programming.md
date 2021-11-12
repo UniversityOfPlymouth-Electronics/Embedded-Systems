@@ -49,13 +49,14 @@ This request-response cycle will close and does not persist - we say it is *stat
 
 > Note the request is formatted using the `HTTP` protocol. This widely used text-based protocol is the basis of the *World Wide Web*. 
 >
-> This exchange was performed using the TCP protocol, which is a lower-level protocol that expects a request and a response (or timeout). Other protocols could have been used, but TCP (e.g. UDP) is the most common.
+> This exchange was performed using the TCP protocol, which is a lower-level (binary) protocol that expects a request and a response (or timeout). Other protocols could have been used (e.g. UDP), but TCP is the most common.
 >
 > All the TCP data is sent over the *Internet* using the `IP` protocol. The binary `IP` protocol is the system used to route data over a world-wide network of computers.
 >
 > You often see the expression `TCP/IP` which reads as `TCP` over `IP`. 
 
-Our software is mostly concerned with the `TCP/IP` protocol layers. 
+Our software is mostly concerned with write `HTTP` strings using the `TCP/IP` protocol layers. 
+
 
 ** TO BE CONTINUED **
 
