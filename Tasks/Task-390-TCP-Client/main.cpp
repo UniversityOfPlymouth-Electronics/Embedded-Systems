@@ -9,6 +9,9 @@
 EthernetInterface net;
 char rbuffer[65];
 
+#define IPV4_HOST_ADDRESS "192.168.1.220"
+#define TCP_SOCKET_PORT 8080
+
 // Socket demo
 int main()
 {
@@ -21,32 +24,35 @@ int main()
     net.get_ip_address(&a);
     printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
 
-    // Open a socket on the network interface, and create a TCP connection to ifconfig.io
+    // Open a socket on the network interface, and create a TCP connection to the TCP server
     TCPSocket socket;
     socket.open(&net);
 
-    //Look up IP address
-    net.gethostbyname("ifconfig.io", &a);
-    printf("IP address of site: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
+    //Option 1. Look up IP address of remote machine on the Internet
+    //net.gethostbyname("ifconfig.io", &a);
+    //printf("IP address of site: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
 
-    //Set the TCP socket port to 80 (standard port for HTTP)
-    a.set_port(80);
+    //Option 2. Manually set the address (In a Windows terminal, type ipconfig /all and look for the IPV4 Address for the network interface you are using)
+    a.set_ip_address(IPV4_HOST_ADDRESS);
+
+    //Set the TCP socket port
+    a.set_port(TCP_SOCKET_PORT);
 
     //Connect to remote web server
     socket.connect(a);
 
-    // Send a simple http request (text protocol understood by the server)
-    char sbuffer[] = "GET / HTTP/1.1\r\nHost: ifconfig.io\r\nConnection: close\r\n\r\n";
+    // Send a simple array of bytes (I've used a string so you can read it)
+    char sbuffer[] = "Hello, this is the MBED Board talking!";
     int scount = socket.send(sbuffer, sizeof sbuffer);
-    printf("sent %d [%.*s]\n", scount, strstr(sbuffer, "\r\n") - sbuffer, sbuffer);
+    printf("sent\r\n");
 
-    // **************************************************************
-    // Receive a simple http response and print out the response line
-    // **************************************************************
+    // ***********************************************************
+    // Receive a simple array of bytes as a response and print out
+    // ***********************************************************
 
     int rcount;
 
-    // Receieve an HTTP response and print out the response line
+    // Receieve response and print out the response line
     while ((rcount = socket.recv(rbuffer, 64)) > 0) {
         rbuffer[rcount] = 0;    //End of string character
         printf("%s", rbuffer);
