@@ -19,10 +19,43 @@ There are some options, and which you choose may depend on where your target boa
 Other sophisticated options may exist. For Plymouth students, option 2 is the recommended approach (USB adapters are provided).
 
 ## TCP/IP Client
-In this example, the target device will act as a simple **web client**. The server is the website http://ifconfig.io/ . 
+In this example, the target device will act as a simple TCP/IP client. The server is a small application written C#. 
+
+For the following task, you will need to run a special server application on your host computer. For Windows, it will be `TCP_Server.exe` (see image below)
+
+<figure>
+<img src="../img/tcp_server.png" width="600px">
+<figcaption>TCP_Server.exe</figcaption>
+</figure>
+
+Open a terminal, and change the directory where the server application is located. In the example above, you would type `cd C:\git\Embedded-Systems\Software\TCP-Client-Server\bin`
+
+<figure>
+<img src="../img/terminal.png" width="600px">
+<figcaption>Terminal</figcaption>
+</figure>
+
+Next, you need to find out the IP address of the host PC. This is for the network adapter that is connected to the target (if you are using the USB adapter). You can see all the adapters and network addresses using the terminal. On unix systems, the command is `ifconfig -a`. For windows, it is `ipconfig /all`
+
+For example:
+
+```
+   IPv4 Address. . . . . . . . . . . : 192.168.1.220(Preferred)
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+```
+
+Make a note of the IP address. You can now run the server. For Windows, you would type:
+
+`TCP_Server.exe 192.168.1.220 8080`
+
+Note that the IP address above is for my particular configuration. Yours will probably be different.
+
+
+
 
 | Task-390-TCP-Client | - |
 | - | - |
+| 1 | In your Git repository for this course, you should find a folder  |
 | 1 | Open Task-390, build and run |
 | - | Note that is output to the terminal |
 | 2 | Read through the code and comments |

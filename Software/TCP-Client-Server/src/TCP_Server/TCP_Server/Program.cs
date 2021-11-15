@@ -34,7 +34,7 @@ public class serv
             /* Start Listeneting at the specified port */
             myList.Start();
 
-            Console.WriteLine("The server is running at port 8001...");
+            Console.WriteLine($"The server is running at port {port}");
             Console.WriteLine("The local End point is  :" + myList.LocalEndpoint);
             Console.WriteLine("Waiting for a connection.....");
 
