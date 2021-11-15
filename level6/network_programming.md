@@ -47,7 +47,7 @@ This is formatted using the all-pervasive `HTTP` text protocol.
 
 This request-response cycle will close and does not persist - we say it is *stateless*.
 
-> Note the request is formatted using the `HTTP` protocol. This widely used text-based protocol is the basis of the *World Wide Web*. 
+> Note the request is formatted using the `HTTP` protocol. This widely used text-based protocol is the basis of the *World Wide Web*. This example shows a particularly simple case. In general, these strings can be much longer and more complex.
 >
 > This exchange was performed using the TCP protocol, which is a lower-level (binary) protocol that expects a request and a response (or timeout). Other protocols could have been used (e.g. UDP), but TCP is the most common.
 >

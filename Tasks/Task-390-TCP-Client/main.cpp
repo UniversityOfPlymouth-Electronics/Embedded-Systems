@@ -45,8 +45,6 @@ int main()
     // **************************************************************
 
     int rcount;
-    // rcount = socket.recv(rbuffer, sizeof rbuffer);
-    // printf("recv %d [%.*s]\n", rcount, strstr(rbuffer, "\r\n") - rbuffer, rbuffer);
 
     // Receieve an HTTP response and print out the response line
     while ((rcount = socket.recv(rbuffer, 64)) > 0) {
