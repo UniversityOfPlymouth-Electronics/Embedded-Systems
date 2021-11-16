@@ -35,7 +35,14 @@ Open a terminal, and change the directory where the server application is locate
 <figcaption>Terminal</figcaption>
 </figure>
 
-Next, you need to find out the IP address of the host PC. This is for the network adapter that is connected to the target (if you are using the USB adapter). You can see all the adapters and network addresses using the terminal. On unix systems, the command is `ifconfig -a`. For windows, it is `ipconfig /all`
+We now need to obtain the IP address for the target (Nucleo) )and host (PC or Mac).
+
+<figure>
+<img src="../img/home network.png">
+<figcaption>Typical Domestic Network Configuration</figcaption>
+</figure>
+
+First you need to find out the IP address of the host PC. This is for the network adapter that is connected to the target (if you are using the USB adapter). You can see all the adapters and network addresses using the terminal. On unix systems, the command is `ifconfig -a`. For windows, it is `ipconfig /all`
 
 For example:
 
