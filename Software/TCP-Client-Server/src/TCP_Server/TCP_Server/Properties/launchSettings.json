@@ -2,7 +2,7 @@
   "profiles": {
     "TCP_Server": {
       "commandName": "Project",
-      "commandLineArgs": "192.168.1.220"
+      "commandLineArgs": "192.168.1.220 8080"
     }
   }
 }

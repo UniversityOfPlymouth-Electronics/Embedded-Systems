@@ -38,21 +38,34 @@ public class serv
             Console.WriteLine("The local End point is  :" + myList.LocalEndpoint);
             Console.WriteLine("Waiting for a connection.....");
 
-            Socket s = myList.AcceptSocket();
-            Console.WriteLine("Connection accepted from " + s.RemoteEndPoint);
+            bool keepGoing = true;
 
-            byte[] b = new byte[100];
-            int k = s.Receive(b);
-            Console.WriteLine("Recieved...");
-            for (int i = 0; i < k; i++)
-                Console.Write(Convert.ToChar(b[i]));
+            do
+            {
+                Socket s = myList.AcceptSocket();
+                Console.WriteLine("Connection accepted from " + s.RemoteEndPoint);
 
-            //Send response
-            ASCIIEncoding asen = new ASCIIEncoding();
-            s.Send(asen.GetBytes("AOK."));
-            Console.WriteLine("\nSent Acknowledgement AOK");
-            /* clean up */
-            s.Close();
+                byte[] b = new byte[100];
+                int k = s.Receive(b);
+                if ((b[0] == 'E') && (b[1] == 'N') && (b[2] == 'D'))
+                {
+                    keepGoing = false;
+                } else
+                {
+                    Console.WriteLine("Recieved...");
+                    for (int i = 0; i < k; i++)
+                        Console.Write(Convert.ToChar(b[i]));
+                }
+
+                //Send response
+                ASCIIEncoding asen = new ASCIIEncoding();
+                s.Send(asen.GetBytes("AOK."));
+                Console.WriteLine("\nSent Acknowledgement AOK");
+                /* clean up */
+                s.Close();
+
+            } while (keepGoing);
+
             myList.Stop();
 
         }

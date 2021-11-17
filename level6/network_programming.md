@@ -19,9 +19,31 @@ There are some options, and which you choose may depend on where your target boa
 Other sophisticated options may exist. For Plymouth students, option 2 is the recommended approach (USB adapters are provided).
 
 ## TCP/IP Client
-In this example, the target device will act as a simple TCP/IP client. The server is a small application written C#. 
+In this example, the target device will act as a simple TCP/IP client. This will send data to a  small server application running on the host PC (written in C#.NET).
 
-For the following task, you will need to run a special server application on your host computer. For Windows, it will be `TCP_Server.exe` (see image below)
+Before we begin, we need to provide a network connection to our host PC. If using the USB adapter, then the following video shows you how to share a PC Internet connection with the Nucleo Target:
+
+https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=bc691918-46a7-495f-b9ee-ade300cffc3b
+
+Before you can run the server, you need to obtain the IP address for the target (Nucleo) and host (PC or Mac). The figure below represents a typical setup for a student (students are provided with a USB-Ethernet adapter)
+
+<figure>
+<img src="../img/home network.png">
+<figcaption>Typical Domestic Network Configuration</figcaption>
+</figure>
+
+Next you need to find out the IP address of the host PC. This is for the network adapter that is connected to the target (if you are using the USB adapter). You can see all the adapters and network addresses using the terminal. On unix systems, the command is `ifconfig -a`. For windows, it is `ipconfig /all`
+
+For example:
+
+```
+   IPv4 Address. . . . . . . . . . . : 192.168.1.220(Preferred)
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+```
+
+Make a note of the IP address as you need this later.
+
+Now we can run the server application. For Windows, the server application is `TCP_Server.exe` which can be found in this repository (see image below). Note also there are Mac OS and Linux versions as well.
 
 <figure>
 <img src="../img/tcp_server.png" width="600px">
@@ -35,37 +57,21 @@ Open a terminal, and change the directory where the server application is locate
 <figcaption>Terminal</figcaption>
 </figure>
 
-We now need to obtain the IP address for the target (Nucleo) )and host (PC or Mac).
+ For Windows, you would type:
 
-<figure>
-<img src="../img/home network.png">
-<figcaption>Typical Domestic Network Configuration</figcaption>
-</figure>
+`TCP_Server.exe <ip address> 8080`
 
-First you need to find out the IP address of the host PC. This is for the network adapter that is connected to the target (if you are using the USB adapter). You can see all the adapters and network addresses using the terminal. On unix systems, the command is `ifconfig -a`. For windows, it is `ipconfig /all`
-
-For example:
-
-```
-   IPv4 Address. . . . . . . . . . . : 192.168.1.220(Preferred)
-   Subnet Mask . . . . . . . . . . . : 255.255.255.0
-```
-
-Make a note of the IP address. You can now run the server. For Windows, you would type:
-
-`TCP_Server.exe 192.168.1.220 8080`
-
-Note that the IP address above is for my particular configuration. Yours will probably be different.
-
-
+where <ip address> is substituted with the IP address found above. The server is now waiting for connection on TCP port 8080.
 
 
 | Task-390-TCP-Client | - |
 | - | - |
 | 1 | In your Git repository for this course, you should find a folder  |
-| 1 | Open Task-390, build and run |
-| - | Note that is output to the terminal |
-| 2 | Read through the code and comments |
+| 1 | Open Task-390 |
+| 2 | In main.cpp, edit `#define IPV4_HOST_ADDRESS "192.168.1.220"` and change the IP address
+| 3 | Build and run the code. When asked in the terminal, type in a string and press return |
+| - | Note the output on the server and the terminal |
+| 2 | Read through the code and comments and try to follow how this works |
 
 In this example, the NUCLEO target board is the *client*. The website http://ifconfig.io/ is a computer running an application using a **web server**.
 
