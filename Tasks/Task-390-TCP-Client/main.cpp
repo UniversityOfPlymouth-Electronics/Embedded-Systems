@@ -21,7 +21,7 @@ int main()
     printf("Ethernet socket example\n");
     net.connect();
     bool keepGoing = true;
-
+ 
     do {
         // Show the network address
         SocketAddress a;
