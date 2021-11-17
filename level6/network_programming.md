@@ -66,45 +66,32 @@ where <ip address> is substituted with the IP address found above. The server is
 
 | Task-390-TCP-Client | - |
 | - | - |
-| 1 | In your Git repository for this course, you should find a folder  |
 | 1 | Open Task-390 |
 | 2 | In main.cpp, edit `#define IPV4_HOST_ADDRESS "192.168.1.220"` and change the IP address
-| 3 | Build and run the code. When asked in the terminal, type in a string and press return |
+| 3 | Build and run the code |
 | - | Note the output on the server and the terminal |
+| - | Hold down the blue button to stop both server and client |
 | 2 | Read through the code and comments and try to follow how this works |
+| 3 | Modify the client to send a number (as a string) that increments each time |
 
-In this example, the NUCLEO target board is the *client*. The website http://ifconfig.io/ is a computer running an application using a **web server**.
+In this example, the NUCLEO target board is the *client*. The server is a bespoke application that listens for binary data on a TCP/IP socket. We happen to be sending ASCII bytes, but it is not limited to text.
 
 The **client-server** relationship works as follows:
 
-1. The *client* (NUCLEO) connects to the *server* and sends the following ASCI string (to the Internet address ifconfig.io:80) as a request:
+1. The listening *server* blocks waiting for a connection on port 8080. 
+1. The *client* (NUCLEO) connects to the *server*. 
+1. The client sends a stream of byes as a TCP request. 
+1. The client now blocks waiting for a response.
+1. A response is returned by the server (over the network) as another stream of bytes
+1. The client unblocks and reads the response until all bytes have been received.
+1. The connection is then closed (and forgotten)
+1. The above repeats until "END" is sent by the client 
 
-`GET / HTTP/1.1\r\nHost: ifconfig.io\r\nConnection: close\r\n\r\n`
+This exchange was performed using the TCP protocol, which is a lower-level (binary) protocol that expects a request *and* a response (or timeout). This is useful as the client can verify the data was received. Other protocols such as UDP do not require a response, but TCP is the most common.
 
-This is formatted using the all-pervasive `HTTP` text protocol.
+> All the TCP data is sent using the `IP` protocol. The binary `IP` protocol is the system used to route data over the Internet.
 
-2. The client now blocks waiting for a response.
-3. The listening *server* receives the request, interprets it and constructs a response. 
-   * This is typically performed by a *server side application*, which runs when the request is received, and outputs `HTTP` responses 
-   * The response is typically formatted in either HTTP (such that it can be viewed by a web browser) or a protocol such as XML or JSON (so that it can be easily ready by a computer).
-4. The response is returned (over the Internet)
-5. The client unblocks and reads the response until all bytes have been received.
-6. The connection is then closed (and forgotten)
-
-This request-response cycle will close and does not persist - we say it is *stateless*.
-
-> Note the request is formatted using the `HTTP` protocol. This widely used text-based protocol is the basis of the *World Wide Web*. This example shows a particularly simple case. In general, these strings can be much longer and more complex.
->
-> This exchange was performed using the TCP protocol, which is a lower-level (binary) protocol that expects a request and a response (or timeout). Other protocols could have been used (e.g. UDP), but TCP is the most common.
->
-> All the TCP data is sent over the *Internet* using the `IP` protocol. The binary `IP` protocol is the system used to route data over a world-wide network of computers.
->
-> You often see the expression `TCP/IP` which reads as `TCP` over `IP`. 
-
-Our software is mostly concerned with write `HTTP` strings using the `TCP/IP` protocol layers. 
-
-
-** TO BE CONTINUED **
+You often see the expression `TCP/IP` which reads as `TCP` over `IP`. The format of the data sent using TCP/IP is often HTTP, which is human-readable text based protocol. The world wide web uses HTTP to format documents and data. Even numbers are converted to strings. Although seemingly inefficient, this ensures compatibility across multi different computing devices.
 
 ## Network Time Protocol (NTP) Client
 Not all Internet data is HTTP or text.

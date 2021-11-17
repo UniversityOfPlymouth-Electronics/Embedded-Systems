@@ -12,7 +12,7 @@ public class clnt
     {
         if (args == null)
         {
-            Console.WriteLine("Please provide your local IP address as a single parameter");
+            Console.WriteLine("Please provide the server IP address and port");
             return;
         }
 
@@ -21,7 +21,6 @@ public class clnt
             Console.WriteLine("Provide an address and port");
             return;
         }
-
 
         try
         {
@@ -45,12 +44,16 @@ public class clnt
             Console.WriteLine("Transmitting.....");
 
             stm.Write(ba, 0, ba.Length);
+            Console.WriteLine("Written.....");
+            Console.WriteLine("Waiting for response");
 
+            //Wait for response
             byte[] bb = new byte[100];
             int k = stm.Read(bb, 0, 100);
 
             for (int i = 0; i < k; i++)
                 Console.Write(Convert.ToChar(bb[i]));
+            Console.WriteLine("");
 
             tcpclnt.Close();
         }
