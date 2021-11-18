@@ -2,6 +2,7 @@ BUILD
 .mbed
 mbed-os
 libuopmsb
+ntp-client
 .DS_Store
 .DS_Store
 *.zip

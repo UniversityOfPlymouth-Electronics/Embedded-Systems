@@ -7,104 +7,77 @@ using namespace uop_msb;
 
 #include "EthernetInterface.h"
 #include "TCPSocket.h"
- 
-#define HTTP_STATUS_LINE "HTTP/1.0 200 OK"
-#define HTTP_HEADER_FIELDS "Content-Type: text/html; charset=utf-8"
-#define HTTP_MESSAGE_BODY ""                                     \
-"<html>" "\r\n"                                                  \
-"<head><title> Plymouth Uni Weather Page </title></head>" "\r\n" \
-"  <body style=\"display:flex;text-align:center\">" "\r\n"       \
-"    <div style=\"margin:auto\">" "\r\n"                         \
-"      <h1>Hello World</h1>" "\r\n"                              \
-"      <p>It works !</p>" "\r\n"                                 \
-"    </div>" "\r\n"                                              \
-"  </body>" "\r\n"                                               \
-"</html>" "\r\n"
-    
-#define HTTP_RESPONSE HTTP_STATUS_LINE "\r\n"   \
-                      HTTP_HEADER_FIELDS "\r\n" \
-                      "\r\n"                    \
-                      HTTP_MESSAGE_BODY "\r\n"
-#define HTTP_TITLE     "<head><title> Plymouth Uni Weather Page </title></head>" "\r\n"
-#define HTTP_FORMAT_1 "<body style=\"display:flex;text-align:center\">" "\r\n" \
-                      "<div style=\"margin:auto\">" "\r\n"
-#define HTTP_BOTTOM "</html>" "\r\n"
-
- 
-//For the static IP version
-#define IP        "10.0.0.10"
-#define NETMASK   "255.255.255.0"
-#define GATEWAY   "10.0.0.1"
+#include "NTPClient.h"
+#include <iostream>
+using namespace std;
 
 //const char *const myHTTP = HTTP_RESPONSE; //This if you wish to set above Compiler defines into Flash Silicon
 
-EthernetInterface net;
+NetworkInterface* netIF;
 LCD_16X2_DISPLAY disp;
-DigitalOut lcdBacklight(LCD_BKL_PIN);
+DigitalOut lcdBacklight(LCD_BKL_PIN,1);
+InterruptIn blueButton(USER_BUTTON);
 
 int main()
 {
-    printf("\r\nBasic HTTP server example\r\n");
+    // Create network interface (Ethernet in our case)    
+    netIF = NetworkInterface::get_default_instance();
+    if (netIF == nullptr) {
+        printf("No network interface found\n");
+        return -1;
+    }
+
+    // Connect
+    int ret = netIF->connect();
+    if (ret != 0) {
+        printf("Connection error: %d\n", ret);
+        return -1;
+    }
+    printf("Connection success, MAC: %s\n", netIF->get_mac_address());
+    printf("Getting time from the NTP server\n");
+
+    // Instantiate a NPTClient using the connected interface
+    NTPClient ntp(netIF);
+    // Configure for a public time server
+    ntp.set_server("time.google.com", 123);
+
+    // Get the time
+    time_t timestamp = ntp.get_timestamp();
+    if (timestamp < 0) {
+        cout << "Failed to get the current time, error: " << timestamp << endl;
+        netIF->disconnect(); //This is easy to forget!
+        return -1;
+    }
+    printf("Time: %s\n", ctime(&timestamp));
+    // Set system time
+    set_time(timestamp);
     
-    // Connect the ethernet interface
-    net.set_network(IP, NETMASK, GATEWAY);  //For static IP
-    net.connect();
-
-    // Get the network address
-    SocketAddress a;
-    net.get_ip_address(&a);
-
-    // Show the network address
-    printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
-    disp.cls();
-    disp.printf("%s\n", a.get_ip_address() ? a.get_ip_address() : "None");
-    lcdBacklight = 1;
-
-    // Open a TCP socket on the network interface, and create a TCP connection on port 80
-    TCPSocket socket;
-    socket.open(&net);
-    socket.bind(80);
-
-    //Set socket to listening mode (up to 5 connections)
-    int err=socket.listen(5);
-    if(err==0) {
-        printf("Listening OK\n\r");
-    }
-    else {
-        printf("Listen error=%d\n\r",err);
-        socket.close();
-        while(1);
-    }
+    //Close network connection (we are finished)
+    printf("Closing network connection\n");
+    netIF->disconnect();
 
     while (true)
     {
-        disp.locate(1, 0);
-        disp.printf("Waiting...      ");
+        //Spin waiting for button press
+        while (blueButton == 0);
 
-        // ACCEPT Accepting connections
-        TCPSocket* clt_sock=socket.accept();    //Blocking
+        //Immediately read the time (seconds since 00:00 on the 1/1/1070)
+        timestamp = time(NULL);
 
-        //Unblocks with each connection
-        disp.locate(1, 0);
-        disp.printf("Connected...    ");
-
-
-        //Send response (blocking until completed)
-        printf("%s STRING LENGTH is: %d\n\r", HTTP_RESPONSE, strlen(HTTP_RESPONSE)); // the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
-        nsapi_size_or_error_t ret = clt_sock->send(HTTP_RESPONSE, strlen(HTTP_RESPONSE));  //myHTTP,mydatasize)the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
+        //Display the current date and time
+        disp.cls(); disp.locate(0, 0);
+        disp.printf("%s\n", ctime(&timestamp));
         
-        //Echo how many bytes were sent
-        printf("Sent %d bytes\n", ret);
+        //Debounce
+        ThisThread::sleep_for(250ms);
+        
+        //Spin waiting for button release
+        while (blueButton == 1);
 
-        //You are responsible to close this
-        clt_sock->close();
-        disp.locate(1, 0);
-        disp.printf("Closed...       ");
-
-        ThisThread::sleep_for(1s);
+        //Debounce
+        ThisThread::sleep_for(250ms);
     }
 
 
 }
  
-//have to close socket to re-enter

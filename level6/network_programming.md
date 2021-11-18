@@ -72,7 +72,7 @@ where <ip address> is substituted with the IP address found above. The server is
 | - | Note the output on the server and the terminal |
 | - | Hold down the blue button to stop both server and client |
 | 2 | Read through the code and comments and try to follow how this works |
-| 3 | Modify the client to send a number (as a string) that increments each time |
+| 3 | **Modify the client to send a number (as a string) that increments each time** |
 
 In this example, the NUCLEO target board is the *client*. The server is a bespoke application that listens for binary data on a TCP/IP socket. We happen to be sending ASCII bytes, but it is not limited to text.
 
@@ -93,24 +93,50 @@ This exchange was performed using the TCP protocol, which is a lower-level (bina
 
 You often see the expression `TCP/IP` which reads as `TCP` over `IP`. The format of the data sent using TCP/IP is often HTTP, which is human-readable text based protocol. The world wide web uses HTTP to format documents and data. Even numbers are converted to strings. Although seemingly inefficient, this ensures compatibility across multi different computing devices.
 
+## TCP/IP Server
+In this task, and in contrast to the above, the roles now reverse. The Nucleo becomes the server (the one waiting for an incoming message) and the PC host becomes the client.
+
+| Task-390-TCP-Server | - |
+| - | - |
+| 1 | Build and Run Task 390 |
+| - | Note the IP address written to the terminal and LCD screen | 
+| 2 | Run the tool TCP-Client, passing the IP address of the server and port (8080)
+| 3 | Type a message and press return. Note the terminal output in Mbed Studio |
+| 4 | Run again, this time type (case sensitive) `LIGHT` then press return. Repeat.
+| 5 | Run again. Now type `END` and press return to end both sessions.
+
+To make this easier to follow, the data exchanged was text. However, for TCP/IP we exchange a stream of bytes (8-bit). It does not have to be text.
+
+| **Challenge (for the ambitious!)** |
+| - |
+| This task is much more advanced, and will require you to use Visual Studio and C# |
+| - |
+| The source code the the TCP-Client is also included alongside the binary applications. Modify this to only send binary data to control the LEDs on the target. |
+| * Send a single 8-bit number |
+| * Bits 0-2 should control LED1, LED2 and LED3 |
+| * Bit 7 should be set to stop the server |
+| The response should simply echo what was received by the server |
+
+You will observe that the network traffic is **MUCH** lower using a binary protocol. Although sending text is easier to debug, it is inefficient.
+
+> **Consider this** - If you were to repeat the above challenge, but instead sending data of type `int`, you would need to remember that the type `int` is NOT the same on all platforms!
+>
+> * Endianess (byte ordering)
+> * Word size (32-bit on ARM; 64-bit in x86)
+>
+> Text representation of numbers is platform agnostic. This is one of the main reasons why text is so often used instead of binary data. 
+
+Let's now look at a real-life binary protocols.
+
 ## Network Time Protocol (NTP) Client
-Not all Internet data is HTTP or text.
+Whereas the World Wide Web using strings, not all Internet data is text based. A famous example is the Network Time Protocol [NTP](https://en.wikipedia.org/wiki/Network_Time_Protocol). This can be used to set the date and time of any computer system connected to the Internet. Our Microcontroller has a real-time clock which can be easily set using the `NTPClient` class ([see this link](https://github.com/ARMmbed/ntp-client.git)) as follows:
 
 ```C++
     NetworkInterface *_defaultSystemNetwork;
     
     _defaultSystemNetwork = NetworkInterface::get_default_instance();
-    if (_defaultSystemNetwork == nullptr) {
-        LogError("No network interface found");
-        return -1;
-    }
 
     int ret = _defaultSystemNetwork->connect();
-    if (ret != 0) {
-        LogError("Connection error: %d", ret);
-        return -1;
-    }
-    cout << _defaultSystemNetwork->get_mac_address()) << endl;
 
     NTPClient ntp(_defaultSystemNetwork);
     ntp.set_server("time.google.com", 123);
@@ -124,12 +150,60 @@ Not all Internet data is HTTP or text.
     set_time(timestamp);
 ```
 
+Note that `NTPClient` is part of a separate library from Arm.
+
+| Task-392-NTP-Client | - |
+| - | - |
+| 1 | Build and Run Task 392 |
+| - | Press the blue button to see the updated time |
+| 2 | This code is simple, but it is not easy to remember all the steps. Write a class to encapsulate all the code necessary to make it easy to set the system date time using NTP |
+|   | Assume this will have the sole use of the network interface until complete |
+|   | Disconnect the networking interface when finished |
+|   | Put this code in a separate CPP file so it can be reused in other projects |
+|   | Advanced: there are some status messages and error conditions to be considered. Give the option to pass a closure as a parameter to handle call-backs so that messages and errors can be handled appropriately |
+
+Once complete, it is hoped you can reuse your own class to set the date and time on Mbed boards with network interfaces.
+
+## HTTP Server
+You have probably encounted a device connected to your local network which can be configured with a web browser. Examples include routers, power-line network interfaces, smart home devices and printers to name a few. The advantage of this approach is that no specialised software is needed, and costs can be saved by avoiding electronic interfaces such as buttons and screens.
+
+Many devices that use application processors (e.g. Cortex A devices) will run an embedded operating system, such as Linux. Such devices can run large complex web servers and use any choice of programming language.
+
+Low power deeply-embedded Microcontrollers, such as the target board used in this course, do not have such capability. However, it is still possible to create a simple web server and perform many configuration tasks. The next example is a very simple example of this. The sequence is as follows:
+
+* Target board (server) listens on TCP Port 80
+* Host computer starts a web browser and enters the IP address of the target
+* The web browser sends data to the server, using what is known as the "HTTP GET" protocol
+* The server has the option to read parameters from this data
+* The server returns data, formatted as a HTTP response.
+
+HTTP is a text based protocol. It is large and complicated as it can perform so many tasks. However, we will look at a minimalist system to understand the essence of a "web server".
+
+| Task-394 | HTTP Server |
+| - | - |
+| 1 | Build and Run Task 394 |
+| 2 | Read the IP address of the server from the LCD display |
+| 3 | Enter this address into your web browser |
+| 4 | Now adjust the potentiometer and refresh the page |
+| 5 | Study the code and read the comments. Note in particular how the text `{{0}}` is substituted with another string |
+| 6 | **Challenge:** Update the code, including the `HTTP_MESSAGE_BODY`, to also displays the light value (using the LDR) |
+
+It is also possible for the browser to send parameters to the server in order to control the target device. We won't go that far, but if you are interested, you may want to read up on HTTP GET and POST verbs.
+
+The HTTP protocol is not the easiest thing to work with however. It is verbose and particular about formatting, including newlines. Writing correctly formatted HTTP is error prone, so it would seem reasonable to use an existing HTTP class library.
+
+It is maybe surprising what can be achieved on such as small microcontroller. However, we also need to consider networking, security and privacy issues. Securely sending, receiving and storing usernames and passwords alone is non-trivial. This can get very complicated. Furthermore, what if you have a network of devices? Consider a network of refrigerated vans travelling across a continent, reporting temperatures on route to customers over cellular networks. 
+
+How do you set up, secure and monitor these devices once installed in the real world? What is the network coverage is not 100%? What happens in a severely bug is discovered in your embedded code? This leads us to the term **Internet of Things** (IoT). A whole industry has grown up around IoT, providing infrastructure, expertise and services to support such operations. One (of many) providers is Microsoft Azure. As Azure is supported by Mbed OS, we will use this for the next example.
+
 ## Cloud Services with Azure IoT Central
 Before you start this section, make sure you set up a [student account](https://azure.microsoft.com/en-gb/free/students/) or a [free account](https://azure.microsoft.com) if not a student.
 
 For this example, we are going to use Microsoft Azure IoT Central. IoT is described as "Software as a Service" (SaaS). This provides a very convenient way to upload data from an embedded device to the cloud, where is can easily be logged and displayed on charts and in tables.
 
 > SaaS is a method of software delivery and licensing in which software is accessed online via a subscription, rather than bought and installed on individual computers.
+
+
 
 
 

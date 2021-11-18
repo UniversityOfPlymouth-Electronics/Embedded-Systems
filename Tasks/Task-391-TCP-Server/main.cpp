@@ -15,7 +15,7 @@ using namespace std;
 EthernetInterface net;
 LCD_16X2_DISPLAY disp;
 DigitalOut lcdBacklight(LCD_BKL_PIN);
-
+BusOut onBoardLEDs(LED1, LED2, LED3);
 
 DigitalOut led(LED1);
  
@@ -81,6 +81,10 @@ int main()
         if (rx == "END") {                      //Are we done?
             keepGoing = false;
             printf("END Sent - terminating\n");
+        }
+        else if (rx == "LIGHT") {
+            lcdBacklight = !lcdBacklight;
+            onBoardLEDs = onBoardLEDs ^ 7;
         }
 
         //Send response (blocking until completed)
