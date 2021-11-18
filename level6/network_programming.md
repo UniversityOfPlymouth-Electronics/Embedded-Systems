@@ -199,13 +199,17 @@ How do you set up, secure and monitor these devices once installed in the real w
 ## Cloud Services with Azure IoT Central
 Before you start this section, make sure you set up a [student account](https://azure.microsoft.com/en-gb/free/students/) or a [free account](https://azure.microsoft.com) if not a student.
 
-For this example, we are going to use Microsoft Azure IoT Central. IoT is described as "Software as a Service" (SaaS). This provides a very convenient way to upload data from an embedded device to the cloud, where is can easily be logged and displayed on charts and in tables.
+For this example, we are going to use [Microsoft Azure IoT Central](https://azure.microsoft.com/services/iot-central/). IoT is described as "Software as a Service" (SaaS). This provides a very convenient way to upload data from an embedded device to the cloud, where is can easily be logged and displayed on charts and in tables.
 
 > SaaS is a method of software delivery and licensing in which software is accessed online via a subscription, rather than bought and installed on individual computers.
 
+Under the hood, this is use a collection of Azure services to build up one application which meets a more specific need. One of these is [IoT Hub](https://azure.microsoft.com/services/iot-hub/). 
 
+**NOTE**
 
+This example using a single device connected to Azure, using a free Tier. It does not address provisioning or use the best practise for authentication. This example includes a connection string in the source code. This is fine for testing, but not good practise for a real deployment.
 
+Below are a series of videos, showing each step for your to follow.
 
 [Video 1 - Creating the Application](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0604b16b-38de-43f1-8828-addd010e6e9a)
 
@@ -217,10 +221,11 @@ For this example, we are going to use Microsoft Azure IoT Central. IoT is descri
 
 [Video 5 - Configure the Target Board](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=93466dc5-325a-4a1f-869e-addd01123210)
 
+Note - [this is the URL for the connection string converter](https://dpsgen.z8.web.core.windows.net/).
+
 [Video 6 - Adding Additional Parameters](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7714d640-75b6-44a9-a923-addd0117f2d9)
 
 [Video 7 - Sending Back Commands](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b536473-e042-4e6a-86cd-addd01257498)
-
 
 
 
