@@ -209,9 +209,14 @@ Under the hood, this is use a collection of Azure services to build up one appli
 
 This example using a single device connected to Azure, using a free Tier. It does not address provisioning or use the best practise for authentication. This example includes a connection string in the source code. This is fine for testing, but not good practise for a real deployment.
 
-Below are a series of videos, showing each step for your to follow.
+| Task-396 | Azure IoT Central |
+| - | - |
+| 1 | Build Task 396 |
+| 2 | Watch each of the following videos, and follow each step |
 
 [Video 1 - Creating the Application](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0604b16b-38de-43f1-8828-addd010e6e9a)
+
+Reference: [IoT Central](https://apps.azureiotcentral.com/)
 
 [Video 2 - Device Templates](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=3d8eedf1-63f9-48c6-a1d5-addd010f0c2f)
 
@@ -221,22 +226,61 @@ Below are a series of videos, showing each step for your to follow.
 
 [Video 5 - Configure the Target Board](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=93466dc5-325a-4a1f-869e-addd01123210)
 
-Note - [this is the URL for the connection string converter](https://dpsgen.z8.web.core.windows.net/).
+Reference - [Azure IoT Central Connection String Generator](https://dpsgen.z8.web.core.windows.net/).
 
 [Video 6 - Adding Additional Parameters](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7714d640-75b6-44a9-a923-addd0117f2d9)
 
 [Video 7 - Sending Back Commands](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5b536473-e042-4e6a-86cd-addd01257498)
 
 
+Sending back commands includes two variants. One which simply sends a message, and another who expects a response. The sample code has examples of both
 
-## Further Learning
-A good place to go is the following tutorial from Microsoft Learn:
+`on_method_callback` is called when the command has the response option ticked (expects an integer payload to be returned to Azure)
 
-[Create your first Azure IoT Central app](https://docs.microsoft.com/learn/modules/create-your-first-iot-central-app/)
+`on_message_received` does not return a response with any payload.
 
-**TO BE CONTINUED**
+| Task-396 | Azure IoT Central | | 
+| - | - | - |
+| 3 | Modify the code to send back real light and temperature values. Use the LDR for light and the `EnvSensor` class in the uopmsb library. See uopmsb.h for details |
+| 4 | Add pressure as an additional parameter |
+| 5 | Modify the code so it runs until a command is sent from Azure to make it stop | 
+| 6 | In the IoT Central application, there is a section called rules. See if you can get Azure to email you every time the light levels drop low | 
+| 7 | Add a new parameter called `PressureChange`. This should be equal to the pressure change in the last 30 minutes. |
+| 8 | Add a new rule to detect a large pressure drop (in theory, this might correlate with rain) |
 
+If you want to explore more of IoT Central, a good place is on Microsoft Learn - [Create your first Azure IoT Central app](https://docs.microsoft.com/learn/modules/create-your-first-iot-central-app/)
 
+## Reflection
+
+This lab only begins the journey into IoT and networking. As networking infrastructure becomes more pervasive, so the Internet becomes available in more places. The current IoT term may fit the changes at the time of writing, and some might argue it's another 'fad'. However, the networked embedded systems and the benefits connectivity brings is likely to continue to evolve.
+
+What I've tried to do is also expose some of the underpinning networking fundamentals including IP Addresses, TPC, Ports, HTTP protocol and a first look at IoT services. 
+
+Low level socket programming (typically TCP/IP) is the foundation of most of what we use today. On a totally private network, with no gateway to the outside world, then binary protocols such as TCP and UDP can be an efficient may to send data between devices. Once we connect to public networks however, this becomes much more difficult as securing systems becomes complex. 
+
+* Network Security almost always has to be considered
+   * Servers (computers listening on network sockets) are often targeted and scanned for vulnerabilities
+   * Servers are likely to sit behind firewalls, and some on private networks, to reduce the attack surface. They often block unsolicited traffic on most TCP and UDP ports.
+   * Computer systems within an organisation may also run local firewalls to protect from internal attacks (such as by an infected device, or BYOD device)
+* IoT devices may be outside any firewall, so more visible and vulnerable to attack.
+
+Today, transmitting data is usually in an encrypted format. Concerns exist with [man in the middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) that can redirect and/or snoop on your data. Therefore, most data is encrypted. 
+
+> **Writing your own cryptography algorithms is strongly discouraged** 
+
+This means you will need to use supported and tested security layers to send and receive data. This adds to the complexity and computational overheads.
+
+Provisioning devices is also a consideration. Enrolling and authenticating devices into an organisation in a way that is secure is again complex and time consuming.
+
+Over the Air Updates has become popular, with IoT systems being live patched. The potential for security breeches are enough to make anyone nervous!
+
+Given all the above, it is easy to see how secured services (such as [Azure](https://azure.microsoft.com/overview/iot/), [Pellion](https://pelion.com/), [Google Cloud](https://cloud.google.com/solutions/iot/), [AWS](https://aws.amazon.com/iot/) and others.) are attractive as they absorb much of the complexity and overheads. 
+
+## Further Reading
+
+[MQTT Protocol for IoT](https://mqtt.org/)
+
+[Mbed OS Connectivity](https://os.mbed.com/docs/mbed-os/v6.15/apis/connectivity.html)
 
 ---
 

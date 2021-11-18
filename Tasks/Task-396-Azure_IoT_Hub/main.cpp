@@ -78,9 +78,9 @@ static void on_message_sent(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* user
     }
 }
 
-// **************************************
-// * COMMAND HANDLER (sends a response) *
-// **************************************
+// ****************************************************
+// * COMMAND HANDLER (sends a response back to Azure) *
+// ****************************************************
 DigitalOut led1(LED1); 
 DigitalIn blueButton(USER_BUTTON);
 static int on_method_callback(const char* method_name, const unsigned char* payload, size_t size, unsigned char** response, size_t* response_size, void* userContextCallback)
@@ -188,7 +188,7 @@ void demo() {
             // If we have received a message from the cloud, don't send more messeges
             break;
         }
-
+        //Send data in this format:
         /*
             {
                 "LightLevel" : 0.12,
