@@ -1,6 +1,6 @@
 [Table of Contents](../README.md) 
 
-<img src="img/Icon-jpg-small.jpg" width="80px" align="right">
+<img src="../img/Icon-jpg-small.jpg" width="80px" align="right">
 
 ---
 
