@@ -775,7 +775,6 @@ Some other languages have "interfaces", which are similar to classes, but contai
 
 ---
 
-
-[Back to Contents](README.md)
+[NEXT - Lab3-Threads and Thread Synchronisation](threads1.md)
 
 ---

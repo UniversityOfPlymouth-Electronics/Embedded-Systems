@@ -1218,5 +1218,4 @@ You can think of counting semaphores being a special case, where the value (of t
 
 ---
 
-
-[Next - Lab8 - Thread Abstractions](thread_abstractions.md)
+[NEXT - Lab4-Thread Abstractions](thread_abstractions.md)

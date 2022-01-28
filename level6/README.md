@@ -29,16 +29,21 @@ Changes for 2020:
 * The [existing glossary](http://blogs.plymouth.ac.uk/embedded-systems/glossary-2/) is being migrated to a [new version](/glossary/README.md) 
 * Blended delivery model
 
+Changes for 2022:
+Moved content from level 6 back to level 5
+
 # Level 6 Course
-This course is divided into two blocks:
+This is an advanced programming module, that builds on content in levels 4 and 5. You may wish to survey some of the labs from previous year first.
+
+In particular, make sure you are familiar with C/C++ structures, rapid polling and interrupts. If not, you must attempt those labs first as they underpin the content in this module.
 
 | Block | Content | - | Weeks |
 | --- | --- | --- | --- |
-| 1. | Review of Mbed-OS, C++, OOP and Interfacing | [Lab1-DigitalIO](DigitalIO.md), [Lab2-C and C++ Structures](Cplusplus-structures.md), [Lab3-C++ Classes](Cplusplus-classes.md), [Lab4-C++ and OOP](Cplusplus-oop.md) | 1-4 |
-| 2. | Multi-tasking: Blocking, polling, interrupts,  multi-threaded programming and networking | [Lab5-Rapid Polling](rapid-poll.md), [Lab6-Interrupts](interrupts.md), [Lab7-Threads and Thread Synchronisation](threads1.md), [Lab8-Thread Abstractions](thread_abstractions.md), [Lab9-Network Programming](network_programming.md) | 5 - 8 |
-| 3. | Coursework | | 9 - 13 |
+| 1. | Review | [See level 5 Lab Schedule](../level5/README.md) - review labs on structures and interrupts | 1-2 |
+| 2. | C++ and OOP | [Lab1-C++ Classes](Cplusplus-classes.md), [Lab2-C++ and OOP](Cplusplus-oop.md) | 3-4 |
+| 3. | Multi-threaded programming and networking | [Lab3-Threads and Thread Synchronisation](threads1.md), [Lab4-Thread Abstractions](thread_abstractions.md), [Lab5-Network Programming](network_programming.md) | 5-7 |
+| 4. | Coursework | | 7 - 13 |
 | |
-
 
 ## Using the Glossary
 Some crucial information is contained in the [glossary](/glossary/README.md).
@@ -54,9 +59,9 @@ We will then recap on what we mean by **blocking hardware** and the problems is 
 
 We will then review three approaches to managing multiple hardware devices in real-time, namely:
 
-* Rapid polling loops
-* Interrupts (and interrupt safety)
-* Multi-threaded programming
+* Rapid polling loops (from level 5)
+* Interrupts and interrupt safety (from level 5)
+* Multi-threaded programming (new in level 6)
 
 Some of this may be a refresher of what you were taught in level 5. However, repetition is often helpful as students don't often grasp the concepts first time. 
 
@@ -72,21 +77,9 @@ You may also be loaned other equipment, such as a "Picoscope" (assuming you don'
 
 
 ## Attending Labs
-Formal labs are scheduled at specific times in your timetable. Whether you are attending in person or remotely, you should use the Teams channel for that lab.
+Formal labs are scheduled at specific times in your timetable. Whether you are attending in person or doing some self study, you should ask questions in the Teams channel for that lab.
 
 Look for the channel that says "Lab Sessions"
-
-<figure>
-<img src="../img/Teams143-Expand-Lab-Sessions.png" width="300">
-<figcaption>Screen capture from the ELEC143 module Team. Your module code may be different</figcaption>
-</figure>
-
-When you click this channel, you should see meeting links
-
-<figure>
-<img src="../img/Teams143-Lab-Meeting.png" width="600">
-<figcaption>Click the appropriate lab session (module codes again will vary) and join the meeting. Turn off your camera and microphone</figcaption>
-</figure>
 
 Labs will also contain interactive elements. There will typically be a briefing at the start and a poll part way through. Participating in these is important.
 
@@ -106,5 +99,5 @@ There you will find links to recorded lectures. You can also subscribe to these 
 > Some videos are restricted to a specific cohort of students, where others may be public. Please do not distribute these videos elsewhere.  
 
 ---
-[NEXT - Lab1-DigitalIO](DigitalIO.md)
+[NEXT - Start the first lab](#Level-6-Course)
 

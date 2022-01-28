@@ -514,4 +514,6 @@ Hints
 
 Write some demo code to simulate a road with two traffic lights, one at each end.
 
-[NEXT - Lab4-C++ and OOP](Cplusplus-oop.md)
+---
+
+[NEXT - Lab2-C++ and OOP](Cplusplus-oop.md)
