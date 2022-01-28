@@ -37,7 +37,7 @@ This is an advanced programming module, that builds on content in levels 4 and 5
 
 In particular, make sure you are familiar with C/C++ structures, rapid polling and interrupts. If not, you must attempt those labs first as they underpin the content in this module.
 
-| Block | Content | - | Weeks |
+| Topic | Content | - | Weeks |
 | --- | --- | --- | --- |
 | 1. | Review | [See level 5 Lab Schedule](../level5/README.md) - review labs on structures and interrupts | 1-2 |
 | 2. | C++ and OOP | [Lab1-C++ Classes](Cplusplus-classes.md), [Lab2-C++ and OOP](Cplusplus-oop.md) | 3-4 |
