@@ -4,5 +4,5 @@
  
 # Level 5 - ELEC240
 
-COMING SOON - ELEC240 and ELEC241
-(see other branches for a sneak peek)
+1. [Semester 1 - ELEC240 Embedded Systems - C](embedded_systems_C.md)
+1. [Semester 1 - ELEC240 Embedded Systems - VHDL](embedded_systems_HDL.md)
