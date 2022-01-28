@@ -18,20 +18,20 @@ One of the objectives of modern computers, and especially those which are batter
 
 With this in mind, let's have a refresher of hardware interrupts on our embedded board.
 
-> It should be noted that we are STILL using the **bare-metal** profile of Mbed. This ensures the real-time operating system (RTOS) is disabled.
+> It should be noted that we are STILL using the **bare-metal** profile of Mbed. This ensures the real-time operating system (RTOS) is disabled (we don't need this until level 4).
 >
 > The reason for this is that the RTOS uses a timer interrupt, and this will keep waking the CPU. 
 >
 > See the file `mbed_app.json` in each project 
 
-## Task-348 : Interrupts
+## Task-248 : Interrupts
 This tasks reminds us of how to use interrupts to respond to external and internal hardware events. It also shows us how to put the microcontroller into a lower-power sleep state.
 
 
 
-| TASK-348 | Interrupts in Mbed |
+| TASK-248 | Interrupts in Mbed |
 | --- | --- |
-| 1.  | Make Task-348 the Active Program |
+| 1.  | Make Task-248 the Active Program |
 | 2.  | Build and run the code. Press button A to see what happens |
 | 3.  | Read through the code and comments |
 | 4.  | Using the debugger, put a breakpoint on the line that reads: |
@@ -83,12 +83,12 @@ In this example, we see both GPIO and Timer based interrupts wake the CPU.
 >
 > This is a very important point which we will now look at in more details.
 
-## Task-350 - Race Conditions
+## Task-250 - Race Conditions
 **This is one of the most important topics in this module.** Pay particular attention to this exercise as it underpins many issues you will meeting going forward. It is also the basis of some of the most difficult software faults to detect and fix.
 
-| TASK-350 | Race Conditions |
+| TASK-250 | Race Conditions |
 | --- | --- |
-| 1.  | Set Task-350 as your active program |
+| 1.  | Set Task-250 as your active program |
 | 2.  | Build and run the task. |
 | 3.  | Note the LED sequence |
 
@@ -109,7 +109,7 @@ Three LEDs are used in this project.
 * The yellow LED is on while `countDown()` is running
 * The red LED is on as long as `counter` is not equal to zero
 
-| TASK-350 | Race Conditions |
+| TASK-250 | Race Conditions |
 | --- | --- |
 | 4.  | Press the black reset button and again observe the green and yellow LEDs |
 | -   | Note that green first switches on and then off, followed by yellow switching on and off. |
@@ -118,7 +118,7 @@ Three LEDs are used in this project.
 
 This makes numerical sense. The `countUp()` function adds 10,000,000 to `counter`, then the `countDown()` function subtracts 10,000,000. **The net result is zero**.
 
-| TASK-350 | Race Conditions |
+| TASK-250 | Race Conditions |
 | --- | --- |
 | 5.  | While holding down the blue button, press and release the black reset button. Again observe the green and yellow LEDs |
 | -   | Note that there is a moment when both yellow and green are switched ON. |
@@ -379,7 +379,7 @@ This is the topic of the next section.
 
 ---
 
-[NEXT - Threads and Thread Synchronisation](threads1.md)
+[Back to Contents](README.md)
 
 
 

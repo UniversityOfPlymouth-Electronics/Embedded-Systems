@@ -7,7 +7,7 @@ In this 2-part lab, we will explore object orientated techniques in C++. We begi
 
 C++ is an "Object Orientated Language", whereas C is procedural. You can think of C++ as an extension of the C language, inheriting most of it's attributes and syntax.
 
-Central to this is the "Class". To understand Classes, we need to remind ourselves about structures.
+In level 4, we will meet custom data types known as "Classes". First however, we need to understand C (and C++) **structures**.
 
 | Lecture | Title |
 | - | - |
@@ -23,12 +23,12 @@ typedef short int16_t
 
 where `short` is an existing type and `int16_t` is the new name. In fact, some of these are already create for you, including:
 
-* int8_t
-* uint8_t
-* int16_t
-* uint16_t
-* int32_t
-* uint32_t
+* `int8_t`
+* `uint8_t`
+* `int16_t`
+* `uint16_t`
+* `int32_t`
+* `uint32_t`
 
 > If you want to revise this, [see here](../level4/TASK110.md#Platform-independent-types-and-typedef)
 
@@ -83,9 +83,9 @@ To read the values, you simple use the _dot notation_. For example:
 double y = q.real;
 ```
 
-| **TASK 310** | Structures |
+| **TASK 210** | Structures |
 | --- | --- |
-| 1. | Set Task-310 as your active project |
+| 1. | Set Task-210 as your active project |
 | 2. | Read the code and the comments |
 | 3. | Create another complex number y |
 |    | Calculate the complex sum of p and q and store in y |
@@ -196,9 +196,9 @@ ComplexNumber_C& nice_ptr = *ptrP;
 
 Now the variable `nice_ptr` is synonymous with `p` and you can still use the dot notation.
 
-| **TASK 311** | Value and Reference Semantics |
+| **TASK 211** | Value and Reference Semantics |
 | --- | --- |
-| 1. | Set Task-311 as your active project |
+| 1. | Set Task-211 as your active project |
 | 2. | Build the code |
 | 3. | Now step through the code line by line. However, _you should try and predict the values before they are printed._ |
 |    | How many did you get right? |
@@ -233,9 +233,9 @@ ComplexNumber_C complexAdd(const ComplexNumber_C a, const ComplexNumber_C b)
 }
 ```
 
-| **TASK 312** | Passing by value and reference |
+| **TASK 212** | Passing by value and reference |
 | --- | --- |
-| 1. | Set Task-312 as your active project |
+| 1. | Set Task-212 as your active project |
 | 2. | Build and debug through the code to understand what it does |
 | 3. | [Watch this video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6039be0c-fd29-4590-b76d-ac5600c4404b). Now move your complex data type and associated functions into a separate CPP and header file |
 | 4. | Now add the following functions and test |
@@ -277,7 +277,7 @@ To invoke, the syntax must also use pointers:
 complexNegateInplace(&p);
 ```
 
-| **TASK 312** | Passing by value and reference |
+| **TASK 212** | Passing by value and reference |
 | --- | --- |
 | 5. | Now add the following functions and test |
 | -  | complexConjugateInplace |
@@ -318,4 +318,4 @@ https://dle.plymouth.ac.uk/mod/quiz/view.php?id=985992
 
 ---
 
-[NEXT - Lab3-C++ Classes](Cplusplus-classes.md)
+[NEXT - Lab3-Serial Interfacing](SerialInterfacing.md)

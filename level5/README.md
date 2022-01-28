@@ -24,7 +24,7 @@ This course covers a number of topics in embedded programming
 
 | Block | Content | - | Weeks |
 | --- | --- | --- | --- |
-| 1. | Review of Mbed-OS, C/C++ and Interfacing | [Lab1-DigitalIO](DigitalIO.md), [Lab2-C and C++ Structures](Cplusplus-structures.md), [Lab3-Serial Interfacing - Coming Soon] | 1 |
+| 1. | Review of Mbed-OS, C/C++ and Interfacing | [Lab1-DigitalIO](DigitalIO.md), [Lab2-C and C++ Structures](Cplusplus-structures.md), [Lab3-Serial Interfacing - Coming Soon](SerialInterfacing.md) | 1 |
 | 2. | Multi-tasking: Blocking, polling, interrupts | [Lab4-Rapid Polling](rapid-poll.md), [Lab5-Interrupts](interrupts.md) | 5 - 8 |
 | |
 

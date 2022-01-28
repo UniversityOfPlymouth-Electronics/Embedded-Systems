@@ -3,7 +3,7 @@
 ---
 
 # Multi-Tasking with Rapid-Polling
-If you remember back to the level 5 course, one of the challenges was with managing multiple devices at the same time.
+If you remember back to previous modules, one of the challenges you may have encountered was with managing multiple devices at the same time.
 
 > Blocking has been recognised as a problem for computers for many years. In the absence of an alternative strategy, simply waiting on a device to change state can mean ignoring other device I/O, which can lead to data loss or integrity errors.
 
@@ -15,7 +15,7 @@ For the remainder of this module, we mostly focus on techniques to implement mul
 
 * **Rapid Polling** - whereby we take responsibility for servicing all devices. We read input devices and service output devices at high enough speeds to prevent data loss or corruption.
 * **Interrupts** - whereby we utilise hardware-interrupts and the "Nested Vectored Interrupt Controller" (NVIC) to react to hardware events (whilst also saving power).
-* **Multi Threaded Programming** - using the Mbed Real Time Operating System components (based on CMSIS RTOS) to handle multi-tasking for us, so that we are able to write separate functions (containing sequential code) that "seems" to run in parallel, even on a single core. Using this method, we go full circle and discover we may use simple blocking code once again!
+* **Multi Threaded Programming** - using the Mbed Real Time Operating System components (based on CMSIS RTOS) to handle multi-tasking for us, so that we are able to write separate functions (containing sequential code) that "seems" to run in parallel, even on a single core. Using this method, we go full circle and discover we may use simple blocking code once again! However, this is an advanced topic which is covered in level 4.
 
 Let's begin with the concept of rapid-polling.
 
@@ -29,7 +29,7 @@ Rapid polling loops are simple in concept, but can be tricky and messy to write.
 
 This is probably explained with some examples. The first is a simple application which uses two buttons to increment or decrement a counter.
 
-## Task-344 - Rapid Polling
+## Task-244 - Rapid Polling
 In this task, you will have three input devices controlling two outputs.
 
 **Inputs**
@@ -41,9 +41,9 @@ In this task, you will have three input devices controlling two outputs.
 * 7-Segment Display - displays a count
 * Green LED - flashes twice a second
 
-| TASK-344 | Rapid Polling |
+| TASK-244 | Rapid Polling |
 | --- | --- |
-| 1. | Make Task-344 the Active Program |
+| 1. | Make Task-244 the Active Program |
 | 2. | Build and run. |
 | -  | Press A a few times to increment the count |
 | -  | Press B a few times to decrement the count |
@@ -160,14 +160,14 @@ This delay noticeably slows the loop time, but luckily not enough to notice. It 
 
 An improvement would be to poll two more timers, one per switch and remove blocking entirely. This is the purpose of the next task. This change is going to add more complexity to our code however.
 
-## Task-346 - Using a State Machine pattern
+## Task-246 - Using a State Machine pattern
 We will now remote any blocking code from the previous task. So that the code does not become too complex, a state machine is used for each input/output combination. In fact we employ 3 state machines.
 
 > A state machine allows us to keep track of where we are in a sequence. As you will see, this removes the need to record the previous input values and we can avoid blocking entirely.
 
-| Task-346 | Using a State Machine for Rapid Polling |
+| Task-246 | Using a State Machine for Rapid Polling |
 | --- | --- |
-| 1.  | Make Task-346 the active program |
+| 1.  | Make Task-246 the active program |
 | 2.  | Build and run the code |
 | -   | Press A and B to see the count change. Note the flashing green LED is unaffected |
 | 3.  | Use the debugger to step through the code to make sure you understand it |
@@ -189,9 +189,9 @@ The next task as one possible solution.
 ## Task-427
 This task contains one possible solution to the challenge in the previous task.
 
-| Task-347 | Using a State Machine for Rapid Polling |
+| Task-247 | Using a State Machine for Rapid Polling |
 | --- | --- |
-| 1.  | Make Task-347 the active program |
+| 1.  | Make Task-247 the active program |
 | 2.  | Build and run the code |
 | -   | Press A and B to see the count change. Note the flashing green LED is unaffected |
 | 3.  | Use the debugger to step through the code to make sure you understand it |
@@ -223,6 +223,6 @@ Next, we loop a more sophisticated solution, **hardware interrupts**.
 
 ---
 
-[NEXT - Lab6-Interrupts](interrupts.md)
+[NEXT - Lab5-Interrupts](interrupts.md)
 
 
