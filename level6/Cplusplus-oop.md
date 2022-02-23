@@ -822,15 +822,13 @@ There are two folders in this project: `Concrete Objects` and `Flashy` (the fold
 
 All the above are pure C++ (and the standard library). In theory, these should compile on any platform. However, we need to do more work for them to actually compile.
 
-Let's look at `Flashy`. Note the protected properties `_tmr` and `_light`. These are of type `ITimer` and `ILightNotify`. They are also references, and initialised via the constructor.
-
-Note the function invocations. 
+Let's look at `Flashy`. Note the protected properties `_tmr` and `_light`. These are of type `ITimer&` and `ILightNotify&`. They are also **references** (to existing objects), and initialised via constructor parameters.
 
 ```C++
 class Flashy {
     protected:
-    ITimer& _tmr;
-    ILightNotify& _light;
+    ITimer& _tmr;           //Reference to an object type ITimer
+    ILightNotify& _light;   //Reference to an object type ILightNotify
     milliseconds _rate;
     public:
     Flashy(ITimer& tmr, ILightNotify& light, milliseconds rate) : _tmr(tmr), _light(light), _rate(rate) {
