@@ -37,7 +37,7 @@ int main()
     
     while (true) {
         f.flashOnce();
-        tmr.wait_for(1000ms);
+        tmrObj.wait_for(1000ms);
     }
 }
 

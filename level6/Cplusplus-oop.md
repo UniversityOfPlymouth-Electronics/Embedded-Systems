@@ -762,16 +762,91 @@ Let's look at `Flashy` and we see the ISR has been slightly modified. The `Ticke
 | 7. | Use the debugger to discover which one is when the blue button is held down |
 | 8. | Remove the `virtual` keyword and rebuild the code. Repeat the above experiment |
 
+
 ## Further topics
 
 ### Multiple Inheritance
 C++ allows us to  inherit code from more than one class. You can see an example of this in Task-340B
 
-### Pure Virtual Functions
-Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "abstract classes". This is a rather an advanced topic, but an example has been provided in Task-342
+### Task 344: Mocking Hardware with Pure Virtual Classes
+Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "abstract classes". This is a rather an advanced topic, but an example has been provided in Task-342 and Task-344.
 
+We will focus on Task-344 which also introduces the idea of mocking hardware. Mocking hardware is when you write abstractions to mimic real hardware. This is useful for a number of reasons, including:
 
+* Cross platform porting
+* Testing without access to physical hardware
+* Unit Testing code logic (abstracting out the hardware specifics)
 
+We also want to make it easy to switch between real hardware and mocked. A key concept is this: *any object that has at least one parent class, in effect, has more than one type*.
+
+Let's look at a real example:
+
+| TASK 344 | Mocking Hardware with Pure Virtual Classes |
+| --- | --- |
+| 1 | Make Task 344 your active program |
+| 2 | Build and run. You should see an LED pulse on and off every second |
+| 3 | Inspect the `main` function |
+
+We see the following code:
+
+```C++
+int main()
+{
+    Flashy f(tmrObj, lightObj, 250ms);
+    
+    while (true) {
+        f.flashOnce();
+        tmrObj.wait_for(1000ms);
+    }
+}
+```
+
+You need to focus on the `Flashy` class, as this has been written with a specific criteria - **to be platform independent**. However, it is clearly running on Mbed. 
+
+| TASK 344 | continued |
+| --- | --- |
+| 4 | Comment out the line in `main.cpp` that reads `#define USE_REAL_HW` |
+| 5 | Rebuild and observe the terminal output. You should also notice that your board LED stops flashing |
+
+With this one simple change, we have switched from real platform-specific hardware to pure C++ (and C++ standard library) text output.
+
+Let's now look at one of the more surprising claims: 
+
+> The class `Flashy` is platform independent.
+
+There are two folders in this project: `Concrete Objects` and `Flashy` (the folders are purely a means of grouping related files). In `Flashy`, we see three classes:
+
+* `Flashy` - pure C++
+* `ITimer` - pure virtual class that contains only function prototypes  relating to starting and stopping a timer. There is no concrete code in this class. In other languages, this would be called an *Interface*
+* `ILightNotify` - another pure virtual class, only with function prototypes relating to switching a light on and off
+
+All the above are pure C++ (and the standard library). In theory, these should compile on any platform. However, we need to do more work for them to actually compile.
+
+Let's look at `Flashy`. Note the protected properties `_tmr` and `_light`. These are of type `ITimer` and `ILightNotify`. They are also references, and initialised via the constructor.
+
+Note the function invocations. 
+
+```C++
+class Flashy {
+    protected:
+    ITimer& _tmr;
+    ILightNotify& _light;
+    milliseconds _rate;
+    public:
+    Flashy(ITimer& tmr, ILightNotify& light, milliseconds rate) : _tmr(tmr), _light(light), _rate(rate) {
+        _light.lightOff();
+        _tmr.stop();
+    }
+    void flashOnce() {
+        _light.lightOn();
+        _tmr.start();
+        _tmr.wait_for(_rate);
+         _light.lightOff();
+        _tmr.wait_for(_rate);       
+        _tmr.stop();
+    }
+};
+```
 
 ---
 
