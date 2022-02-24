@@ -9,7 +9,7 @@ class Flashy {
     protected:
     ITimer& _tmr;           //Reference to an object type ITimer
     ILightNotify& _light;   //Reference to an object type ILightNotify
-    milliseconds _rate;
+    milliseconds  _rate;
     public:
     // Initialisation list set the private referenes - keeping a reference to the 
     Flashy(ITimer& tmr, ILightNotify& light, milliseconds rate) : _tmr(tmr), _light(light), _rate(rate) {
@@ -20,11 +20,10 @@ class Flashy {
         _light.lightOn();
         _tmr.start();
         _tmr.wait_for(_rate);
-         _light.lightOff();
+        _light.lightOff();
         _tmr.wait_for(_rate);       
         _tmr.stop();
     }
-
 };
 
 #endif
