@@ -769,15 +769,15 @@ Let's look at `Flashy` and we see the ISR has been slightly modified. The `Ticke
 C++ allows us to  inherit code from more than one class. You can see an example of this in Task-340B
 
 ### Task 344: Mocking Hardware with Pure Virtual Classes
-Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "abstract classes". This is a rather an advanced topic, but an example has been provided in Task-342 and Task-344.
+Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "pure virtual classes" (or abstract classes). This is a somewhat advanced topic, but an example has been provided in Task-344.
 
-We will focus on Task-344 which also introduces the idea of mocking hardware. Mocking hardware is when you write abstractions to mimic real hardware. This is useful for a number of reasons, including:
+This task also introduces the idea of mocking hardware. Mocking hardware is when you write abstractions to mimic real hardware. This is useful for a number of reasons, including:
 
 * Cross platform porting
 * Testing without access to physical hardware
 * Unit Testing code logic (abstracting out the hardware specifics)
 
-We also want to make it easy to switch between real hardware and mocked. A key concept is this: *any object that has at least one parent class, in effect, has more than one type*.
+We also want to make it easy to switch between real hardware and mocked. A key concept is this: *any object that has at least one parent class, in effect, has more than one type. Therefore, objects that share the same parent can be considered to be of the same type*.
 
 Let's look at a real example:
 
@@ -801,7 +801,7 @@ int main()
 }
 ```
 
-You need to focus on the `Flashy` class, as this has been written with a specific criteria - **to be platform independent**. However, it is clearly running on Mbed. 
+You need to initially focus on the `Flashy` class, as this has been written with a specific criteria - **to be platform independent**. However, it is clearly running on Mbed. 
 
 | TASK 344 | continued |
 | --- | --- |
@@ -822,11 +822,11 @@ There are two folders in this project: `Concrete Objects` and `Flashy` (the fold
 
 All the above are pure C++ (and the standard library). In theory, these should compile on any platform. However, we need to do more work for them to actually compile.
 
-Let's look at `Flashy`. Note the protected properties `_tmr` and `_light`. These are of type `ITimer&` and `ILightNotify&`. They are also **references** (to existing objects), and initialised via constructor parameters.
+Let's look at `Flashy` (code is shown below). Note the protected properties `_tmr` and `_light`. These are of type `ITimer&` and `ILightNotify&`. They are also **references** (to existing objects), and provided (a.k.a.injected) via constructor parameters.
 
-> The actual concrete objects `_light` and `_tmr` are not instantiated inside this class, but are instead passed by reference from outside.
+> The actual concrete objects for `_light` and `_tmr` are not instantiated inside this class, but are instead created elsewhere (platform specific code), and passed by reference from outside.
 >
-> The actual objects can be any subclass of `ITimer` and `ILightNotify`. This class does not need to know the concrete class type.
+> The actual objects can be **any** subclass of `ITimer` and `ILightNotify`. The `Flashy` class does **not** need to know the concrete class type. 
 >
 > This is sometimes known as *Dependency Injection* (DI)
 
@@ -854,7 +854,7 @@ class Flashy {
 
 So what are `ITimer` and `ILightNotify`? Taking a look at the sources, we see they are *pure virtual classes* (known as Interfaces in other languages).
 
-**`ITimer`** lists some APIs for generic timer behaviour. Note these are *pure virtual functions*, so **must** be overridden in any subclass (or the compiler will generate an error). Therefore, we can safely assume these functions will always be implemented at run-time.
+**`ITimer`** lists some APIs for generic timer behaviour. Note these are *pure virtual functions*, so **must** be overridden in any subclass (or the compiler will generate an error). Therefore, we can safely assume these functions will always be implemented at run-time by any subclass of `ITimer`.
 
 ```C++
 class ITimer {
@@ -894,11 +894,11 @@ Now we have the three virtual classes, but none of them can be instantiated. The
 | 7 | In `MbedLight`, comment out one of the functions and try to re-compile |
 | - | What error do you get and why? |
 
-Let's now look at the sources. `MbedLight` is a concrete class that compiles. It is designed to work with Mbed, making use of `DigitalOut` and related classes. The key point is that **it is a subclass of ILightNotify**, and must override all the APIs in the parent class in order to compile.
+Let's now look at the sources (see below). `MbedLight` is a concrete class that compiles. It is designed to work with Mbed, making use of `DigitalOut` and related classes. The key point is that **it is a subclass of ILightNotify**, so **must** override all the APIs in the parent class in order to compile.
 
 * We can say that an instance of `MbedLight` is also of type `ILightNotify`
 * All the base class functions are overridden with concrete (platform dependent) implementations.
-* All the inherited APIs are virtual, so will be resolved at run-time (using late binding)
+* All the inherited APIs are virtual, so will be resolved correctly at run-time (polymorphism - using late binding)
 
 ```C++
 class MbedLight : public ILightNotify {
@@ -926,7 +926,7 @@ class MbedLight : public ILightNotify {
 
 Now we can contrast this with `MockedLight`. This has has no dependency on Mbed at all. In fact, it only uses standard C++ and the standard C++ library. All output is written to the the `stdout` stream (terminal output). However, it also is a subclass of `ILightNotify` so again, **must** override all the virtual functions in order to be compiled. 
 
-* Like it's sibling `MbedLight`, it is also of type `ILightNotify`.
+* Like it's sibling `MbedLight`, we can say it is also of type `ILightNotify`.
 
 ```C++
 class MockedLight : public ILightNotify {
@@ -954,7 +954,7 @@ class MockedLight : public ILightNotify {
 };
 ```
 
-So we have a pure virtual base class type (`ILightNotify`), and concrete subclasses. All that remains is for another actor to inject one of these concrete objects into the `Flash` class. We see this code in `main.cpp`.
+So we have a pure virtual base class type (`ILightNotify`), and a choice of two concrete subclasses. All that remains is for another actor to inject one of these concrete objects into the `Flash` class. We see this code in `main.cpp`.
 
 If we are building for Mbed, we would use the following:
 
@@ -972,30 +972,28 @@ ILightNotify& lightObj = redLedMocked;
 Flashy f(tmrObj, lightObj, 250ms);
 ```
 
-**Note** how the last line of each version is identical. `Flashy` does not need to know what concrete type is being used as the parameter type is `ILightNotify`. All it cares about is that it can safely invoke a set of member functions at run-time, as declared in `ILightNotify`. 
+**Note** how the last line of each version is identical. `Flashy` does not need to know what concrete type is being used as the parameter type is `ILightNotify`. All it cares about is that it can safely invoke a set of member functions at run-time, as declared in `ILightNotify`. The addresses will be resolved at run-time (see virtual functions).
 
-Note of the concrete object is passed by parameter. This is the Dependency Injection (DI) part.
+Note how the concrete object is passed by parameter. This is the Dependency Injection (DI) part. We've chosen to use parameters in the constructor, but you could equally use setters for the properties.
 
-We can also make another claim - `Flashy` is not strongly coupled to any particular concrete class type. We say it is loosely coupled.
+We can also make another claim - `Flashy` is not strongly coupled to any particular concrete class type. We say it is *loosely coupled*.
 
 | TASK 344 | continued |
 | --- | --- |
 | 8 | Examine the code in `ITimer` and the concrete subclasses in the `ConcreteObjects` folder. |
 | - | Confirm that the exact same principle is applied |
-| 9 | In `main.cpp`, comment out the line that reads `#define USE_REAL_HW`. Rebuild and run |
-| 10 | Can you build a Windows console application (in C++) to test `Flashy` using the Mocked version of the class? |
+| 9 | Can you build a Windows console application (in C++) to test `Flashy` using the Mocked version of the class? |
 
 ## Why loosely couple classes?
 There are many arguments for loose coupling, some of which we have witnessed here. 
 
-One of the downsides of *composition* is the tight coupling it creates. By using pure virtual classes (Interfaces), we break such dependencies.
+One of the downsides of *composition* is the tight coupling it creates. By making our properties pure virtual class types (Interfaces), we break such dependencies.
 
-One of the major benefits of this approach is mocking. Writing classes to mimic real hardware to make testing easier. Mocked classes can include additional tests and logging data. It should be easy to switch back to platform code. This also allows for methodologies, such as Test Driven Development (TDD).
+One of the major benefits of this approach is mocking. Writing classes to mimic real hardware can help make testing more rigorous. Mocked classes can include additional tests and data logging. It should be made easy to switch back to platform code. This also supports methodologies such as Test Driven Development (TDD).
 
-Another benefit is portability. We could equally have written concrete subclasses for another platform, such as Arduino. 
+Another benefit is portability. We could equally have written concrete subclasses for another platform, such as Arduino.
 
 The cost for this is greater complexity in the application. The *plumbing and wiring* of objects can be confusing, especially if it is not your own code.
-
 
 [NEXT - Lab3-Threads and Thread Synchronisation](threads1.md)
 
