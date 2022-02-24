@@ -824,6 +824,12 @@ All the above are pure C++ (and the standard library). In theory, these should c
 
 Let's look at `Flashy`. Note the protected properties `_tmr` and `_light`. These are of type `ITimer&` and `ILightNotify&`. They are also **references** (to existing objects), and initialised via constructor parameters.
 
+> The actual concrete objects `_light` and `_tmr` are not instantiated inside this class, but are instead passed by reference from outside.
+>
+> The actual objects can be any subclass of `ITimer` and `ILightNotify`. This class does not need to know the concrete class type.
+>
+> This is sometimes known as *Dependency Injection* (DI)
+
 ```C++
 class Flashy {
     protected:
@@ -846,7 +852,150 @@ class Flashy {
 };
 ```
 
----
+So what are `ITimer` and `ILightNotify`? Taking a look at the sources, we see they are *pure virtual classes* (known as Interfaces in other languages).
+
+**`ITimer`** lists some APIs for generic timer behaviour. Note these are *pure virtual functions*, so **must** be overridden in any subclass (or the compiler will generate an error). Therefore, we can safely assume these functions will always be implemented at run-time.
+
+```C++
+class ITimer {
+
+    public:
+    virtual void start() = 0;
+    virtual void stop() = 0;
+    virtual milliseconds getTime_ms() = 0;
+    virtual void wait_for(milliseconds t) = 0;
+    protected:
+    virtual void initialise() = 0;
+};
+```
+
+**`ILightNotify`** similarly lists some APIs for generic "Light" behaviour. Again, these are all *pure virtual functions*, so **must** be overridden in any subclass.
+
+```C++
+class ILightNotify {
+    public:
+    virtual void lightOn() = 0;
+    virtual void lightOff() = 0;
+    virtual bool lightStatus() = 0;
+};
+```
+
+**KEY POINT** - all of the three classes discussed so far are pure C++ and C++ standard library. There is nothing in this code that is platform dependent. These three files would be packaged together.
+
+### Porting to a specific platform
+Now we have the three virtual classes, but none of them can be instantiated. The developer reusing these classes must now implement the platform specific code. This is achieved through subclassing and injecting (via parameters).
+
+| TASK 344 | continued |
+| --- | --- |
+| 6 | Examine the code in the `ConcreteObjects` folder. |
+| - | Contrast the `MbedLight` and `MockedLight` classes |
+| - | What do they have in common? |
+| - | What is different? |
+| 7 | In `MbedLight`, comment out one of the functions and try to re-compile |
+| - | What error do you get and why? |
+
+Let's now look at the sources. `MbedLight` is a concrete class that compiles. It is designed to work with Mbed, making use of `DigitalOut` and related classes. The key point is that **it is a subclass of ILightNotify**, and must override all the APIs in the parent class in order to compile.
+
+* We can say that an instance of `MbedLight` is also of type `ILightNotify`
+* All the base class functions are overridden with concrete (platform dependent) implementations.
+* All the inherited APIs are virtual, so will be resolved at run-time (using late binding)
+
+```C++
+class MbedLight : public ILightNotify {
+    private:
+    DigitalInOut _gpio;
+
+    public:
+    MbedLight(PinName pin, PinDirection direction=PinDirection::PIN_OUTPUT, PinMode mode=PushPullNoPull, int value=0) : _gpio(pin, direction, mode, value) {
+        _gpio.output();
+        _gpio.mode(mode);
+        _gpio.write(value);
+    }
+
+    virtual void lightOn() { 
+        _gpio.write(1); 
+    };
+    virtual void lightOff() { 
+        _gpio.write(0); 
+    };
+    virtual bool lightStatus() { 
+        return (_gpio.read() == 1) ? true : false; 
+    };
+};
+```
+
+Now we can contrast this with `MockedLight`. This has has no dependency on Mbed at all. In fact, it only uses standard C++ and the standard C++ library. All output is written to the the `stdout` stream (terminal output). However, it also is a subclass of `ILightNotify` so again, **must** override all the virtual functions in order to be compiled. 
+
+* Like it's sibling `MbedLight`, it is also of type `ILightNotify`.
+
+```C++
+class MockedLight : public ILightNotify {
+    private:
+    bool state = false;
+    string ID;
+
+    public:
+    MockedLight(string ID, bool initialState = false) : ID(ID) {
+        cout << "Mocked Light initialised" << endl;
+        state = initialState;
+    }
+
+    virtual void lightOn() { 
+        cout << "LIGHT " << ID << "ON" << endl; 
+        state = true; 
+    };
+    virtual void lightOff() { 
+        cout << "LIGHT " << ID << "OFF" << endl; 
+        state = false; 
+    };
+    virtual bool lightStatus() { 
+        return state; 
+    };
+};
+```
+
+So we have a pure virtual base class type (`ILightNotify`), and concrete subclasses. All that remains is for another actor to inject one of these concrete objects into the `Flash` class. We see this code in `main.cpp`.
+
+If we are building for Mbed, we would use the following:
+
+```C++
+MbedLight redLed(LED1);                 //Concrete class
+ILightNotify& lightObj = redLed;        //Alias - to look tidy
+Flashy f(tmrObj, lightObj, 250ms);
+```
+
+If we are testing on another platform (e.g. Windows console app), we could use the following:
+
+```C++
+MockedLight redLedMocked("RED LED");
+ILightNotify& lightObj = redLedMocked;
+Flashy f(tmrObj, lightObj, 250ms);
+```
+
+**Note** how the last line of each version is identical. `Flashy` does not need to know what concrete type is being used as the parameter type is `ILightNotify`. All it cares about is that it can safely invoke a set of member functions at run-time, as declared in `ILightNotify`. 
+
+Note of the concrete object is passed by parameter. This is the Dependency Injection (DI) part.
+
+We can also make another claim - `Flashy` is not strongly coupled to any particular concrete class type. We say it is loosely coupled.
+
+| TASK 344 | continued |
+| --- | --- |
+| 8 | Examine the code in `ITimer` and the concrete subclasses in the `ConcreteObjects` folder. |
+| - | Confirm that the exact same principle is applied |
+| 9 | In `main.cpp`, comment out the line that reads `#define USE_REAL_HW`. Rebuild and run |
+| 10 | Can you build a Windows console application (in C++) to test `Flashy` using the Mocked version of the class? |
+
+## Why loosely couple classes?
+There are many arguments for loose coupling, some of which we have witnessed here. 
+
+One of the downsides of *composition* is the tight coupling it creates. By using pure virtual classes (Interfaces), we break such dependencies.
+
+One of the major benefits of this approach is mocking. Writing classes to mimic real hardware to make testing easier. Mocked classes can include additional tests and logging data. It should be easy to switch back to platform code. This also allows for methodologies, such as Test Driven Development (TDD).
+
+Another benefit is portability. We could equally have written concrete subclasses for another platform, such as Arduino. 
+
+The cost for this is greater complexity in the application. The *plumbing and wiring* of objects can be confusing, especially if it is not your own code.
+
 
 [NEXT - Lab3-Threads and Thread Synchronisation](threads1.md)
 
