@@ -78,5 +78,8 @@ int main()
             led2 = !led2;
         }
     
+        //Experiment -  uncommend the following line. Are any characters missed?
+        //wait_us(1000000);   //Delay 1 seconds
+
     }
 }

@@ -348,6 +348,29 @@ All the others must never be used in an interrupt service routine! This is quite
 
 Of course, you can always write your own interrupt safe driver, but that involves bare-metal programming and knowledge of MCU specific registers.
 
+## Task-252 - Serial Interrupts
+This example shows how you can use interrupts with a serial interface. This uses the simpler `UnbufferedSerial` driver. There is no buffering, so it is important to read data as soon as it arrives.
+
+| TASK-252 | Serial Interrupts |
+| --- | --- |
+| 1.  | Set Task-252 as your active program |
+| 2.  | Build and run the task. |
+| 3.  | Press `+` to increase the flash interval |
+| 4.  | Press `-` to decrease the flash interval |
+
+Note the following:
+
+* `CriticalSectionLock` is used to avoid race conditions
+* The variable `T` is `volatile`
+
+The above example only processes single bytes. A greater challenge is to process strings.
+
+**Challenge:**
+
+In Task-252, the blue LED flashes at a rate that is controlled by the keyboard. The serial interface generates an interrupt every time a new byte is received.
+
+Modify this code so that the flashing rate is controlled by the user typing the words UP or DOWN. Add additional state machines to detect each word (think of a word as a sequence of input values).
+
 ## Reflection
 It is not unknown for developers to use interrupts and be completely oblivious to their dangers and limitations. In some applications, this could even pose a risk to life and/or the environment.
 

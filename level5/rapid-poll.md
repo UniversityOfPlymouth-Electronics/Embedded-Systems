@@ -160,6 +160,82 @@ This delay noticeably slows the loop time, but luckily not enough to notice. It 
 
 An improvement would be to poll two more timers, one per switch and remove blocking entirely. This is the purpose of the next task. This change is going to add more complexity to our code however.
 
+## Task-245 - Non-blocking Serial
+In this task, we look at serial input and output. 
+
+**Inputs**
+* Serial Terminal configured for 9600,N,1
+* Hardware Timer - Sets the flash rate of the green LED
+
+**Outputs**
+* Serial Terminal
+* Green LED - flashes twice a second
+
+| TASK-244 | Non-blocking Serial |
+| --- | --- |
+| 1. | Make Task-245 the Active Program |
+| 2. | Build and run. Ensure your Serial terminal has a baud rate of 9600 |
+| 3. | Try typing some characters, pressing return. Note the green LED every time you press a key. Also try pressing '1' and '2' |
+
+Key Points:
+* The blue LED flashes even if a key is not pressed
+* Pressing a key has a near immediate effect. You do not need to press return
+
+Let's look at this code. First of all, there is the serial object in Mbed OS:
+
+```C++
+static BufferedSerial serial_port(USBTX, USBRX);
+```
+
+Note this is the `BufferedSerial`. There is also an `UnbufferedSerial` which we will meet later.
+
+The serial interface is configured for 9600bps, no parity and one stop bit as follows:
+
+```C++
+serial_port.set_baud(9600);
+serial_port.set_format(
+    /* bits */ 8,
+    /* parity */ SerialBase::None,
+    /* stop bit */ 1
+);
+```
+
+This is a fairly low-level driver, with which we can read and write bytes of data. There are two modes:
+
+* **Blocking** - an attempt to read from the serial port will block until a character is available.
+* **Nonblocking** - an attempt to read from the serial port will either return data, or if there is none, will return an error code `EAGAIN`
+
+In this example, we purposely turn off blocking as follows:
+
+```C++
+serial_port.set_blocking(false);
+```
+
+| TASK-244 | Continued |
+| --- | --- |
+| 4. | Temporarily set blocking to true |
+| 5. | Build the code again. How does this impact on the blue LED and why? |
+
+The blocking mode is the default. An attempt to read an empty serial interface will block execution until a character arrives. It will wait forever if no data is ever sent!
+
+| TASK-244 | Continued |
+| --- | --- |
+| 6. | Restore blocking to false |
+| -  | Build the code again to confirm it is working as expected |
+| 7. | Now uncomment the line that reads `wait_us(1000000);` |
+| 8. | Build and run the code. Type your name as fast as you can, then watch and wait |
+| 9. | Why are no characters lost? |
+
+Key to the above is the **buffering** capability of the `BufferedSerial`  driver. This driver allows the serial interface to continue reading data even when you are not reading it. It will buffer all incoming bytes in an internal buffer (array) so that no samples are forgotten, and are available to read when convenient. 
+
+> We say that buffering gives the software application *timing slack* - it relaxes the timing constraints that the software has to meet.
+
+Buffering can be performed in both hardware and software. Hardware buffers are common, but normally more limited in size. Hardware buffers can help provide some timing slack to the devices that interface to them. We will see later that you can also write software buffers to further extend this. Ultimately however, if all buffers fill, data is lost.
+
+Some devices are not buffered, including `DigitalIn`. If you don't read a signal on a GPIO in time, then that information is lost forever.
+
+> This is the essence of real-time systems. The ability to service inputs and outputs responsively so that no data is lost and all timing constraints are met.
+
 ## Task-246 - Using a State Machine pattern
 We will now remote any blocking code from the previous task. So that the code does not become too complex, a state machine is used for each input/output combination. In fact we employ 3 state machines.
 
