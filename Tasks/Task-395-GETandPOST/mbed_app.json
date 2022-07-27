@@ -2,7 +2,8 @@
     "target_overrides": {
         "NUCLEO_F429ZI": {
             "target.printf_lib": "std",
-            "target.components_add": ["SD"]
+            "target.components_add": ["SD"],
+            "platform.stdio-baud-rate": 115200
         }
     }
 }

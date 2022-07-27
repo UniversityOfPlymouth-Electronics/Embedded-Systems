@@ -12,9 +12,7 @@ using namespace std;
 #include "EthernetInterface.h"
 #include "TCPSocket.h"
  
-
 void extractRxData(TCPSocket* rxSock);
-uint32_t FindParam (const char* pRxString, const char* pParamName, char* pParam);
 void echoRxData(TCPSocket* rxSock);
 
 
@@ -29,6 +27,15 @@ void echoRxData(TCPSocket* rxSock);
 "      <h1>POT Value</h1>" "\r\n"                              \
 "      <p>{{0}}</p>" "\r\n"                                 \
 "    </div>" "\r\n"                                              \
+"    <div style=\"margin:auto\">" "\r\n"                         \
+"    <form action=\"/\" method=\"GET\">" \
+"     <label for=\"fname\">RED LED:</label><br>" \
+"     <input type=\"text\" id=\"fname\" name=\"red\" value=\"0\"><br>" \
+"     <label for=\"lname\">GREEN LED:</label><br>" \
+"     <input type=\"text\" id=\"lname\" name=\"green\" value=\"0\"><br><br>" \
+"     <input type=\"submit\" value=\"Submit\">" \
+"    </form>     " \
+"    </div>" \
 "  </body>" "\r\n"                                               \
 "</html>" "\r\n"
     
@@ -53,6 +60,8 @@ EthernetInterface net;
 LCD_16X2_DISPLAY disp;
 DigitalOut lcdBacklight(LCD_BKL_PIN);
 AnalogIn pot(AN_POT_PIN);
+DigitalOut greenLED(LED1);
+DigitalOut blueLED(LED2);
 DigitalOut redLED(LED3);
 
 int main()
@@ -113,18 +122,18 @@ int main()
         if (index) {
             html.replace(index, 5, buff);   //Replace with pot value string
         }
-        cout << html << endl;               //For debug purposes
+        //cout << html << endl;               //For debug purposes
 
         //Send response string (blocking until completed)
-        printf("%s STRING LENGTH is: %d\n\r", html.c_str(), strlen(html.c_str())); // the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
+        //printf("%s STRING LENGTH is: %d\n\r", html.c_str(), strlen(html.c_str())); // the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
         nsapi_size_or_error_t ret = clt_sock->send(html.c_str(), strlen(html.c_str()));  //myHTTP,mydatasize)the rest of this line to use Flash Silicon *see notes above line number 35" myHTTP,strlen(myHTTP));
         
-        //Echo how many bytes were sent
+        //Echo how many bytes were sent in the response back to the browser
         printf("Sent %d bytes\n", ret);
-
+        
         //Set redLED
-        //extractRxData(clt_sock);
-        echoRxData(clt_sock);
+        extractRxData(clt_sock);
+        //echoRxData(clt_sock);
 
         //You are responsible to close this
         clt_sock->close();
@@ -137,13 +146,23 @@ int main()
 
 }
 
-#define ESC \x1b    //Escape character
-#define CSI ESC[    //Command Sequence Initiator
-#define CUU A       //Cursor UP
-#define CUD B       //Cursor DOWN
-#define CUF C       //Cursor FORWARD
-#define CUB D       //Cursor BACKWARD
+// References
+// https://solarianprogrammer.com/2019/04/08/c-programming-ansi-escape-codes-windows-macos-linux-terminals/#:~:text=There%20are%20also%20ANSI%20escape%20codes%20to%20clear,ones%20to%20clear%20the%20current%20line%20of%20text%3A
+// https://en.wikipedia.org/wiki/ANSI_escape_code#C0_control_codes
 
+#define ESC "\x1b"              //Escape character
+#define CSI ESC "["             //Command Sequence Initiator
+#define CUU(n) CSI #n "A"       //Cursor UP n lines
+#define CUD(n) CSI #n "B"       //Cursor DOWN n lines
+#define CUF(n) CSI #n "C"       //Cursor FORWARD n lines
+#define CUB(n) CSI #n "D"       //Cursor BACKWARD n lines
+const char* CUP(int row, int col) {        // Move cursor to r,c
+    static char res[32];
+    snprintf(res, 32, CSI "%d;%dH", row, col);
+    return res;
+}
+
+// This is quite slow
 void echoRxData(TCPSocket* rxSock) 
 {
     fflush(stdout);
@@ -156,7 +175,8 @@ void echoRxData(TCPSocket* rxSock)
     do  {
         rcount = rxSock->recv(&c, 1);
         printf("%2X", c);
-        printf("\x1b[1B\x1b[2D");   //Down 1, back 2
+        printf(CUD(1) CUB(2));
+        //printf("\x1b[1B\x1b[2D");   //Down 1, back 2
         //printf(" %c", c) but not the new lines etc..
         if (c == '\n') {
             printf("\\n");
@@ -165,7 +185,8 @@ void echoRxData(TCPSocket* rxSock)
         } else {
             printf("%2c", c);
         }
-        printf("\x1b[1A\x1b[2C");   //Up 1, forward 2
+        printf(CUU(1) CUF(2));
+        //printf("\x1b[1A\x1b[2C");   //Up 1, forward 2
         col++;
         if (col == 32) {
             col = 0;
@@ -192,28 +213,29 @@ void extractRxData(TCPSocket* rxSock)
 
             //Let's see if the red LED state is set?
             char *redStr = strstr(rbuffer, "red=");
-            if (redStr[4] == '1') {
-                cout << "RED ON" << endl;
-                redLED = 1;
-            } else if  (redStr[4] == '0') {
-                cout << "RED OFF" << endl;
-                redLED = 0;
+            if (redStr) {
+                if (redStr[4] == '1') {
+                    cout << "RED ON" << endl;
+                    redLED = 1;
+                } else if  (redStr[4] == '0') {
+                    cout << "RED OFF" << endl;
+                    redLED = 0;
+                }
             }
+
+            //Let's see if the green LED state is set?
+            char *grnStr = strstr(rbuffer, "green=");
+            if (grnStr) {
+                if (grnStr[6] == '1') {
+                    cout << "GREEN ON" << endl;
+                    greenLED = 1;
+                } else if  (grnStr[6] == '0') {
+                    cout << "GREEN OFF" << endl;
+                    greenLED = 0;
+                }
+            }            
+
             printf("************~recv***************\n\r");
         }
         rxSock->set_blocking(true);
-}
-
-uint32_t FindParam (const char* pRxString, const char* pParamName, char* pParam) 
-{
-    //Basic error checking
-    if ((!pRxString) || (!pParam)) return -1;
- 
-    //Find parameter name
-    const char* pLoc = strstr(pRxString, pParamName);
-    if (!pLoc) return 0;
-
-    //Extract pointer to value
-    pParam = (char*)pLoc + strlen(pParamName);
-    return (uint32_t)pLoc-(uint32_t)pRxString;
 }
