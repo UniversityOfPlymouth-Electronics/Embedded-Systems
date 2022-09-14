@@ -2,6 +2,36 @@
 
 ---
 
+# Table of Contents
+
+- [C and C++ Object Orientated Programming](#c-and-c-object-orientated-programming)
+- [Related Lectures](#related-lectures)
+- [Function overloading](#function-overloading)
+   - [Overloaded Constructors](#overloaded-constructors)
+   - [Overloaded Member Functions](#overloaded-member-functions)
+- [Operator Overloading](#operator-overloading)
+   - [Unary Operators](#unary-operators)
+   - [Binary Operators](#binary-operators-2-parameters)
+   - [Type Operators](#type-operators)
+   - [Challenge](#challenge)
+   - [Reflection](#reflection)
+   - [Mbed OS Example](#mbed-example)
+   - [Further Reading](#further-reading)
+- [Class Inheritance](#class-inheritance)
+   - [Inheritance with Mbed](#overriding-with-mbed)
+   - [Reflection](#reflection-1)
+   - [Function Overrides](#function-overrides)
+   - [Inheritance and Overloading the operator =](#inheritance-and-overloading-the-operator)
+   - [Overriding with Mbed](#overriding-with-mbed)
+   - [Polymorphism and Virtual Functions](#polymorphism-and-virtual-functions)
+- [Further topics](#further-topics)
+   - [Multiple Inheritance](#multiple-inheritance)
+   - [Mocking Hardware with Pure Virtual Classes](#mocking-hardware-with-pure-virtual-classes)
+   - [Porting to a specific platform](#porting-to-a-specific-platform)
+   - [Arguments for loosely couple classes](#arguments-for-loosely-couple-classes)
+
+---
+
 # C and C++ Object Orientated Programming
 C++ is a large language that takes a long time and practise to master. We will focus on core object orientated concepts. Even if you don't use all of these, you may encounter code that does.
 
@@ -563,7 +593,7 @@ _What if one of the parent class behaviours needs to be changed (or as we say, o
 
 This is the topic of the next section: function override.
 
-## Function Override
+### Function Overrides
 As we saw in Task 334A, the `ComplexNumber` class inherits all the functionality of `DoubleNumber` and adds a new property, `_imag`. 
 
 However, most of the functions written in `DoubleNumber`  perform operations on a single scalar value. `ComplexNumber` is 2-dimensional, and has two values (known as real and imaginary), so the same functions need to be adapted in many cases.
@@ -696,7 +726,7 @@ In other words, we can choose which version to use.
 
 > You always have access to the parent class functions even if you override it.
 
-## Polymorphism and Virtual Functions
+### Polymorphism and Virtual Functions
 
 | TASK 338B | Virtual Functions |
 | --- | --- |
@@ -768,7 +798,7 @@ Let's look at `Flashy` and we see the ISR has been slightly modified. The `Ticke
 ### Multiple Inheritance
 C++ allows us to  inherit code from more than one class. You can see an example of this in Task-340B
 
-### Task 344: Mocking Hardware with Pure Virtual Classes
+### Mocking Hardware with Pure Virtual Classes
 Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "pure virtual classes" (or abstract classes). This is a somewhat advanced topic, but an example has been provided in Task-344.
 
 This task also introduces the idea of mocking hardware. Mocking hardware is when you write abstractions to mimic real hardware. This is useful for a number of reasons, including:
@@ -984,7 +1014,7 @@ We can also make another claim - `Flashy` is not strongly coupled to any particu
 | - | Confirm that the exact same principle is applied |
 | 9 | Can you build a Windows console application (in C++) to test `Flashy` using the Mocked version of the class? |
 
-## Why loosely couple classes?
+### Arguments for loosely couple classes
 There are many arguments for loose coupling, some of which we have witnessed here. 
 
 One of the downsides of *composition* is the tight coupling it creates. By making our properties pure virtual class types (Interfaces), we break such dependencies.
