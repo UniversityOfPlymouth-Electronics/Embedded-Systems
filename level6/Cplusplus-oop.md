@@ -24,11 +24,20 @@
    - [Inheritance and Overloading the operator =](#inheritance-and-overloading-the-operator)
    - [Overriding with Mbed](#overriding-with-mbed)
    - [Polymorphism and Virtual Functions](#polymorphism-and-virtual-functions)
-- [Further topics](#further-topics)
+- [Use-Cases for Inheritance](#use-cases-for-inheritance)
    - [Multiple Inheritance](#multiple-inheritance)
    - [Mocking Hardware with Pure Virtual Classes](#mocking-hardware-with-pure-virtual-classes)
    - [Porting to a specific platform](#porting-to-a-specific-platform)
    - [Arguments for loosely couple classes](#arguments-for-loosely-couple-classes)
+- [TBD Advanced Language Features](#advanced-language-features)
+   - [Templates](#templates)
+   - [Smart Pointers](#smart-pointers)
+   - [Copy Constructors](#copy-constructors)
+   - [Move Constructors](#move-constructors)
+- [TBD Standard Template Library]()
+   - [Standard Containers]()
+   - [Algorithms]()
+   - [File I/O]()
 
 ---
 
@@ -793,10 +802,10 @@ Let's look at `Flashy` and we see the ISR has been slightly modified. The `Ticke
 | 8. | Remove the `virtual` keyword and rebuild the code. Repeat the above experiment |
 
 
-## Further topics
+## Use-Cases for Inheritance
 
 ### Multiple Inheritance
-C++ allows us to  inherit code from more than one class. You can see an example of this in Task-340B
+C++ allows us to  inherit code from more than one class. You can see an example of this in Task-340B. We will not look at this any further at this stage, but it is well documented elsewhere.
 
 ### Mocking Hardware with Pure Virtual Classes
 Some other languages have "interfaces", which are similar to classes, but contain no code. The nearest equivalent in C++ is "pure virtual classes" (or abstract classes). This is a somewhat advanced topic, but an example has been provided in Task-344.
@@ -1024,6 +1033,46 @@ One of the major benefits of this approach is mocking. Writing classes to mimic 
 Another benefit is portability. We could equally have written concrete subclasses for another platform, such as Arduino.
 
 The cost for this is greater complexity in the application. The *plumbing and wiring* of objects can be confusing, especially if it is not your own code.
+
+## Advanced Language Features
+You may have noticed some key differences between C and C++
+
+* Easier to reuse
+   * Inheritance
+   * Polymorphism
+* Code can be more expressive
+   * Function and operator overloading can make our code look clean and simpler to understand
+* Safer
+   * Constructors and destructors automatically allocate, initialise and free resources
+
+In this section, we will look at some language features that take this further, and help us write compact, robust and reusable code.
+
+### Templates
+
+TBD
+#### Function Templates
+
+| TASK 350 | Function Template |
+| --- | --- |
+| 1. | Make Task 350 your active program |
+
+
+
+#### Function Templates
+
+### Smart Pointers
+
+TBD
+
+### Copy Constructors]
+
+TBD
+
+### Move Constructors
+
+TBD
+
+---
 
 [NEXT - Lab3-Threads and Thread Synchronisation](threads1.md)
 
