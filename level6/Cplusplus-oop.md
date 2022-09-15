@@ -31,6 +31,7 @@
    - [Arguments for loosely couple classes](#arguments-for-loosely-couple-classes)
 - [TBD Advanced Language Features](#advanced-language-features)
    - [Templates](#templates)
+   - [Dynamic Memory Allocation](#dynamic-memory-allocation)
    - [Smart Pointers](#smart-pointers)
    - [Copy Constructors](#copy-constructors)
    - [Move Constructors](#move-constructors)
@@ -1049,16 +1050,306 @@ In this section, we will look at some language features that take this further, 
 
 ### Templates
 
-TBD
+Function and Class templates are widely used C++ language features that can significantly reduce repeated code as well as make code more reusable. In this section we will take a short look at some key concepts (there are many good books and websites describing C++ templates in greater detail). 
+
 #### Function Templates
+
+In C and C++, we are familiar with functions:
+
+`<return type> function_name(<type> parameter, <type> parameter ...)`
+
+Note that the function parameters and returned data **must** all have an explicit data type. **This is done for safety**. For example, if we tried to build and run the following code:
+
+```C++
+#include <iostream>
+
+bool isGreater_int(int a, int b) {
+    if (a > b) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int main()
+{
+    bool y = isGreater_int(3,2);
+    if (y == true) {
+        std::cout << "3>2\n\r";
+    }
+    bool t = isGreater_int(0.3, 0.2);
+    if (t == true) {
+        std::cout << "0.3 > 0.2\n\r";
+    }
+}
+```
+
+The simple function `isGreater` performs a greater-than operation `>` on two integers. This always works until we pass arguments with the wrong type, such as:
+
+```C++ 
+bool t = isGreater_int(0.3, 0.2);
+```
+
+where the output is the opposite to what we intended. The arguments `0.3` and `0.2` are both literal constants, of type `double`. However, `isGreater` has integer parameter types. Therefore, `0.3` and `0.2` are `implicitly` converted to `int` and are both rounded down to `0`, making them equal.
+
+> If you try and build this code, there is very likely to be a compiler warning. On the system the author used, the warnings read: `warning: implicit conversion from 'double' to 'int' changes value from 0.2 to 0` and `warning: implicit conversion from 'double' to 'int' changes value from 0.3 to 0`
+>
+> Do not ignore warnings!
+
+So, we might write another function to compare two variables of type `double`:
+
+```C++
+bool isGreater_double(double a, double b) {
+    if (a > b) {
+        return true;
+    } else {
+        return false;
+    }
+}
+```
+
+However, look at the function bodies of both versions. **The code is identical. They only differ in data-type**. As you may know, replicating code is not encouraged. It makes the code longer, and if you need to change one, you have to remember to change the other.
+
+This is where function templates come it. Where two functions only differ in data type, you can write a *function template* and let the compiler write the functions for you. The code for the function template is as follows:
+
+```C++
+template<class T>
+bool isGreater(T a, T b) {
+    if (a > b) {
+        return true;
+    } else {
+        return false;
+    }
+}
+```
+
+The type-parameter `T` is not specified at this stage. It is when the compiler encounters invokation of the function, that it creates functions for you with the appropriate types:
+
+```C++
+int main()
+{
+    bool y = isGreater(3,2);
+    if (y == true) {
+        std::cout << "3>2\n\r";
+    }
+    bool t = isGreater(0.3, 0.2);
+    if (t == true) {
+        std::cout << "0.3 > 0.2\n\r";
+    }
+}
+```
+
+Behind the scenes, two versions of `isGreater` will be created. One will use type `int` and the other will use type `double`. Let's now look at an example in Mbed.
 
 | TASK 350 | Function Template |
 | --- | --- |
-| 1. | Make Task 350 your active program |
+| 1. | Make Task 350 your active program. Build and run |
+| 2. | Turn the potentiometer quickly in the clock wise direction, and observe the LEDs |
+| - |  Repeat, but anti clockwise |
+| 3. | Now experiment with turning the dials slowly so that the lights do not change |
+
+In this code, we read the ADC and represent it using two data formats (for comparison):
+
+```C++
+uint16_t uPot = pot.read_u16() >> 4;    //12-bit Integer 0..4095
+float    fPot = (float)uPot / 4095.0f;  //Scaled 0.0-1.0  
+```
+
+| TASK 350 | Continued ... |
+| --- | --- |
+| 4. | Try editing the line that reads `hasIncreasedBy<float>` to `hasIncreasedBy<int>`. Intellisense may detect this immediately and underline some code! Try building the code. <a title="Type conversion error as before">What warning do you get?</a> |
+| 5. | In this code, we've used explicit types `<float>` and `<uint16_t>` to direct the compiler. Remove these and rebuild. <a title="No. The compiler uses type-inference to work out the type"> Does this have any impact?</a> |
+| 6. | Now remove the `f` from `0.1f`. <a title="The literal 0.1 is of type double, but the first parameter is type float. The template expects the two arguments to be the same type `T`"> What happens and why?</a>> |
+| - | Hover your mouse to see the answers |
+
+Now consider the following line:
+
+```C++
+cout << "Mean: " << addToBuffer<uint16_t, double, 4>(uPot) << endl;
+```
+
+This invokes the function `addToBuffer<uint16_t, double, 4>` and outputs a running arithmetic mean. Let's look at this function in more detail:
+
+```C++
+//Function to add a sample to the a circular buffer and return the sum
+template<class T, class R, int N>
+R addToBuffer(T nextSample)
+{
+    //Again that static local trick 
+    static T buffer[N];
+    static T sum = (T)0;
+    static int index = 0;
+
+    // Sum is updated - add new sample, subtract oldest
+    sum = sum + nextSample - buffer[index];
+    buffer[index] = nextSample;     //Overwrite oldest sample
+    index = (index + 1) % N;        //Update position of oldest sample
+    return (R)sum/(R)N;             //Return the mean, using the precision of type R
+}
+```
+
+This time there are three template parameters.
+
+* `T` is a type-parameter, and specifies the type of data in the internal buffer
+* `R` is a type-parameter, and specifies the return type (different to the type of the data)
+* `N` is a non-type parameter, which in this case is an integer constant that sets the size of the internal array **at compile time**
+
+> Observe the following:
+>
+> * Function parameters are determined at run-time
+> * Template parameters are determined at compile-time
 
 
+The non-type parameter is particularly useful in embedded-systems as it allows us to create different size arrays that a defined at compile time, and avoids dynamic memory allocation (slower and comes with risks).
 
-#### Function Templates
+| TASK 350 | Continued ... |
+| --- | --- |
+| 7. | Modify the code to calculate an average over 20 samples  |
+| 8. | In the line that reads `return (R)sum/(R)N;` <a title="This is a type-cast. It converts the data (integer) to type R (double) to maintain precision when performing the division"> what is the purpose of `(R)`?</a>
+
+So far, we have considered the case where template functions always contain the exact same code, but use different types. You might wonder what happens if for some types, code cannot be equal? In that case, you can use template specialization. See [1] for more details.
+
+#### Class Templates
+
+Everything we've seen in function templates can also be applied to a class. In fact, the example above is a good candidate for a class as we can make our code even more readable.
+
+| TASK 352 | Class Templates |
+| --- | --- |
+| 1. | Make Task 352 your active program. Build and run |
+| 2. | Adjust the potentiometer. Note how the output changes. There may be some perceivable lag |
+
+If we look at the main code, we see the following:
+
+```C++
+#include "uop_msb.h"
+#include "RunningMean.hpp"
+
+#include <iostream>
+using namespace std;
+
+DigitalOut led1(LED1);
+DigitalOut led2(LED2);
+AnalogIn pot(AN_POT_PIN);
+
+//Defines an object with a fixed-size internal buffer
+RunningMean<uint16_t, double, 4> buf4;
+
+int main()
+{
+    printf("\n\rStart\n\r");
+
+    while (true) {
+        //Read the ADC     
+        uint16_t uPot = pot.read_u16() >> 4;    //12-bit Integer 0..4095
+        float    fPot = (float)uPot / 4095.0f;  //Scaled 0.0-1.0      
+ 
+        //Add sample to buffer.
+        buf4 << (uint16_t)uPot;
+
+        //Output running mean
+        cout << "Mean: " << buf4 << endl;
+        wait_us(500000);
+    }
+}
+```
+The object that buffers data and calculates the mean is defined as follows:
+
+```C++
+RunningMean<uint16_t, double, 4> buf4;
+```
+
+The data input type is a 16-bit unsigned, the output (mean) is type `double`, and the internal buffer holds 4 samples. We add data using the `<<` operator as follows:
+
+```C++
+buf += uPot;
+```
+
+And finally, we obtain the mean result by simply referring to the object `buf` as if it was a variable of type `double`:
+
+```C++
+cout << "Mean: " << buf << endl;
+```
+
+Note how operator overloading is used to try and make the code more easy to read. At least, that was the intention!
+
+> There is a view that operator overloading makes code ambiguous. For example, why did I use `+=`, why not `<<`, and would the casual observer know what these do?
+
+Now let's examine the class. Again, we see the type parameters `template<class T, class R, int N>` as before.
+
+```C++
+#pragma once
+#include <iostream>
+
+/*
+T is the data type of the data
+R is the data type of the mean (and sum)
+N is the buffer size
+*/
+template<class T, class R, int N>
+class RunningMean {
+private:
+    T buffer[N];
+    R sum;
+    int index;
+
+    // Computing a running sum (Optimised for speed - no checks for overflows!!!)
+    void addAndUpdate(T nextSample) {
+        // Sum is updated - add new sample, subtract oldest
+        sum = sum + nextSample - buffer[index];
+        buffer[index] = nextSample;     //Overwrite oldest sample
+        index = (index + 1) % N;        //Update position of oldest sample
+    }
+
+public:
+    //Constructor
+    RunningMean(T initValue = (T)0) {
+        //Initialise data to known state
+        sum = (T)0;
+        index = 0;
+        for (unsigned int n=0; n<N; n++) buffer[n] = (T)0;
+    }   
+
+    //Used to add a sample to the buffer
+    void operator += (T sample) {
+        this->addAndUpdate(sample);
+    }
+
+    //Used to read the mean
+    operator R() {
+        return sum/(R)N;             //Return the mean, using the precision of type R
+    }
+};
+```
+
+| TASK 352 | Continued... |
+| --- | --- |
+| 3. | This class has a constructor. <a title="All internal data is always initialised to a known state. In the function template example, it was assumed the buffer would initially contain zeros.">What is the advantage this brings over the simple function template version?</a> |
+| 4. | Now **add** a second instance of this class, but this time make the buffer 64 samples deep. You code your add data to both buffers and output the mean from each.  <a title="The 64 sample version will lag much more, but the mean will have less variance">How do they compare?</a> |
+
+**Key Points**
+
+Consider the following two lines:
+
+```C++
+RunningMean<uint16_t, double, 4> buf4;
+RunningMean<uint16_t, double, 64> buf64;
+```
+
+It should be stressed that the compiler generates **two versions** of the class `RunningMean`. Both have internal **fixed** size arrays. The only difference between the two classes is that these arrays are of different sizes.
+
+**Because the array sizes are defined at build time, this allows the linker to ensure there is enough memory to run the code**
+
+It would be tedious (and error prone) to duplicate the class twice, just to modify the array sizes. C++ templates gets the compiler to create them for you!
+
+### Dynamic Memory Allocation
+
+
+| TASK 354 | Dynamic Memory Allocation |
+| --- | --- |
+| 1. | Make Task 354 your active program. Build and run |
+
+
+**TBD**
 
 ### Smart Pointers
 
@@ -1071,6 +1362,10 @@ TBD
 ### Move Constructors
 
 TBD
+
+## References
+
+[1] [Microsoft, Templates (C++), C++ Language Reference](https://docs.microsoft.com/en-us/cpp/cpp/templates-cpp?view=msvc-170)
 
 ---
 
