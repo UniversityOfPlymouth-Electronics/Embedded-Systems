@@ -1347,7 +1347,114 @@ It would be tedious (and error prone) to duplicate the class twice, just to modi
 | TASK 354 | Dynamic Memory Allocation |
 | --- | --- |
 | 1. | Make Task 354 your active program. Build and run |
+| 2. | Look at the constructor for the `RunningMean` class. |
+| - | <a title="Using the `new` command">From reading the code, how is the array `buffer` created?</a> |
+| 3. | Look inside the class destructor |
+| -  | <a title="Using the `delete []` command">How is the memory freed (so it can be reused)?</a> |
 
+Let's look at this class more closely:
+
+In internally, there is a **pointer** (32-bit integer variable that stores an address) `buffer`. The data it points to is expected to be type `T` (template argument).
+
+```C++
+template<class T, class R>
+class RunningMean {
+private:
+    uint32_t N;
+    T *buffer;
+    ...
+```
+
+This pointer is initialised in the class constructor as follows:
+
+```C++
+RunningMean(uint32_t N_, T initValue = (T)0) : N(N_) {
+    //Initialise data to known state
+    sum = (T)0;
+    index = 0;
+    buffer = new T[N];  //Allocate memory on the heap
+    for (unsigned int n=0; n<N; n++) buffer[n] = (T)0;
+} 
+```
+
+The C++ `new` keyword is used to request a block of memory (via some low-level library functions in the standard C++ library). The following line requests a block of memory to store `N` variables of type `T`. 
+
+```C++
+buffer = new T[N];
+```
+
+*If successful*, `new` will return the start address of this memory, and this is saved in `buffer`. The actual reserved memory will be in the **heap** memory area. You can now use `buffer` as an array.
+
+> `N` was passed as a constructor parameter, but could equally have been obtained from a network, or via user input. As the size of the array (`N` copies of type `T`) is decided at *run time*, we call this **dynamic memory allocation**.
+
+When the data is no longer needed, the memory should be *deallocated*. This is found in the destructor (which is called then the object is destroyed):
+
+```C++
+~RunningMean() {
+    //Give back the memory
+    //This is critical unless you want a memory leak!
+    delete [] buffer;
+}
+```
+
+The keyword `delete []` is used to free the memory so it can be allocated for other uses.
+
+#### New and Delete
+
+In this example, we look at two ways to use `new` and `delete`.
+
+| TASK 355 | New and Delete |
+| --- | --- |
+| 1. | Make Task 354 your active program. Build and run |
+| - | Study the code and note the console output |
+| 2. | Look at the output for Task 1. <a title="When an object is allocated with `new`, the constructor runs. When destroyed with `delete`, the destructor runs">At what point does the constructor and destructor run for class `DataObject`?</a> |
+| 3. | Look at the output for Task 2. <a title="When the array `buffer` is instantiated with `new`, all the contained object constructors are called (in turn). When the array `buffer` is deleted with `delete []`, all the destructors are called">What causes the constructor and destructor run for class `DataObject`?</a> | 
+| 4. | Change the line that reads `delete [] buffer;` to `delete buffer;`. Ignoring the warnings, build and run again. |
+| 5. | <a title="The objects in the array are not being deleted">Why are the destructors not being called?</a> |
+| - | <a title="152-64=88 bytes">How much memory is being leaked?</a> |
+
+In Test 1, we saw a single object allocated and deleted:
+
+```C++
+DataObject *pObj = new DataObject(1.0f, 2.0f);
+pObj->display();
+delete pObj;
+```
+
+Note how the array operators `[]` are not used for `new` or `delete` in this case as we are not creating an array.
+
+In Test 2, we created an array of objects:
+
+```C++
+DataObject *buffer = new DataObject[N];
+```
+
+When this occurs, you see the constructor for each instance of `DataObject` being run.
+
+> Note that there is no way to pass values into the constructor here.
+
+We see all the destructors when when the array is destroyed:
+
+```C++
+delete [] buffer;
+```
+
+Things can get more complicated than this, and memory leaks can be hard to spot.
+
+> A common cause of a memory leak is an early return from a function, before the `delete` statement
+>
+> ```C++
+> void myFunction()
+> {
+>   MyClass obj = new MyClass();
+>   ...
+>   if (condition_to_exit == true) return; //Early return
+>   ...
+>   delete obj;
+> }
+> ```
+
+For more information on `delete`, see [2].
 
 **TBD**
 
@@ -1366,7 +1473,7 @@ TBD
 ## References
 
 [1] [Microsoft, Templates (C++), C++ Language Reference](https://docs.microsoft.com/en-us/cpp/cpp/templates-cpp?view=msvc-170)
-
+[2] [Microsoft, delete Operator (C++)](https://docs.microsoft.com/en-us/cpp/cpp/delete-operator-cpp?view=msvc-170)
 ---
 
 [NEXT - Lab3-Threads and Thread Synchronisation](threads1.md)

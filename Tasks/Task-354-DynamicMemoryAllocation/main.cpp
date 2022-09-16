@@ -11,7 +11,7 @@ AnalogIn pot(AN_POT_PIN);
 int main()
 {
     //Defines an object with an internal buffer defined at run-time
-    RunningMean<uint16_t, double> buf4(4);
+    RunningMean<uint16_t, double> buf4(64);
 
     printf("\n\rStart\n\r");
 

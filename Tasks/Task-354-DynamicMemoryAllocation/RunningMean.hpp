@@ -36,6 +36,7 @@ public:
         //Give back the memory
         //This is critical unless you want a memory leak!
         delete [] buffer;
+        // See https://docs.microsoft.com/en-us/cpp/cpp/delete-operator-cpp?view=msvc-170 for a disussion on delete []
     }
 
     //Used to add a sample to the buffer
