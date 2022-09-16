@@ -35,10 +35,11 @@
    - [Smart Pointers](#smart-pointers)
    - [Copy Constructors](#copy-constructors)
    - [Move Constructors](#move-constructors)
-- [TBD Standard Template Library]()
-   - [Standard Containers]()
-   - [Algorithms]()
-   - [File I/O]()
+- [TBD Standard Template Library](#the-standard-template-library)
+   - [Standard Containers](#standard-containers)
+   - [Algorithms](#algorithms)
+   - [File I/O](#file-io)
+- [References](#references)
 
 ---
 
@@ -1456,11 +1457,18 @@ Things can get more complicated than this, and memory leaks can be hard to spot.
 
 For more information on `delete`, see [2].
 
-**TBD**
-
 ### Smart Pointers
 
-TBD
+You sometimes hear the statement that *you should not use dynamic memory allocation in an embedded system*. There are a number of reasons why this might be:
+
+* It is hard to know in advance if you have *enough* memory
+* Over time, memory can be fragmented and allocation can fail
+* It is expensive in CPU time to allocate and deallocate memory
+* It is easy to introduce errors. These include:
+   * Memory leaks
+   * De-referencing a dangling pointer (one that no longer points to allocate memory) 
+   
+The last two points even apply to devices with less memory pressure, such as the application processor used on the Raspberry Pi.
 
 ### Copy Constructors]
 
@@ -1470,10 +1478,28 @@ TBD
 
 TBD
 
+## The Standard Template Library
+
+TBD
+
+### Standard Containers
+
+TBD
+
+### Algorithms
+
+TBD
+
+### File I/O
+
+TBD
+
 ## References
 
 [1] [Microsoft, Templates (C++), C++ Language Reference](https://docs.microsoft.com/en-us/cpp/cpp/templates-cpp?view=msvc-170)
+
 [2] [Microsoft, delete Operator (C++)](https://docs.microsoft.com/en-us/cpp/cpp/delete-operator-cpp?view=msvc-170)
+
 ---
 
 [NEXT - Lab3-Threads and Thread Synchronisation](threads1.md)
