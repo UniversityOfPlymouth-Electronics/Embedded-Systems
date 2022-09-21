@@ -1455,6 +1455,12 @@ Things can get more complicated than this, and memory leaks can be hard to spot.
 > }
 > ```
 
+**TASK** - Watch the following two videos to summarise this section
+
+[VIDEO - New and Delete for a single object](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5c254629-f767-4b4c-bf20-af1700d51bb0)
+
+[VIDEO - New and Delete for an array of objects](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=61578609-b38e-4d11-ad89-af1700d69636)
+
 For more information on `delete`, see [2].
 
 ### Smart Pointers
@@ -1469,7 +1475,6 @@ You sometimes hear the statement that *you should not use dynamic memory allocat
    * De-referencing a dangling pointer (one that no longer points to allocate memory) 
    
 The last two points even apply to devices with less memory pressure, such as the application processor used on the Raspberry Pi.
-
 
 
 ### Copy Constructors]
