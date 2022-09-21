@@ -1,6 +1,6 @@
 {
     "files.associations": {
         "*.txt": "cmake",
-        "ostream": "cpp"
+        "memory": "cpp"
     }
 }
