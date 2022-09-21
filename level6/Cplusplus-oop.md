@@ -1470,6 +1470,8 @@ You sometimes hear the statement that *you should not use dynamic memory allocat
    
 The last two points even apply to devices with less memory pressure, such as the application processor used on the Raspberry Pi.
 
+
+
 ### Copy Constructors]
 
 TBD
