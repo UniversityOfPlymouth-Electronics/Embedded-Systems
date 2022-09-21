@@ -1384,7 +1384,7 @@ The C++ `new` keyword is used to request a block of memory (via some low-level l
 buffer = new T[N];
 ```
 
-*If successful*, `new` will return the start address of this memory, and this is saved in `buffer`. The actual reserved memory will be in the **heap** memory area. You can now use `buffer` as an array.
+*If successful*, `new` will return the start address of this memory, and this is saved in `buffer`. The variable `buffer` is known as a raw pointer [3]. The actual reserved memory will be in the **heap** memory area. You can now use `buffer` as an array.
 
 > `N` was passed as a constructor parameter, but could equally have been obtained from a network, or via user input. As the size of the array (`N` copies of type `T`) is decided at *run time*, we call this **dynamic memory allocation**.
 
@@ -1467,15 +1467,30 @@ For more information on `delete`, see [2].
 
 You sometimes hear the statement that *you should not use dynamic memory allocation in an embedded system*. There are a number of reasons why this might be:
 
-* It is hard to know in advance if you have *enough* memory
-* Over time, memory can be fragmented and allocation can fail
-* It is expensive in CPU time to allocate and deallocate memory
-* It is easy to introduce errors. These include:
-   * Memory leaks
-   * De-referencing a dangling pointer (one that no longer points to allocate memory) 
-   
-The last two points even apply to devices with less memory pressure, such as the application processor used on the Raspberry Pi.
+1. It is hard to know in advance if you have *enough* memory
+2. Over time, memory can be fragmented and allocation can fail
+3. Accessing dangling pointers (a pointer that holds the address of some prebviously allocated memory, but where that memory has been released with `delete` or `free`) can cause unpredicatable results.
+4. It is expensive in CPU time to allocate and deallocate memory
+5. Memory leaks can occur, and can be hard to both detect and spot (when reading source code).
 
+   
+For point 1, the developer is responsible to ensure there is always enough memory. It is considered good practise to add run-time checks (as was shown in the previous task), such as checking an allocation succeeded and handling the error condition appropriately.
+
+For point 2, memory fragmentation occurs if memory is allocated and deallocated in a random order. If you de-allocate in the exact reverse order that you allocate, then it is possible to avoid fragmentation. If you have code that runs out-of-sequence (e.g. multi-threaded code), then you need to be extra careful.
+
+For point 3, accessing *dangling pointer* can be avoided if you remember to set all unused pointers to `nullptr`. 
+
+The last two points are more challenging to address. Memory leaks even apply to devices with less memory pressure, such as the application processor used on the Raspberry Pi. A small memory leak over time will ultimately result in all the memory being used up. Memory leaks are such a problem, that there have been language changes to help address them. We will discuss two strategies now.
+
+#### The RAII Idiom
+
+The **Resource Acquisition Is Initialization** (RAII) idiom ensures that 
+
+> "resource acquisition occurs at the same time that the object is initialized, so that all resources for the object are created and made ready in one line of code. In practical terms, the main principle of RAII is to give ownership of any heap-allocated resource—for example, dynamically-allocated memory or system object handles—to a stack-allocated object whose destructor contains the code to delete or free the resource and also any associated cleanup code" [5].
+
+
+
+An example of this is found in the [`CriticalSectionLock` class](https://os.mbed.com/docs/mbed-os/v6.15/apis/criticalsectionlock.html)
 
 ### Copy Constructors]
 
@@ -1506,6 +1521,12 @@ TBD
 [1] [Microsoft, Templates (C++), C++ Language Reference](https://docs.microsoft.com/en-us/cpp/cpp/templates-cpp?view=msvc-170)
 
 [2] [Microsoft, delete Operator (C++)](https://docs.microsoft.com/en-us/cpp/cpp/delete-operator-cpp?view=msvc-170)
+
+[3] [Microsoft, Raw Pointers (C++)](https://learn.microsoft.com/en-us/cpp/cpp/raw-pointers?view=msvc-170)
+
+[4] [Microsoft, Object lifetime and resource management (RAII)](https://learn.microsoft.com/en-us/cpp/cpp/object-lifetime-and-resource-management-modern-cpp?view=msvc-170)
+
+[5] [Microsoft, Smart pointers (Modern C++)](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170)
 
 ---
 
