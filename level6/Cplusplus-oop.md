@@ -32,6 +32,7 @@
 - [TBD Advanced Language Features](#advanced-language-features)
    - [Templates](#templates)
    - [Dynamic Memory Allocation](#dynamic-memory-allocation)
+   - [The RAII Idiom](#the-raii-idiom)
    - [Smart Pointers](#smart-pointers)
    - [Copy Constructors](#copy-constructors)
    - [Move Constructors](#move-constructors)
@@ -1463,7 +1464,7 @@ Things can get more complicated than this, and memory leaks can be hard to spot.
 
 For more information on `delete`, see [2].
 
-### Smart Pointers
+### The RAII Idiom
 
 You sometimes hear the statement that *you should not use dynamic memory allocation in an embedded system*. There are a number of reasons why this might be:
 
@@ -1482,15 +1483,128 @@ For point 3, accessing *dangling pointer* can be avoided if you remember to set 
 
 The last two points are more challenging to address. Memory leaks even apply to devices with less memory pressure, such as the application processor used on the Raspberry Pi. A small memory leak over time will ultimately result in all the memory being used up. Memory leaks are such a problem, that there have been language changes to help address them. We will discuss two strategies now.
 
-#### The RAII Idiom
-
 The **Resource Acquisition Is Initialization** (RAII) idiom ensures that 
 
 > "resource acquisition occurs at the same time that the object is initialized, so that all resources for the object are created and made ready in one line of code. In practical terms, the main principle of RAII is to give ownership of any heap-allocated resource—for example, dynamically-allocated memory or system object handles—to a stack-allocated object whose destructor contains the code to delete or free the resource and also any associated cleanup code" [5].
 
+Consider the following function:
+
+```C++
+void someFunction() {
+    //Allocate
+    uint16_t* pData = new uint16_t[64];
+
+    ...
+    
+    if (someCondition) {
+        //Early return
+        return;
+    }
+
+    ...
+
+    //Free up the memory
+    delete [] pData;
+}
+```
+
+This code has the potential to leak memory. If `someCondition` is `true`, it will exit *before* the memory pointed to by `pdata` is released. As `pData` goes out of scope, we have no way to recover from this.
+
+One way to address this is to add an additional `delete []`
+
+```C++
+void someFunction() {
+    //Allocate
+    uint16_t* pData = new uint16_t[64];
+
+    ...
+    
+    if (someCondition) {
+        //Early return
+        delete [] pData;
+        return;
+    }
+
+    ...
+
+    //Free up the memory
+    delete [] pData;
+}
+```
+
+However, it is all too easy to forget to do this! From task 354, we saw a class where an array is allocated in a constructor, and deallocated in the destructor. An extract is shown below:
+
+```C++
+template<class T, class R>
+class RunningMean {
+private:
+    uint32_t N;
+    T *buffer;
+    R sum;
+    int index;
+
+public:
+    //Constructor
+    RunningMean(uint32_t N_, T initValue = (T)0) : N(N_) {
+        sum = (T)0;
+        index = 0;
+        buffer = new T[N];  //Allocate memory on the heap
+        for (unsigned int n=0; n<N; n++) buffer[n] = (T)0;
+    }   
+    //Destructor
+    ~RunningMean() {
+        //Free the memory
+        delete [] buffer;
+    }
+
+    ...
+
+};
+```
+
+If we create object of type `RunningMean` on the local stack, then heap allocation and deallocation is automatic:
+
+```C++
+void someFunction() {
+    //Pointer obj is locally declared and defined on the function stack
+    RunningMean<uint16_t, double> obj(64);
+
+    ...
+    
+    if (someCondition) {
+        //Early return - obj will go out of scope
+        return;
+    }
+
+    ...
+
+    //obj will now go out of scope
+}
+```
+
+Note this function still has an *early return*, but there is no memory leak. This works because of the the following:
+
+* The pointer variable `obj` is a local variable (therefore stack based)
+   * it automatically goes out of scope as soon as the function `someFunction` exits.
+* When `obj` goes out of scope, the destructor for `RunningMean` is called automatically and releases the memory.
+
+Another example of this is found in the [`CriticalSectionLock` class](https://os.mbed.com/docs/mbed-os/v6.15/apis/criticalsectionlock.html)
+
+### Smart Pointers
+
+While embracing the idea of RAII, and with the help of C++ templates, we can make our code even safer with the use of C++ smart pointers, which are now part of the C++ standard library. 
+
+There are three types of smart pointer:
+
+* **Unique** - where only one pointer can reference a specific resource on the heap. When that pointer goes out of scope or gives up ownership, the resource is automatically deallocated.
+* **Shared** - where multiple pointer can reference a specific resource on the heap. The resource will remain on the heap while there is at least one shared pointer in scope. Once all shared pointers go out of scope or give up ownership, the resource is automatrically deallocated.
+* **Weak** - A special type that is used in combination with a unique or shared smart pointer to avoid something known as a `retain cycle` (special case)
 
 
-An example of this is found in the [`CriticalSectionLock` class](https://os.mbed.com/docs/mbed-os/v6.15/apis/criticalsectionlock.html)
+See [this page](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170#kinds-of-smart-pointers) for more details.
+
+
+
 
 ### Copy Constructors]
 
