@@ -1596,10 +1596,9 @@ While embracing the idea of RAII, and with the help of C++ templates, we can mak
 
 There are three types of smart pointer:
 
-* **Unique** - where only one pointer can reference a specific resource on the heap. When that pointer goes out of scope or gives up ownership, the resource is automatically deallocated.
-* **Shared** - where multiple pointer can reference a specific resource on the heap. The resource will remain on the heap while there is at least one shared pointer in scope. Once all shared pointers go out of scope or give up ownership, the resource is automatrically deallocated.
-* **Weak** - A special type that is used in combination with a unique or shared smart pointer to avoid something known as a `retain cycle` (special case)
-
+* **Unique** - where **only one** pointer can reference a specific resource on the heap. When that pointer goes out of scope or gives up ownership, the resource is automatically deallocated. 
+* **Shared** - where multiple pointers can reference a specific resource on the heap. The resource will remain on the heap while there is **at least one** shared pointer in scope. Once all shared pointers go out of scope or give up ownership, the resource is automatically deallocated.
+* **Weak** - A special type that is used in combination with a unique or shared smart pointer to avoid a specific condition known as a `retain cycle` (special case)
 
 See [this page](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170#kinds-of-smart-pointers) for more details.
 
