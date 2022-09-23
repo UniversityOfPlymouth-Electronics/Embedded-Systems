@@ -1598,9 +1598,28 @@ There are three types of smart pointer:
 
 * **Unique** - where **only one** pointer can reference a specific resource on the heap. When that pointer goes out of scope or gives up ownership, the resource is automatically deallocated. 
 * **Shared** - where multiple pointers can reference a specific resource on the heap. The resource will remain on the heap while there is **at least one** shared pointer in scope. Once all shared pointers go out of scope or give up ownership, the resource is automatically deallocated.
-* **Weak** - A special type that is used in combination with a unique or shared smart pointer to avoid a specific condition known as a `retain cycle` (special case)
+* **Weak** - A special type that is used in combination with a unique or shared smart pointer to avoid a specific condition known as a `retain cycle` (special case).
 
-See [this page](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170#kinds-of-smart-pointers) for more details.
+For this discussion, we will only focus on the Unique pointer (`unique_ptr`) as the use-cases for the others is somewhat more complex. There can also be issues with C++ language confirmity.
+
+| TASK 356 | Smart Pointers |
+| - | - | 
+| 1. | Read the code in Task 356, then then Build and run.  |
+|    | Enter 1000 for the sampling rate |
+|    | Enter 1000 for the number of samples |
+|    | Enter 200 for the frequence |
+| 2. | If you have a phone app that can play a tone, set the frequency to 200Hz and hold it over the microphone |
+|    | Compare the magnitude with and without the tone playing. Compare with different frequencies |
+| 3. | <a title="No. The heap memory is all resored">Reading the output in the terminal, is there a memory leak?</a> |
+| 4. | <a title="In dft.hpp, line 18 - timeSeries = std::unique_ptr<T[]>(new T[Nsamp]);"> The object type `DFT<T>` stores `N` samples in it's internal buffer. Where is the memory for this buffer allocated? |
+| 5.  | <a title="The the function magnitudeAtFrequency() exits, the object dft goes out of scope. This causes the the smart pointer timeseries to go out of scope, which free the memory automatically">How and when is the memory deallocated?</a>
+| 6. | Re run the code, but specify the number of samples as 1000000 |
+| -  | <a title="Insufficient memory on the heap">Why is there an error?</a>
+
+There is a lot more that could be said about smart pointers. The adoption of them seems to be somewhat specific to the compiler. It is probably more important at this stage that you know they exist, and how to recognise one when you see it. For your own code, it is often advised that you use the standard template library objects `vector` and `array`.
+
+See [this page](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170#kinds-of-smart-pointers) for more details on smart pointers.
+
 
 
 

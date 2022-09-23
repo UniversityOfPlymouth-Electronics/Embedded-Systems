@@ -2,18 +2,25 @@
 
 #include "math.h"
 #include <memory>
-#include <array>
 
-//Normalised Discrete Fourier Transform
-template <class T, uint32_t Nsamp = 64>
+//Normalised Discrete Fourier Transform (DFT) - for type T data
+template <class T>
 class DFT {
     private:
-    std::unique_ptr<T[]> timeSeries;
-    uint32_t index = 0;
+    uint32_t Nsamp;                     //Number of samples
+    std::unique_ptr<T[]> timeSeries;    //Pointer to internal time series array
+    uint32_t index = 0;                 //Index to the location of the next sample
 
     public:
-    DFT() {
+    // Constructor requires the number of samples N at run time
+    DFT(uint32_t N = 64) : Nsamp(N) {
+        //Allocate the memory - this has only ONE owner (timeSeries)
         timeSeries = std::unique_ptr<T[]>(new T[Nsamp]);
+        if (timeSeries == nullptr) {
+            //Force a crash
+            std::throw_with_nested(std::runtime_error("MEMORY ALLOCATION FAILURE"));
+        }
+        //Initialise
         for (uint32_t n=0; n<Nsamp; n++) {
             timeSeries[n] = (T)0;
         }
@@ -38,17 +45,5 @@ class DFT {
         }
         T magnitude = sqrt(real*real + imag*imag);
         return magnitude;
-    }
-
-    // For read input data, calculate the magnitude spectrum up to Fs/2
-    std::array<T, Nsamp/2> calculateMagnitudeSpectrum() {
-        //Allocate the memory
-        std::array<T, Nsamp/2> spectrum;
-
-        //Calculate all bins
-        for (uint32_t k=0; k<Nsamp/2; k++) {
-            spectrum[k] = this->calculateMagnitudeForBin(k);
-        }
-        return spectrum;
     }
 };
