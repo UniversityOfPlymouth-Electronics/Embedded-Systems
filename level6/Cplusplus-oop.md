@@ -1616,13 +1616,9 @@ For this discussion, we will only focus on the Unique pointer (`unique_ptr`) as 
 | 6. | Re run the code, but specify the number of samples as 1000000 |
 | -  | <a title="Insufficient memory on the heap">Why is there an error?</a>
 
-There is a lot more that could be said about smart pointers. The adoption of them seems to be somewhat specific to the compiler. It is probably more important at this stage that you know they exist, and how to recognise one when you see it. For your own code, it is often advised that you use the standard template library objects `vector` and `array`.
+There is a lot more that could be said about smart pointers. The adoption of them seems to be somewhat specific to the compiler. It is probably more important at this stage that you know they exist, and how to recognise one when you see it. For your own code, it is often advised that you use the standard template library objects `vector` and `array`. These will be discussed later in the [standard template library](#the-standard-template-library) 
 
 See [this page](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170#kinds-of-smart-pointers) for more details on smart pointers.
-
-
-
-
 
 ### Copy Constructors]
 
