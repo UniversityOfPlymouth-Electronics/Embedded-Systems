@@ -34,6 +34,8 @@
    - [Dynamic Memory Allocation](#dynamic-memory-allocation)
    - [The RAII Idiom](#the-raii-idiom)
    - [Smart Pointers](#smart-pointers)
+   - [Reference Types](#reference-types)
+   - [`const` and references](#const-and-references)
    - [Copy Constructors](#copy-constructors)
    - [Move Constructors](#move-constructors)
 - [TBD Standard Template Library](#the-standard-template-library)
@@ -1620,7 +1622,131 @@ There is a lot more that could be said about smart pointers. The adoption of the
 
 See [this page](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170#kinds-of-smart-pointers) for more details on smart pointers.
 
-### Copy Constructors]
+### Reference Types
+
+The C and C++ languages claim to be fast and efficient. This can be at the expense of readability. C code can become quite hard to read.
+
+C++ has features that try to make code clearer, easier to read and  maintainable, while remaining performant. It can be quite challenging to write C++ that achieves both, and without any errors.
+
+One of the features is the *reference type*. You can recognise a reference by the `&` suffix. For example, consider the following extract from a class type `DataContainer`:
+
+```C++
+template <class T, int N>
+class DataContainer
+{
+    private:
+    //Array of data - potentially large!
+    T data[N];
+    uint32_t index = 0;
+
+    public:
+    DataContainer() : index(0) {
+        for (uint32_t n=0; n<N; n++) {
+            data[n] = (T)0;
+        }
+    }
+    //Member functions
+    void addSample(T nextSample);
+    double calcMean();
+    T operator[](int x);    //Access a sample
+};
+```
+
+You can see the this object encapsulates an array which could potentially be quite large. If you now pass such types as arguments to a function, these will be copied, and the overheads could be significant:
+
+```C++
+template <class T, int N>
+bool compareMeans(DataContainer<T,N> dat1, DataContainer<T,N> dat2)
+{
+    double m1 = dat1.calcMean();
+    double m2 = dat2.calcMean();
+    T y = dat1[0];
+    ...
+}
+```
+
+We could use pointers, but this is at the expense of readability:
+
+```C++
+template <class T, int N>
+bool compareMeans(DataContainer<T,N> dat1, DataContainer<T,N> dat2)
+{
+    double m1 = dat1->calcMean();
+    double m2 = dat2->calcMean();
+    T y = dat1->operator[](0);
+    ...
+}
+```
+
+Instead, we can use C++ *references*:
+
+```C++
+template <class T, int N>
+bool compareMeans(DataContainer<T,N>& dat1, DataContainer<T,N>& dat2)
+{
+    double m1 = dat1.calcMean();
+    double m2 = dat2.calcMean();
+    T y = dat1[0];
+    ...
+}
+```
+
+The code body reads as if copies had been passed, resulting in easy to read code. However, under the hood, only pointers were passed (this is hidden). 
+
+> You cannot directly perform pointer arithmetic on a reference. If you want to do this, you need to use the `&` prefix to extract the pure pointer. For example:
+>
+> `DataContainer<T,N>* p = &dat1;`
+>
+> Similarly, you can create a reference from a pointer:
+>
+> `DataContainer<T,N> *p = new DataContainer<T,N>();`
+> `DataContainer<T,N>& refP = *p;`
+>
+> It is not common to do this.
+
+### Const and References
+
+When arguments are passed by value, a copy is made, so there is no danger of changing the original data. Like pointers, a risk with using references is that the data might be changed by invoking member functions.
+
+The `const` keyword can be used to prevent this. For example, the member function `calcMean` might be written as follows:
+
+```C++
+double calcMean() const {
+    double y = 0.0;
+    for (uint32_t n=0; n<N; n++) {
+        y = y + (double)data[n];
+    }
+    return (y/N);
+}
+```
+
+The `const` in the function declaration tells the compiler that this function does not change any of the class members. 
+
+* `index` is not changed
+* the array `data` is not modified
+
+We say this function does not mutate the object, so is a `const` function. For reference type parameters, we also see `const` used. For example:
+
+```C++
+template <class T, int N>
+bool compareMeans( const DataContainer<T,N>& dat1, const DataContainer<T,N>& dat2)
+{
+    double m1 = dat1.calcMean();
+    double m2 = dat2.calcMean();
+
+    double margin = 0.05*m1;                            //5% margin
+    return ( (m2>=(m1-margin)) && (m2<=(m1+margin)) );  //True if they are within +-5%
+}
+```
+
+The `const` in the parameters means that the objects `dat1` and `dat2` will not be mutated by the function `compareMeans`. For this to be guaranteed, the function `calcMean` must also not also not mutate the data. Therefore, `calcMean` *must* be a constant function (as discussed above) otherwise there will be a compiler error. It's rather tidy once you understand it!
+
+Two things have been achieved here:
+
+* The code is a lot safer. The compiler will spot if something directly or indirectly modifies data when is not expected.
+* The code is efficient as only references to data are passed.
+
+### Copy Constructors
 
 TBD
 
