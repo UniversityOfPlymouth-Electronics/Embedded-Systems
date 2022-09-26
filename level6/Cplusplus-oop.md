@@ -36,8 +36,8 @@
    - [Smart Pointers](#smart-pointers)
    - [Reference Types](#reference-types)
    - [`const` and references](#const-and-references)
-   - [Copy Constructors](#copy-constructors)
-   - [Move Constructors](#move-constructors)
+   - [Copy Constructors](#copy-constructors-and-operators)
+   - [Move Constructors](#move-constructors-and-operators)
 - [TBD Standard Template Library](#the-standard-template-library)
    - [Standard Containers](#standard-containers)
    - [Algorithms](#algorithms)
@@ -1746,11 +1746,23 @@ Two things have been achieved here:
 * The code is a lot safer. The compiler will spot if something directly or indirectly modifies data when is not expected.
 * The code is efficient as only references to data are passed.
 
-### Copy Constructors
+### Copy Constructors and Operators
+
+We have met class constructors already. There is a special type of constructor known as a *copy constructor*. This allows you to instantiate and initialise one object using another (existing) object. 
+
+> As we will discover, these can be stored or temporary objects 
+
+For these exercises, we will use Visual Studio Code and a C++ compiler as it is easier to debug.
+
+| Task 358 | Copy Constructors and Operators|
+| - | - |
 
 TBD
 
-### Move Constructors
+### Move Constructors and Operators
+
+| Task 359 | Move Constructors and Operators |
+| - | - |
 
 TBD
 
