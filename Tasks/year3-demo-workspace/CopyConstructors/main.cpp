@@ -1,6 +1,10 @@
 // Copy constructor and assignment
 //
 // See https://learn.microsoft.com/cpp/cpp/copy-constructors-and-copy-assignment-operators-cpp?view=msvc-170
+//
+// N Outram and S Harris
+//
+// Checked with valgrind - https://valgrind.org/docs/manual/quick-start.html
 
 #include <iostream>
 #include <memory>
@@ -10,50 +14,69 @@ template<class T, int N>
 class Record
 {
     private:
-    // I've used a unique_ptr to simplify memory management
-    unique_ptr<T[]> samples;    // When this goes out of scope, the resource is released
+    T* samples;                 // When this goes out of scope, the resource is deleted
     uint32_t index;             // Location of latest sample
     
     public:
     Record() {
         cout << "Record() called" << endl;      //
-        samples = unique_ptr<T[]>(new T[N]);    // Allocate memory (reference counted)
+        samples = new T[N];                     // Allocate memory 
         index = 0;                              //
     }
+    
+    ~Record() {
+        delete [] samples;
+    }
+
     // Declare COPY CONSTRUCTOR - ensure the parameterless constructor is also called
     Record( const Record& other) : Record() {
         cout << "Copying via constructor..." << endl;
         *this = other;
-        //this->operator=(other);
-    }            
+    }     
+
     // Declare copy assignment.
     Record& operator=(const Record& rhs) {
         cout << "Copying..." << endl;
         for (uint32_t n=0; n<N; n++) {
             samples[n] = rhs.samples[n];
-            index = rhs.index;
         }
+        index = rhs.index;
         return *this;   //Dereference from pointer to value
     }   
+
     // For initialisation with a scalar
-    void operator=(T u) {
-        for (uint32_t n=0; n<N; samples[n] = u, n++);
+    void operator=(const T& u) {
+        for (uint32_t n=0; n<N; n++) {
+            samples[n] = u;
+        }
     }
 
-    ~Record() {
-        cout << "~Record() called" << endl;
-    }
-
-    // Add a sample
-    void operator << (T sample)
-    {
+    // Insert a sample
+    void operator << (T sample) {
         samples[index] = sample;
         index = (index == 0) ? N-1 : index-1;
     }
 
+    // Read a sample via []
+    T& operator[](uint32_t n) const {
+        return samples[(index - n)%N];
+    }
+    // Read/write a sample via []
+    T& operator[](uint32_t n) {
+        return samples[(index - n)%N];
+    }
+
+    // Sum two together 
+    Record operator+(const Record<T,N>& rhs) const {
+        Record<T,N> sum;                //Allocate a record for the result
+        for (uint32_t n=0; n<N; n++) {
+            sum[n] = (*this)[n] + rhs[n];   //Add and store in sum
+        }
+        return sum;
+    }
+
     // Write contents of the internal buffer to the terminal
-    void display()
-    {
+    void display() {
         uint32_t idx = index;
         for (uint32_t n=0; n<N; n++) {
             cout << samples[idx] << endl;
@@ -75,24 +98,29 @@ int main()
     A << 4;
     A.display();
 
-    //Use copy constructor to deep-copy A into C
+    // Use copy constructor to deep-copy A into C
     Record<int, 4> C(A);
 
-    //Update A (independently of C)
+    // Update A (independently of C)
     A << 5;
 
-    //Check C has not changed
+    // Check C has not changed
     C.display();
     
-    //Now the operator
+    // Now the operator
     B = A;
     B.display();
 
-    //The initialisation operator
+    // The initialisation operator
     Record<int,4> D;
     D = 0;
     D.display();
-    
+
+    // The add can be done in 1 line or two
+    Record<int,4> Y;
+    Y = A + B;
+    //Record<int,4> Y = A+B;    //Turn on optimisation!
+    Y.display();
 
     return 0;
 }
