@@ -10,19 +10,21 @@ template<class T, int N>
 class Record
 {
     private:
-    unique_ptr<T[]> samples;
-    uint32_t index;
+    // I've used a unique_ptr to simplify memory management
+    unique_ptr<T[]> samples;    // When this goes out of scope, the resource is released
+    uint32_t index;             // Location of latest sample
     
     public:
     Record() {
-        cout << "Record() called" << endl;
-        samples = unique_ptr<T[]>(new T[N]);
-        index = 0;
+        cout << "Record() called" << endl;      //
+        samples = unique_ptr<T[]>(new T[N]);    // Allocate memory (reference counted)
+        index = 0;                              //
     }
-    // Declare copy constructor - ensure the parameterless constructor is also called
+    // Declare COPY CONSTRUCTOR - ensure the parameterless constructor is also called
     Record( const Record& other) : Record() {
         cout << "Copying via constructor..." << endl;
-        this->operator=(other);
+        *this = other;
+        //this->operator=(other);
     }            
     // Declare copy assignment.
     Record& operator=(const Record& rhs) {
@@ -33,7 +35,7 @@ class Record
         }
         return *this;   //Dereference from pointer to value
     }   
-    // For initialisation
+    // For initialisation with a scalar
     void operator=(T u) {
         for (uint32_t n=0; n<N; samples[n] = u, n++);
     }
@@ -42,12 +44,14 @@ class Record
         cout << "~Record() called" << endl;
     }
 
+    // Add a sample
     void operator << (T sample)
     {
         samples[index] = sample;
         index = (index == 0) ? N-1 : index-1;
     }
 
+    // Write contents of the internal buffer to the terminal
     void display()
     {
         uint32_t idx = index;
