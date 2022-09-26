@@ -7,6 +7,9 @@
 			"command": "/usr/bin/clang++",
 			"args": [
 				"-fdiagnostics-color=always",
+				"-fno-elide-constructors",
+				"-O0",
+				"-std=c++14",
 				"-g",
 				"${file}",
 				"-o",

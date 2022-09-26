@@ -5,6 +5,7 @@
 // N Outram and S Harris
 //
 // Checked with valgrind - https://valgrind.org/docs/manual/quick-start.html
+// valgrind --leak-check=yes ./main
 
 #include <iostream>
 #include <memory>
@@ -116,10 +117,11 @@ int main()
     D = 0;
     D.display();
 
-    // The add can be done in 1 line or two
+    // The add can be done in 1 line or two. In two lines, it is less able to optimise
     Record<int,4> Y;
     Y = A + B;
-    //Record<int,4> Y = A+B;    //Turn on optimisation!
+    //Record<int,4> Y = A+B;    //Turn on optimisation and watch the copy disappear.
+
     Y.display();
 
     return 0;
