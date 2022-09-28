@@ -1739,7 +1739,7 @@ bool compareMeans( const DataContainer<T,N>& dat1, const DataContainer<T,N>& dat
 }
 ```
 
-The `const` in the parameters means that the objects `dat1` and `dat2` will not be mutated by the function `compareMeans`. For this to be guaranteed, the function `calcMean` must also not also not mutate the data. Therefore, `calcMean` *must* be a constant function (as discussed above) otherwise there will be a compiler error. It's rather tidy once you understand it!
+The `const` in the parameters means that the objects `dat1` and `dat2` will not be mutated by the function `compareMeans`. For this to be guaranteed, the function `calcMean` must also not also not mutate the data. Therefore, `calcMean` *must* be a constant function (as discussed above) otherwise there will be a compiler error. 
 
 Two things have been achieved here:
 
@@ -1750,12 +1750,13 @@ Two things have been achieved here:
 
 We have met class constructors already. There is a special type of constructor known as a *copy constructor*. This allows you to instantiate and initialise one object using another (existing) object. 
 
-> As we will discover, these can be stored or temporary objects 
+> As we will discover, both stored and temporary objects can be copied. 
 
-For these exercises, we will use Visual Studio Code and a C++ compiler as it is easier to debug.
+For these exercises, we will use Visual Studio Code and a C++ compiler as it is easier to debug (you can also use g++ on Linux or Mac OS). [See here for details](../getting_started/software-tools.md#windows-c-compiler). 
 
 | Task 358 | Copy Constructors and Operators|
 | - | - |
+
 
 TBD
 
