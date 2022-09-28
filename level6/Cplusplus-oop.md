@@ -1754,18 +1754,68 @@ We have met class constructors already. There is a special type of constructor k
 
 For these exercises, we will use Visual Studio Code and a C++ compiler as it is easier to debug (you can also use g++ on Linux or Mac OS). [See here for details](../getting_started/software-tools.md#windows-c-compiler). 
 
-| Task 358 | Copy Constructors and Operators|
+
+[Click Here to Watch a video op how to compile C++ on Windows.](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d61f5039-b4d9-4622-9dba-af1e00aaa813)
+
+Now try the following tasks:
+
+| Task 358 | Copy Constructors and Operators |
 | - | - |
+| 1. | Build the code in Visual Studio Code. Create `tasks.json` to use g++ to build the code. |
+| 2. | Using the debugger, find out which *constructor(s)* is/are used for the following lines: |
+| - | <a title="Parameterless constructor `Record()`">Record<int, 4> A;</a> |
+| - | <a title="First the parameterless constructor `Record()`, then the copy constructor `Record(const Record& other)`">Record<int, 4> C(A);</a> |
+| - | <a title="That is where memory is allocated for the new Record">Why is it essential that `Record()` is always called?</a> |
+| - | For the line that reads `B = A;`|
+| - | <a title="All the array data in A is copied into the array of B. The index of the next sample is also copied so that the order is the same">describe the actions performed</a> |
+| - | <a title="B would be unaffected as they are entirely independent copies of each other">If the data in `A` was to be subsequently changed, would this impact on `B` (and why)?</a> |
+| 3. | For the statement `Y = A + B;` |
+| - | <a title="The sum of A and B is written into a temporary Record `sum`. This is then copied into `Y`">How many times is data copied from one array to another, and when?</a> |
+| - | <a title="Instead of writing the sum into a temporary Record, write the result directly into Y">In what way do you think this could be more efficient?</a> |
+| 4. | Combine the two statements `Record<int,4> Y; Y = A + B;` into `Record<int,4> Y = A+B;` |
+| - | <a title="Yes - the optimiser has somehow removed the additional copy by moving the result directly into Y">Has anything changed?</a> |
 
+Now watch [this summary video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=86986f21-464a-4d7f-b997-af1e00f3f43e)
 
-TBD
+**Key Points**
+
+* In this example, we saw how one object can be allocated, and its internal data is copied from another object, thus making each independent. This is known as a *deep copy*. We used a copy-constructor to do this.
+
+ * A copy operator `=` was also created for copying data from one object into another (already allocated) object.
+
+ * The mechanism by which data is returned from a function depends on the compiler's ability to optimise the operations. 
+    * We saw an example where a temporary object was created, only to then be copied into another and destroyed. 
+    * By changing the style of the code, the compiler was able to find a way to avoid the copy.
+
+The last point is an example of *Return Value Optimisation* (RVO). 
+
+The following first creates `Y`, then (temporarily) creates `A+B`, so one is copied into the other.
+
+```C++
+    Record<int,4> Y;
+    Y = A + B;
+```
+
+Whereas the following can avoid creating two objects by combining the operations. Logically speaking, the temporary object *becomes* `Y`. We also refer to this as a *move*.
+
+```C++
+    Record<int,4> Y = A + B;
+```
+
+This last example might seem confusing and hard to predict, so the next section might help. 
 
 ### Move Constructors and Operators
 
+In C++ 11, *move semantics* were added to the C++ language. This enables the developer more ability to control when a copy is performed and when it can be "moved" (although copy operations may still be optimised out).
+
 | Task 359 | Move Constructors and Operators |
 | - | - |
+| 1. | Build the code in Visual Studio Code. Create `tasks.json` to use g++ to build the code. |
 
 TBD
+
+Now watch [this summary video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d79d2a77-b03d-478a-b60e-af1e00f8403e)
+
 
 ## The Standard Template Library
 

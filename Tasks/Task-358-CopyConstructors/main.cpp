@@ -120,6 +120,7 @@ int main()
     // The add can be done in 1 line or two. In two lines, it is less able to optimise
     Record<int,4> Y;
     Y = A + B;
+
     //Record<int,4> Y = A+B;    //Turn on optimisation and watch the copy disappear.
 
     Y.display();
