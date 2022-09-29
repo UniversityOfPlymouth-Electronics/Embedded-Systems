@@ -1752,7 +1752,48 @@ We have met class constructors already. There is a special type of constructor k
 
 > As we will discover, both stored and temporary objects can be copied. 
 
-For these exercises, we will use Visual Studio Code and a C++ compiler as it is easier to debug (you can also use g++ on Linux or Mac OS). [See here for details](../getting_started/software-tools.md#windows-c-compiler). 
+An example of a copy-constructor is shown in the code extract below:
+
+```C++
+template<class T, int N>
+class Record
+{
+    private:
+    T* samples = nullptr;       
+    uint32_t index;             
+    
+    ...
+    
+    public:
+    Record() {
+        samples = new T[N];                     
+        index = 0;                              
+    }
+
+    ...
+
+    // COPY CONSTRUCTOR
+    Record( const Record& other) : Record() {
+        *this = other; //Call the copy assignment
+    }   
+
+    // COPY BY ASSIGNMENT  
+    Record& operator=(const Record& rhs) {
+        for (uint32_t n=0; n<N; n++) {
+            samples[n] = rhs.samples[n];
+        }
+        index = rhs.index;
+        return *this;   //Dereference from pointer to value
+    } 
+    ...
+
+```
+
+Note the form of the copy constuctor: *a single reference parameter of the same type*. This invokes the copy-assignment below it (to avoid code replication)
+
+Like the copy constructor, the assignment operator has a single reference parameter of the same type.
+
+Let's look at this code using a debugger. For these exercises, we will use Visual Studio Code and a C++ compiler as it is easier to debug (you can also use g++ on Linux or Mac OS). [See here for details](../getting_started/software-tools.md#windows-c-compiler). 
 
 
 [Click Here to Watch a video op how to compile C++ on Windows.](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d61f5039-b4d9-4622-9dba-af1e00aaa813)
@@ -1808,14 +1849,80 @@ This last example might seem confusing and hard to predict, so the next section 
 
 In C++ 11, *move semantics* were added to the C++ language. This enables the developer more ability to control when a copy is performed and when it can be "moved" (although copy operations may still be optimised out).
 
+A move constructor is shown below:
+
+```C++
+// Declare a MOVE CONSTRUCTOR - used only for R-Values
+Record( Record&& other) : samples(nullptr), index(0)
+{   
+    // Perform "move"
+    this->samples = other.samples;
+    this->index = other.index;
+    
+    //Invalidate other
+    other.samples = nullptr;
+    other.index = 0;  
+}  
+```
+
+Note the constructor has the type `Record&&`. The `&&` signifies this is a reference to an **rvalue**.
+
+> An **rvalue** is typically a value that cannot accessed elsewhere, such as a tempory object.
+>
+> Only by passing rvalues will the move consructor be invoked.
+
+We can now see what is meant by a move. The `samples` pointer is pointed at the memory in `other`. The `samples` pointer in other is set to `nullptr` so that it cannot deallocate the memory when it (soon) goes out of scope.
+
+> In effect, when one object is *moved* into another, ownship of and responsibility for the data is transferred. This invalidates the original object, so only makes sense for temporary objects.
+
+The move assignment is shown below:
+
+```C++
+Record& operator=(Record&& rhs) {
+    //Prevent moving to oneself!
+    if (this != &rhs)
+    {
+        //Free existing resources (or no nothing in the case of a nullptr)
+        delete [] samples;
+
+        //Move (take ownership of the memory)
+        samples = rhs.samples;
+        index = rhs.index;
+        rhs.samples = nullptr;
+        rhs.index = 0;
+    }
+
+    return *this;   //Dereference from pointer to value
+} 
+```
+
+Again, this has a parameter with the `&&` suffix. With a move, we might be overwriting existing data, so the memory is first deallocated. Then ownership is transferred.
+
+
 | Task 359 | Move Constructors and Operators |
 | - | - |
 | 1. | Build the code in Visual Studio Code. Create `tasks.json` to use g++ to build the code. |
-
-TBD
+| 2. | Step into the line `Record<int, 4> C(A);` <a title="As persists beyond this line and can be accessed elsewhere in the code. We say A is an lvalue. A move would delete A">Why is the copy constructor used instead of the move?</a> |
+| 3. | Step into the line `B = A;` <a title="The copy assignment">Which assignment operator `=` does it use? (copy or move)?</a> |
+| - | <a title="As above, A is an lvalue. It cannot be moved (and hence deleted)">Why is this version used?</a> |
+| 4. | Step into the line `Y = A + B;` <a title="The move assingment as A+B is a temporary result, and hence an rvalue">Which assignment operator is used and why?</a> |
 
 Now watch [this summary video](https://plymouth.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d79d2a77-b03d-478a-b60e-af1e00f8403e)
 
+## Perspective
+
+Writing copy constructors and assignment operators is much more common than move. In many cases, returning large objects from functions will be optimised into a move, but only where possible and deemed safe. For many applications, many people simply trust the compiler.
+
+In embedded systems, we have resource limited devices. If you are writing something that needs to be carefully optimised (for speed, storage or both), such as manipulating large matrices of data, then following the pattern of move constructors and assignment will allow you to predict how data is handled with more certainty.  
+
+> Being able to write `Y = A+B;` for complex objects looks like the mathematical operation it performs.
+> 
+> *We are able to create readable code while still being efficient*
+> It is the hard work and complexity behind the scenes that makes something look so easy! 
+
+Furthermore, you should not write move operations without the equivalent copy operations also being implemented.
+
+Copy and move operations are probably one of those tasks you need to look up to ensure you are implementing them correctly. Some commentators make the point that C++ is quite old, and over time, has become unweildy and hard to learn. However, in the embedded space, nothing has evolved as a widely adopted replacement, so like it or not, we are probably better to know it at this point in time.
 
 ## The Standard Template Library
 
