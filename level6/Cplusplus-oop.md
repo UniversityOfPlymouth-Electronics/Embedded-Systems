@@ -1217,9 +1217,9 @@ So far, we have considered the case where template functions always contain the 
 
 Everything we've seen in function templates can also be applied to a class. In fact, the example above is a good candidate for a class as we can make our code even more readable.
 
-| TASK 352 | Class Templates |
+| TASK 351 | Class Templates |
 | --- | --- |
-| 1. | Make Task 352 your active program. Build and run |
+| 1. | Make Task 351 your active program. Build and run |
 | 2. | Adjust the potentiometer. Note how the output changes. There may be some perceivable lag |
 
 If we look at the main code, we see the following:
@@ -1325,7 +1325,7 @@ public:
 };
 ```
 
-| TASK 352 | Continued... |
+| TASK 351 | Continued... |
 | --- | --- |
 | 3. | This class has a constructor. <a title="All internal data is always initialised to a known state. In the function template example, it was assumed the buffer would initially contain zeros.">What is the advantage this brings over the simple function template version?</a> |
 | 4. | Now **add** a second instance of this class, but this time make the buffer 64 samples deep. You code your add data to both buffers and output the mean from each.  <a title="The 64 sample version will lag much more, but the mean will have less variance">How do they compare?</a> |
@@ -1348,9 +1348,9 @@ It would be tedious (and error prone) to duplicate the class twice, just to modi
 ### Dynamic Memory Allocation
 
 
-| TASK 354 | Dynamic Memory Allocation |
+| TASK 352 | Dynamic Memory Allocation |
 | --- | --- |
-| 1. | Make Task 354 your active program. Build and run |
+| 1. | Make Task 352 your active program. Build and run |
 | 2. | Look at the constructor for the `RunningMean` class. |
 | - | <a title="Using the `new` command">From reading the code, how is the array `buffer` created?</a> |
 | 3. | Look inside the class destructor |
@@ -1407,9 +1407,9 @@ The keyword `delete []` is used to free the memory so it can be allocated for ot
 
 In this example, we look at two ways to use `new` and `delete`.
 
-| TASK 355 | New and Delete |
+| TASK 353 | New and Delete |
 | --- | --- |
-| 1. | Make Task 354 your active program. Build and run |
+| 1. | Make Task 353 your active program. Build and run |
 | - | Study the code and note the console output |
 | 2. | Look at the output for Task 1. <a title="When an object is allocated with `new`, the constructor runs. When destroyed with `delete`, the destructor runs">At what point does the constructor and destructor run for class `DataObject`?</a> |
 | 3. | Look at the output for Task 2. <a title="When the array `buffer` is instantiated with `new`, all the contained object constructors are called (in turn). When the array `buffer` is deleted with `delete []`, all the destructors are called">What causes the constructor and destructor run for class `DataObject`?</a> | 
@@ -1534,7 +1534,7 @@ void someFunction() {
 }
 ```
 
-However, it is all too easy to forget to do this! From task 354, we saw a class where an array is allocated in a constructor, and deallocated in the destructor. An extract is shown below:
+However, it is all too easy to forget to do this! From task 352, we saw a class where an array is allocated in a constructor, and deallocated in the destructor. An extract is shown below:
 
 ```C++
 template<class T, class R>
@@ -1604,9 +1604,9 @@ There are three types of smart pointer:
 
 For this discussion, we will only focus on the Unique pointer (`unique_ptr`) as the use-cases for the others is somewhat more complex. There can also be issues with C++ language confirmity.
 
-| TASK 356 | Smart Pointers |
+| TASK 354 | Smart Pointers |
 | - | - | 
-| 1. | Read the code in Task 356, then then Build and run.  |
+| 1. | Read the code in Task 354, then then Build and run.  |
 |    | Enter 1000 for the sampling rate |
 |    | Enter 1000 for the number of samples |
 |    | Enter 200 for the frequence |
@@ -1800,7 +1800,7 @@ Let's look at this code using a debugger. For these exercises, we will use Visua
 
 Now try the following tasks:
 
-| Task 358 | Copy Constructors and Operators |
+| Task 355 | Copy Constructors and Operators |
 | - | - |
 | 1. | Build the code in Visual Studio Code. Create `tasks.json` to use g++ to build the code. |
 | 2. | Using the debugger, find out which *constructor(s)* is/are used for the following lines: |
@@ -1899,7 +1899,7 @@ Record& operator=(Record&& rhs) {
 Again, this has a parameter with the `&&` suffix. With a move, we might be overwriting existing data, so the memory is first deallocated. Then ownership is transferred.
 
 
-| Task 359 | Move Constructors and Operators |
+| Task 356 | Move Constructors and Operators |
 | - | - |
 | 1. | Build the code in Visual Studio Code. Create `tasks.json` to use g++ to build the code. |
 | 2. | Step into the line `Record<int, 4> C(A);` <a title="As persists beyond this line and can be accessed elsewhere in the code. We say A is an lvalue. A move would delete A">Why is the copy constructor used instead of the move?</a> |
@@ -1911,18 +1911,21 @@ Now watch [this summary video](https://plymouth.cloud.panopto.eu/Panopto/Pages/V
 
 ## Perspective
 
-Writing copy constructors and assignment operators is much more common than move. In many cases, returning large objects from functions will be optimised into a move, but only where possible and deemed safe. For many applications, many people simply trust the compiler.
+Writing copy constructors and assignment operators is much more common than move. In many cases, returning large objects from functions will be optimised into a move, but only where possible and guaranteed safe by the compiler. For many applications, many people simply trust the compiler.
 
 In embedded systems, we have resource limited devices. If you are writing something that needs to be carefully optimised (for speed, storage or both), such as manipulating large matrices of data, then following the pattern of move constructors and assignment will allow you to predict how data is handled with more certainty.  
 
-> Being able to write `Y = A+B;` for complex objects looks like the mathematical operation it performs.
+Sometimes there is a trade between code that is efficient and code that is easy to read.
+
+> Being able to write `Y = A+B;` for complex objects looks like the mathematical operation it performs. It is clearly easy to read.
 > 
-> *We are able to create readable code while still being efficient*
+> Through the use of move semantics, *we are able to create readable code while still being efficient*.
+>
 > It is the hard work and complexity behind the scenes that makes something look so easy! 
 
 Furthermore, you should not write move operations without the equivalent copy operations also being implemented.
 
-Copy and move operations are probably one of those tasks you need to look up to ensure you are implementing them correctly. Some commentators make the point that C++ is quite old, and over time, has become unweildy and hard to learn. However, in the embedded space, nothing has evolved as a widely adopted replacement, so like it or not, we are probably better to know it at this point in time.
+Copy and move operations are probably one of those tasks you need to look up to ensure you are implementing them correctly. Some commentators make the point that C++ is quite old, and over time, has become unweildy and hard to learn. However, in the embedded space, nothing has been adopted as a replacement, and even if it was, there will still be a vast quantity of legacy code. So like it or not, we are probably better knowing how to read and write modern C++ at this point in time.
 
 ## The Standard Template Library
 
