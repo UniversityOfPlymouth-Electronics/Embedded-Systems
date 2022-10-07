@@ -1,6 +1,8 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <list>
+#include <map>
 #include <algorithm>
 
 using namespace std;
@@ -85,7 +87,16 @@ void sortNBytes()
     for (auto n : vec) {
         cout << n << endl;
     }    
-    
+}
+
+void sortMap()
+{
+    map<string, uint32_t> myMap;
+    myMap["Embedded-Systems in Context"] = 143;
+    myMap["Embedded-Systems"] = 240;
+    myMap["Advanced Embedded Programming"] = 351;
+        
+
 }
 
 int main()
