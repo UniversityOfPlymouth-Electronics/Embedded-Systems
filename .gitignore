@@ -1,3 +1,4 @@
+.vscode/
 BUILD
 .mbed
 mbed-os
@@ -7,3 +8,4 @@ ntp-client
 .DS_Store
 *.zip
 .DS_Store
+*.exe

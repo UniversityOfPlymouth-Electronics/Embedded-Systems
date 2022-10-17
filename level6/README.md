@@ -1,11 +1,32 @@
 [UP - Table of Contents](../README.md)
 
 ---
- 
+
+# Table of Contents
+
+1. [Advanced Embedded Programming](#advanced-embedded-programming---level-6)
+1. [What's New](#what-is-new)
+1. [Level 6 Course Structure](#level-6-course)
+1. [Using the Glossary](#using-the-glossary)
+1. [Setting Expectation](#setting-expectation)
+1. [Your Kit](#your-kits)
+1. [Attending Labs](#attending-labs)
+1. [Lectures](#lectures)
+
+---
+
 # Advanced Embedded Programming - Level 6
 
+These materials for part of the following modules taught at the University of Plymouth
+
+* ELEC351 Advanced Embedded Programming
+* COMP2008 Embedded Programming and the Internet of Things
+
+All examples and tasks are written in C++. The embedded framework is Mbed OS. See the overview [here](../README.md).
+
+
 ## What is new
-This content has been migrated from [a previous version](http://blogs.plymouth.ac.uk/embedded-systems/microcontrollers/mbed-os-2/courses/embedded-systems-in-context-level-4/foreward/) based on mbed-os 5.
+This content was originally migrated from [a previous version](http://blogs.plymouth.ac.uk/embedded-systems/microcontrollers/mbed-os-2/courses/embedded-systems-in-context-level-4/foreward/) based on mbed-os 5.
 
 **Changes for 2021:**
 
@@ -20,7 +41,7 @@ The following changes are confirmed.
 * All projects are updated to Mbed-OS 6.13 and use Mbed Studio 1.4.2 onwards
 * Various corrections and typos fixed
 
-Changes for 2020:
+**Changes for 2021:**
 
 * Adoption of Mbed Studio v1.X
 * Adoption of Mbed-os 6.X
@@ -29,10 +50,22 @@ Changes for 2020:
 * The [existing glossary](http://blogs.plymouth.ac.uk/embedded-systems/glossary-2/) is being migrated to a [new version](/glossary/README.md) 
 * Blended delivery model
 
-Changes for 2022:
-Moved content from level 6 back to level 5
+**Changes for 2021:**
 
-# Level 6 Course
+* Restructuring. Moved content from level 6 back to level 5
+* Additional Lab using Azure IoT Central
+* Added additional network tasks, including NTP and TCP socket programming
+
+**Changes for 2022:**
+
+* Introduction to the Standard Template Library (STL)
+* Smart Pointers
+* Copy and Move Semantics, Constructors and Types
+* Expanded content on Templates
+* The `using` keyword
+* USB on the go (OTG)
+
+# Level 6 Course Structure
 This is an advanced programming module, that builds on content in levels 4 and 5. You may wish to survey some of the labs from previous year first.
 
 In particular, make sure you are familiar with C/C++ structures, rapid polling and interrupts. If not, you must attempt those labs first as they underpin the content in this module.

@@ -13,6 +13,8 @@ During this course you will use a variety of software tools. This section includ
 1. [Visual Studio Code](#Visual-Studio-Code)
 1. [GitHub Desktop](#GitHub-Desktop)
 1. [GCC Compiler (Optional)](#GCC-Compiler)
+1. [Windows C++ Compiler (Optional)](#windows-c-compiler)
+1. [PuTTY](#putty-serial-terminal)
 
 We will now install each package in turn. Should any of the following steps fail, you can contact the module leader or technician (via instant message) and they should be able to help you.
 
@@ -221,6 +223,23 @@ If you want to switch back to ARMC6, simply edit `external-tools.json` and move 
 ```
 
 I personally like to have the option of using either compiler.
+
+## Windows C++ Compiler
+
+Sometimes it is useful to be able to write C and C++ on the host computer. 
+
+* For Ubuntu Linux, you would install using `sudo apt install build-essential gdb`
+* For Mac OS, you can install XCode or Visual Studio for Mac
+* For Windows, you can install Visual Studio and add the C++ tools, or Visual Studio Code alongside a suitable C++ Compiler.
+
+Windows is the more common scenario, but also arguably the more complex one and there are a few choices. 
+
+* Visual Studio is the simplest, but also the largest install. Note that for commercial use, Visual Studio is paid commercial software.
+* We suggest the free [Visual Studio Code](https://code.visualstudio.com/) for consistency across all platforms. For this, you need to install a suitable C and C++ toolchain alongside it.
+
+The MinGW compiler is a good choice, and is part of the [MSYS2](https://www.msys2.org/) distribution. Instructions can be found here: https://code.visualstudio.com/docs/cpp/config-mingw
+
+You can also use Windows Subsystem for Linux 2 (WSL2) - https://code.visualstudio.com/docs/cpp/config-wsl. Note that for Windows 10, the default is WSL1. You will need to follow [specific instructions](https://learn.microsoft.com/en-us/windows/wsl/install-manual) to install WSL2.
 
 ## PuTTY Serial Terminal
 This is useful and may be used at different times
