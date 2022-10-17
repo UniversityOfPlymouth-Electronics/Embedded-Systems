@@ -40,8 +40,6 @@
    - [Move Constructors](#move-constructors-and-operators)
 - [Standard Template Library](#the-standard-template-library)
    - [Standard Containers](#standard-containers)
-   - [Algorithms](#algorithms)
-   - [File I/O](#file-io)
 - [References](#references)
 
 ---
