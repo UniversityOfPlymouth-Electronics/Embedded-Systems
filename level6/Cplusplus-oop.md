@@ -1929,19 +1929,39 @@ Copy and move operations are probably one of those tasks you need to look up to 
 
 ## The Standard Template Library
 
-TBD
+As a general rule, we try and avoid dynamic memory allocation in embedded systems, especially those with tight resource constraints. However, on more powerful platforms (such as a Raspberry Pi or equivalent) this is more commonplace given the higher performance and larger memory.
+
+Over the year, two standards have developed side by side:
+
+* The C++ language
+* The Standard Template Library (STL)
+
+The STL is a collection of useful classes and functions for common tasks. These have been heavily scrutinised and tested by millions of users, and therefore usually come recommended. Many of these are available in deeply embedded systems, such as Mbed OS. It is important to be aware of their properties however.
 
 ### Standard Containers
 
-TBD
+Containers are a type of object that contain data. This includes arrays, vectors, sets and dictionaries (also known as a hash-table), as well as others.
 
-### Algorithms
+* std::array - a C++ template class that encapsulates functionality to manage a **fixed** size array. Unusually for the STL, this uses static memory allocation, so is a direct replacement for a C++ array. It has relatively low overheads, so is a good choice for embedded systems.
+ * std::vector - a C++ template class that encapsulates functionality to manage a **variable** size array. This comes with certain overheads and like most of the STL containers, used **dynamic memory allocation**. This makes it slow to acquire memory and vulnerable to memory fragmentation. 
+ * std::map - a C++ template class that encapsulates key-value storage. As there is no direct equivalent built into C++, it is useful to look at this. Again, uses dynamic memory allocation, so would need to be used with great caution.
 
-TBD
+| Task 358 | Standard Template Library |
+| - | - |
+| 1. | Make Task-358 the active project. Build the code. |
+| - | For STM32 boards, if using Mbed Studio Desktop, it might be an idea to use GCC so you can single-step this code |
+| 2. | Read the comments in main and follow the instructions, uncommenting each example in turn |
+| - | Use GCC and the debugger to step into each function to better understand it |
+| 3. | <A title="It was possible to assign one array to another to make a full deep copy.">std::array is a value-type, whereas a C-Array is not. In practical terms, how was this demonstrated in `sort4Bytes()`?</A> |
+| - | <A title="It is of variable length and uses dynamic memory allocation">How does std::vector fundamentally differ from std::array?</A> |
+| - | <A title="It is sorted by key, lowest to highest">A map is an order key-value pair. If you iterate over the data, how is the data ordered by default?</A> |
 
-### File I/O
+This task is only a demo, and only considers the very basics of what the STL can do. Other features of the STL include:
 
-TBD
+* Algorithms - many common algorithms are included. We already saw the `sort` function being used
+* File I/O - there are comprehensive libraries to help with file input/output. This uses a modern C++ interface instead of the more procedural standard C library functions.
+
+More information about the STL can be found in [6].
 
 ## References
 
@@ -1954,6 +1974,8 @@ TBD
 [4] [Microsoft, Object lifetime and resource management (RAII)](https://learn.microsoft.com/en-us/cpp/cpp/object-lifetime-and-resource-management-modern-cpp?view=msvc-170)
 
 [5] [Microsoft, Smart pointers (Modern C++)](https://learn.microsoft.com/en-us/cpp/cpp/smart-pointers-modern-cpp?view=msvc-170)
+
+[6] [Standard Template Library](https://cplusplus.com/reference/stl/)
 
 ---
 
