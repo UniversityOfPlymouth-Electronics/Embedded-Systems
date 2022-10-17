@@ -59,11 +59,11 @@ The following changes are confirmed.
 **Changes for 2022:**
 
 * Introduction to the Standard Template Library (STL)
-* Smart Pointers
+* Dynamic Memory Allocation and Smart Pointers
+* More content on Templates
 * Copy and Move Semantics, Constructors and Types
-* Expanded content on Templates
-* The `using` keyword
-* USB on the go (OTG)
+* The `using` and `namespace` keyword - coming soon
+* USB on the go (OTG) - coming soon
 
 # Level 6 Course Structure
 This is an advanced programming module, that builds on content in levels 4 and 5. You may wish to survey some of the labs from previous year first.
