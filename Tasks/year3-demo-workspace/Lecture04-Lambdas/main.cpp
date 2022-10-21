@@ -1,9 +1,8 @@
-#include "mbed.h"
+#include <iostream>
 #include <cstdlib>
 #include <functional>
-#include <iostream>
-#include "uop_msb.h"
-using namespace uop_msb;
+#include <string>
+using namespace std;
 
 // The author would like to acknowledge the following helpful article!
 // https://www.cprogramming.com/c++11/c++11-lambda-closures.html
@@ -29,15 +28,28 @@ std::function<double(double)> accumulator(double initValue)
     return f;
 }
 
+std::function<int()> increment(int initValue, int delta) {
+    int acc = initValue;
+    auto f = [=]() mutable {
+        acc+=delta;
+        return acc;
+    };
+    return f;
+}
+
+
 //Global with Function type
 std::function<int(int,int)> fn;
 
+
+
 int main()
 {
+    cout << "Lambda's and Closures" << endl;
 
     //Local lambda
     auto fred = [] () {
-        std::cout << "I am Fred" << std::endl; 
+        cout << "I am Fred" << endl; 
     };
 
     //Call as you would a separate function 
@@ -48,12 +60,16 @@ int main()
         return a+b;
     };
 
-    auto f1 = [] (int a) {
-        std::cout << a << std::endl;
-    };
+    //Call with arguments
+    int y = fn(2,3);
+    cout << "y = " << y << endl;
 
+    //Two similar lambda functions
+    auto f1 = [] (int a) {
+        cout << a << endl;
+    };
     auto f2 = [] (int a) {
-        std::cout << a*a << std::endl;
+        cout << a*a << endl;
     };
 
     //Pass these functions as parameters
@@ -61,14 +77,18 @@ int main()
     doSomething(f2, 3);
 
     //Currying example
-    auto fc1 = accumulator(0.0);    //Captures 0.0
-    auto fc2 = accumulator(10.0);   //Captures 10.0
+    auto fc1 = accumulator(0.0);    //Captures 0.0 as starting value
+    auto fc2 = accumulator(10.0);   //Captures 10.0 as starting value
 
-    std::cout << fc1(5.0) << std::endl; 
-    std::cout << fc2(1.0) << std::endl;
+    cout << fc1(5.0) << endl; 
+    cout << fc2(1.0) << endl;
 
-    while (true) {
+    //Another
+    auto ctr = increment(10,2);
+    cout << ctr() << endl;
+    cout << ctr() << endl;
+    cout << ctr() << endl;
+    cout << ctr() << endl;
 
-    }
 }
 

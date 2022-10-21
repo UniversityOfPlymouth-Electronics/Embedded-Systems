@@ -32,10 +32,7 @@ class Record
     // Declare COPY CONSTRUCTOR - ensure the parameterless constructor is also called
     Record( const Record& other) : Record() {
         cout << "Copying via constructor..." << endl;
-        for (uint32_t n=0; n<N; n++) {
-            samples[n] = other.samples[n];
-        }
-        index = other.index;
+        *this = other;
     }     
 
     // Declare copy assignment.
@@ -91,7 +88,9 @@ class Record
 };
 
 int main()
-{   
+{
+    cout << "Copy Constructors" << endl;
+
     Record<int, 4> A;
     Record<int, 4> B;
     A << 1;
