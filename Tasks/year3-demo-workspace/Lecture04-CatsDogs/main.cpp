@@ -1,8 +1,21 @@
-#include "mbed.h"
-
+#include <iostream>
 #include "Cat.hpp"
 #include "Dog.hpp"
 #include "RoboDog.hpp"
+using namespace std;
+
+
+#define USER_BUTTON "SIM"
+class DigitalIn {
+    public:
+    DigitalIn(string s) {
+        cout << "Using fake hardware" << endl;
+    }
+    operator int() {
+        return (rand() % 2) == 0;
+    }
+};
+void sleep() {}
 
 DigitalIn blueButton(USER_BUTTON);
 
