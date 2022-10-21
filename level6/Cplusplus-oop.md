@@ -593,7 +593,7 @@ We essentially take an existing class (and all the effort that went into writing
 
 We also saw in a previous example that this was possible with **composition**. Both approaches can be made to work, but with composition, you would only have access to the public functions of `DigitalOut`.
 
-> When we derive a class, we gain access to the `protected` members as well as the `private` 
+> When we derive a class, we gain access to the `protected` members as well as the `public` 
 >
 > This is a key difference between inheritance and composition
 
