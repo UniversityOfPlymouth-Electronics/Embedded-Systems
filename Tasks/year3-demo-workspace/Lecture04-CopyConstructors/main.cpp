@@ -2,7 +2,7 @@
 //
 // See https://learn.microsoft.com/cpp/cpp/copy-constructors-and-copy-assignment-operators-cpp?view=msvc-170
 //
-// N Outram and S Harris
+// N Outram and S Harris (the bearded Guru)
 //
 // Checked with valgrind - https://valgrind.org/docs/manual/quick-start.html
 // valgrind --leak-check=yes ./main
@@ -42,6 +42,7 @@ class Record
             samples[n] = rhs.samples[n];
         }
         index = rhs.index;
+        copyCount++;
         return *this;   //Dereference from pointer to value
     }   
 
@@ -51,6 +52,35 @@ class Record
             samples[n] = u;
         }
     }
+
+    // ********************* MOVE SEMANTICS *********************
+/*
+    Record( Record&& other) : samples(nullptr) {
+        cout << "Move constructor..." << endl;
+        // Remember: other is an rvalue, so will not persist
+
+        //Take ownership of rvalue data
+        samples = other.samples;    // Adopt the array as own
+        other.samples = nullptr;    // When other goes out of scope, data won't be deleted
+
+        //Same state
+        index = other.index;
+    } 
+
+    // Declare copy assignment.
+    Record& operator=(Record&& rhs) {
+        if (samples == rhs.samples) return *this;
+        cout << "Moving..." << endl;
+        if (samples) {
+            delete [] samples;
+            samples = rhs.samples;
+            rhs.samples = nullptr;
+            index = rhs.index;
+        }        
+        return *this;   //Dereference from pointer to value
+    }
+*/
+    // ******************** ~MOVE SEMANTICS *********************
 
     // Insert a sample
     void operator << (T sample) {
@@ -85,7 +115,14 @@ class Record
         }
     }
 
+    //Used for demo purposes
+    static uint16_t copyCount;
+
 };
+
+//Static memory for keeping count
+template<class T, int N>
+uint16_t Record<T,N>::copyCount {0};
 
 int main()
 {
@@ -123,6 +160,8 @@ int main()
     //Record<int,4> Y = A+B;    //Turn on optimisation and watch the copy disappear.
 
     Y.display();
+
+    cout << Record<int,4>::copyCount << endl;
 
     return 0;
 }
