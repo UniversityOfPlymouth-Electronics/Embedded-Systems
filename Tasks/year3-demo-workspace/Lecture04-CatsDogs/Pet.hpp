@@ -18,6 +18,7 @@ protected:
     string name;
 public:
     Pet(string name);
+    ~Pet() { cout << this->name << "Says Bye" << endl; }
     void eat();
     string getName();
     // void doThisPV() {

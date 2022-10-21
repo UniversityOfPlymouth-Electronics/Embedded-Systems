@@ -18,8 +18,11 @@ class Dog : public Pet
 public:
     Dog();
     Dog(string name);
-    //virtual void woof();
-    void woof();
+
+    // ** EXPERIMENT **
+    // Make woof virtual and rerun the demo with the switch pressed
+    /*virtual*/ void woof();
+
     void woof(string);  //Overloaded
 };
 
