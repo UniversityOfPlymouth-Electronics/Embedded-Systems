@@ -57,7 +57,7 @@ class matrix2D  {
 		return *this;
 	}
 
-/*
+
 	// MOVE CONSTRUCTOR (no need to allocate in this case)
 	matrix2D<M,N,T> (matrix2D<M,N,T>&& other) : m_data(nullptr)  {
 		// Simply transfer ownership
@@ -84,7 +84,7 @@ class matrix2D  {
 		//Return a reference (not a pointer type)
 		return *this;
 	}
-*/	
+	
 	// Adds the contents of this matrix with another and MOVE-RETURNS THE RESULT
 	matrix2D<M,N,T> operator+(const matrix2D<M,N,T>& other) const {
 		//Create temporary object to hold the result
