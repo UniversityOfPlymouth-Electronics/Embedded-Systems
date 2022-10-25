@@ -32,17 +32,11 @@ void usbthread(){
     }
 }
 
-void doImportantStuff(){
-    ThisThread::sleep_for(std::chrono::milliseconds(1000));
-}
 
 int main()
 {
     th.start(usbthread);
-
-    while (true) {
-        doImportantStuff();
-    }
+    th.join();
 
     return 0;
 }
