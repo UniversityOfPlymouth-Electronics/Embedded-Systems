@@ -21,6 +21,11 @@ int main(int argc, const char * argv[]) {
     ComplexNumber yy = aa + bb;
     
     cout << yy << endl;
+
+    yy[0] = 1.0;            //Set the real part to 0
+    yy[1] = 2.0;
+    cout << yy << endl;
+
     return 0;
 }
 

@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <iostream>
-#include "Imag.hpp"
+#include <math.h>
 
 class ComplexNumber {
 private:
@@ -24,50 +24,35 @@ private:
     }
     
 public:
-    //Default constructor
-    ComplexNumber() {
-        real = 0.0;
-        imag = 0.0;
-    }
     
-    //Constructor 2
-    ComplexNumber(const double r, const double i=0.0) {
+    //Constructor 1
+    ComplexNumber(const double r=0.0, const double i=0.0) {
         real = r;
         imag = i;
     }
     
-    //Copy constructors
+    //Copy constructor
     ComplexNumber(const ComplexNumber& c) {
         copy(c);
     }
-    ComplexNumber(const Imag& c) {
-        real = 0.0;
-        imag = c.get();
+
+    //Copy operator
+    ComplexNumber& operator = (const ComplexNumber& c) {
+        real = c.real;
+        imag = c.imag;
+        return *this;
     }
 
-
-    //Create a new copy without using a constructor
-//    ComplexNumber& operator = (const Imag& c) {
-//        ComplexNumber *cc = new ComplexNumber();
-//        cc->imag = c.get();
-//        return *cc;
-//    }
-    
     //Conjugate - verb, so perform in place
     void conjugate() {
         imag *= -1.0;
     }
     
     //Conjugated - adjective, so return new copy
-    ComplexNumber conjugated() {
+    ComplexNumber conjugated() const {
         return ComplexNumber(real, -1.0*imag);
     }
     
-    //Override equals
-    void operator = (const ComplexNumber& c) {
-        copy(c);
-    }
-
     //Add in place
     void operator += (const ComplexNumber& c) {
         real += c.real;
@@ -75,10 +60,30 @@ public:
     }
     
     //Add
-    ComplexNumber operator + (const ComplexNumber& c) {
+    ComplexNumber operator + (const ComplexNumber& c) const {
         return ComplexNumber(real+c.real, imag+c.imag);
     }
+
+    //Multiply
+    ComplexNumber operator * (const ComplexNumber& c) const {
+        return ComplexNumber(real*c.real-imag*c.imag, real*c.imag + imag*c.real);
+    }
+
+    //Conversion operator - complex magnitude
+    operator double() {
+        return sqrt(real*real + imag*imag);
+    }
+
+    //Read only - note this is a const function
+    double operator[](const unsigned part) const {
+        return (part == 0) ? real : imag;
+    }
     
+    //Set by accessing a reference
+    double& operator[](const unsigned part) {
+        return (part == 0) ? real : imag;
+    }
+
     //Display
     void display() {
         using namespace std;
