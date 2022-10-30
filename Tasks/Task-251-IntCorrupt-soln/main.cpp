@@ -77,7 +77,7 @@ int main() {
     
     if (button == PRESSED) {
         //VERSION 2: short delay allowing main to be preempted - you might want to tweak this value
-        t1.attach(&countDown, 15us);
+        t1.attach(&countDown, 25us);
     } else {
         //VERSION 1: 2s - ENOUGH TIME FOR COUNTUP TO FINISH
         t1.attach(&countDown, 2s);                   

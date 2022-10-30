@@ -94,7 +94,10 @@ int main(void)
     while (true) {
         sleep(); 
         disp.cls();
-        disp.printf("T=%Ldms", T/1000);    
+        CriticalSectionLock::enable();
+        long long temp = T;
+        CriticalSectionLock::disable();
+        disp.printf("T=%Ldms", temp/1000);    
     }
     
 }
