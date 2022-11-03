@@ -19,6 +19,8 @@ int main()
     lcd.puts("Amber");
     wait_us(1000000);
 
+    red = 0;
+    amber = 0;
     green = 1;
     lcd.cls();
     lcd.puts("Green");    

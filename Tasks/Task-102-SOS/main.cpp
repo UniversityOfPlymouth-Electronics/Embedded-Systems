@@ -22,14 +22,48 @@ int main()
     {
         //On for 500ms
         greenLED = 1;
-        buzz.playTone("C");
-        wait_us(WAIT_TIME_MS * 1000);  //500ms
+        buzz.playTone("A");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
 
 
         //Off for 500ms
         greenLED = 0;
-        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
-        wait_us(WAIT_TIME_MS * 1000);  //500ms
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+
+        greenLED = 1;
+        buzz.playTone("D");
+        wait_us(WAIT_TIME_MS * 2000);  //500ms
+
+        
+        buzz.playTone("A");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+        
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+        
+        buzz.playTone("D#");
+        wait_us(WAIT_TIME_MS * 750);  //250ms
+        greenLED = 1;
+        buzz.playTone("D");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+        buzz.playTone("A");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+
+        greenLED = 1;
+        buzz.playTone("D");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+        
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 1500);  //500ms
+        buzz.playTone("A");
+        wait_us(WAIT_TIME_MS * 2000);  //500ms
 
         //Pause
         buzz.rest();
@@ -37,3 +71,4 @@ int main()
 
     }
 }
+//D D (Oct. Higher) D A G# G F D F G C C (Oct. Higher) D A G# G F D F G B B (Oct. Higher) D A G# G F D F G A# A# (Oct. Higher) D A G# G F D F G F F F F D D D F F F G G# G F D F G F F F G G# A C A D D D A D C A A A A G G G A A A A G A C A G D A G F C G F E D D D D F C F D F G G# G F
