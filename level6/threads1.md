@@ -1191,7 +1191,7 @@ Mbed-os actually uses a priority scheduler, but by default, all threads are give
 | --- | --- |
 | 1. | Open Task-378 and read through the code. |
 | - | Note there are two types of wait in thread 2. |
-| 2. | Run the code and trying holding button A |
+| 2. | Run the code and try holding button A |
 | 3. | Hold down button B and reset (to set a higher priority for thread 2). Repeat. |
 | - | What do you notice? |
 | - | <p title="If thread 2 has a higher priority and never enters the WAITING state, no other threads get any time">Hover here for an answer</p> |
