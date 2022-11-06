@@ -6,6 +6,10 @@ DigitalOut redLED(PC_2);                    //Red Traffic 1
 
 int main()
 {
+    /*the gist of debouncing seems to be to slow the program
+        so far observed the use of wait statements with a decently short
+        wait time to seemingly allow the switch to settle, no clue tho, follow up with nick
+    */
     redLED = 0;
 
     while (true) {
