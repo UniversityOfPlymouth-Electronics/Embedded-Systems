@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <iostream>
+#include <array>
 using namespace std;
+
 
 int main()
 {
