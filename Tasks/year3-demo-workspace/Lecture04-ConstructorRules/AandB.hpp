@@ -5,28 +5,33 @@ using namespace std;
 
 class P
 {
+    private:
+    int32_t parentData;
     public:
-    P() {
-        cout << "Parent" << endl;
+    P() : parentData(100) {
+        cout << "Parent " << parentData << endl;
     }
     P(int u) {
         cout << "P says " << u << endl;
-        func(u);
+        parentData = u;
     }
-    virtual int func(int a) = 0;
+    virtual void display() = 0;    
 };
 
 class C : public P
 {
     private:
-    int32_t stuff;
+    int32_t childData;
     public:
-    C() {
-        cout << "Child" << endl;
+    C() : childData(200) {
+        cout << "Child " << childData << endl;
     }
-    //Hideous bug alert! stuff is NOT initialised
-    C(int a) : stuff(a), P(a)  {
+    C(int a) : P(a), childData(a)  {
         cout << "Child with " << a << endl;
     }
-    virtual int func(int a=10);
+    virtual void display() {
+        cout << "Class C " << childData << endl;
+    }
 };
+
+
