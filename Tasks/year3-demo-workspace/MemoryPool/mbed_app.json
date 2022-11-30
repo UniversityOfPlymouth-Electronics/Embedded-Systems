@@ -1,0 +1,7 @@
+{
+    "target_overrides": {
+        "NUCLEO_F429ZI": {
+            "target.printf_lib": "std"
+        }
+    }
+}
