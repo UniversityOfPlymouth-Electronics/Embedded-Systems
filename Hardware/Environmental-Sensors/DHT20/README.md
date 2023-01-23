@@ -52,7 +52,7 @@ int main()
 
 
 ## Example 2
-The following example specifies the pins used for the I2C interface. A closure is used to output status information (for debugging).
+The following example specifies the pins used for the I2C interface. A lambda function is used to output status information (for debugging). You could equally create a global function with the same signature.
 
 ```c++
 #pragma once
