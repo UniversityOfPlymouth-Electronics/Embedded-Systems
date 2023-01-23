@@ -1,7 +1,7 @@
 
 # DHT20 Educational Driver for [Mbed OS 6.X](https://os.mbed.com/)
 
-Nicholas Outram, University of Plymouth,2023
+Nicholas Outram, [University of Plymouth](https://www.plymouth.ac.uk/schools/school-of-engineering-computing-and-mathematics), 2023
 
 > This is intended for educational purposes only and is provided AS-IS. Use at your own risk.
 >
