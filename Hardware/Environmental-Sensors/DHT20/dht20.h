@@ -55,7 +55,7 @@ private:
 
 
 public:
-  DHT20(PinName SDA = ARDUINO_UNO_D14, PinName SCL = ARDUINO_UNO_D15, CALLBACK_t msg = {}) : _sensor(SDA, SCL), _led(LED1), _msg(msg)
+  DHT20(PinName SDA = ARDUINO_UNO_D14, PinName SCL = ARDUINO_UNO_D15, CALLBACK_t msg = [](const char*){}) : _sensor(SDA, SCL), _led(LED1), _msg(msg)
   {
     _status = 0;
 
