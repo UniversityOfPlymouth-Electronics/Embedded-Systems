@@ -2,12 +2,17 @@
 # DHT20 Educational Driver for [Mbed OS 6.X](https://os.mbed.com/)
 
 Nicholas Outram, [University of Plymouth](https://www.plymouth.ac.uk/schools/school-of-engineering-computing-and-mathematics), 2023
+/*
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+*/
 
-> This is intended for educational purposes only and is provided AS-IS. Use at your own risk.
->
-> The author and the University of Plymouth accept no liability for any consequence of using this software
->
-> You are free to copy and modify this software.
+> This is intended for educational purposes only. You are free to copy and modify this software.
 >
 > If you find any errors, please raise an issue or a pull-request. That would be most appreciated. 
 >
