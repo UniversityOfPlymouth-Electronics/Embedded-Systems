@@ -24,6 +24,9 @@ This code should build with either Mbed Studio [[5]](https://os.mbed.com/studio/
 
 The sensor was from seeed studio - https://wiki.seeedstudio.com/Grove-Temperature-Humidity-Sensor-DH20/, connected via their Grove Arduino Shield https://www.seeedstudio.com/Base-Shield-V2.html using Arduino Pins D14 (SDA) and D15 (SCLK).
 
+## TODO:
+
+1. Implement CRC check
 
 # Examples
 All you need to do in include `dht.h` in your source file.
