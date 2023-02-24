@@ -22,6 +22,9 @@
            this option still affects trivial member functions.
 
 */
+
+#define USEMOVESEMANTICS
+
 #include <iostream>
 #include <memory>
 using namespace std;
@@ -60,6 +63,7 @@ class Record
         return *this;   //Dereference from pointer to value
     } 
 
+ #ifdef USEMOVESEMANTICS   
     // Declare a MOVE CONSTRUCTOR - used only for R-Values
     Record( Record&& other) : samples(nullptr), index(0)
     {   
@@ -93,7 +97,7 @@ class Record
 
         return *this;   //Dereference from pointer to value
     } 
-
+#endif
 
     // For initialisation with a scalar
     void operator=(const T& u) {
