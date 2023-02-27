@@ -1,5 +1,4 @@
-#include "mbed.h"
-#include "demo-self-test.hpp"
+#include "uop_msb.h"
 #include "SW1Poll.hpp"
 #include "SW2Poll.hpp"
 
@@ -8,24 +7,28 @@
 #define PRESSED  1
 
 //Function prototypes
+extern void sw1Controller_init();
+extern void sw2Controller_init();   
+extern void sw1FSM();
+extern void sw2FSM();
+
 void task1();
 void task2();
 
 //Hardware objects
-DigitalOut red_led(PE_15);     //CountUp is in its critical section
-DigitalOut yellow_led(PB_10);  //CountDown is in its critical section
-DigitalOut green_led(PB_11);   //counter != 0
+DigitalOut red_led(TRAF_RED1_PIN);     
+DigitalOut yellow_led(TRAF_YEL1_PIN);  
+DigitalOut green_led(TRAF_GRN1_PIN);  
 DigitalOut onboardLED(LED1);
 
 DigitalIn button(USER_BUTTON);
-DigitalIn sw1(PE_12);
-DigitalIn sw2(PE_14);
+DigitalIn sw1(BTN1_PIN);
+DigitalIn sw2(BTN2_PIN);
 
-
-//LOOK AT SWPoll.hpp for the definition of the SWPoll class
-
+// This project contains a lot of repetition.
+// This is done to keep it as simple as possible.
+// More elegant versions are presented in later tasks 
 int main() {
-    POST();
     
     //Main uses a Timer
     yellow_led = 1;
@@ -40,7 +43,7 @@ int main() {
     while(1) { 
         
         //Flash the yellow on the "main thread"
-        if (t.read_ms() >= 500) {
+        if (t.elapsed_time() >= 500ms) {
             yellow_led = !yellow_led;   
             t.reset(); 
         }

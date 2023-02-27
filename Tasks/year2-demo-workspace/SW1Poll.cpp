@@ -1,4 +1,3 @@
-#include "demo-self-test.hpp"
 #include "SW1Poll.hpp"
 
 //Change this to pick the LED and Switch
@@ -36,7 +35,7 @@ void sw1FSM()
             break;
 
         case LOW_DEBOUNCE:
-            if (t.read_ms() >= 200) {
+            if (t.elapsed_time() >= 200ms) {
                 state = HIGH;
                 t.stop();
                 t.reset();
@@ -52,7 +51,7 @@ void sw1FSM()
             }
             break;
         case HIGH_DEBOUNCE:
-            if (t.read_ms() >= 200) {
+            if (t.elapsed_time() >= 200ms) {
                 state = LOW;
                 t.stop();
                 t.reset();
