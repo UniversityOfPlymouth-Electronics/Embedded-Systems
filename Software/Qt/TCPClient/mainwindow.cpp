@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <iostream>
 
+//Main window (there is only one)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -133,7 +134,7 @@ void MainWindow::acceptConnection()
 
 void MainWindow::updateServerProgress()
 {
-    int bytesThisTransaction = int(tcpServerConnection->bytesAvailable());
+    unsigned bytesThisTransaction = int(tcpServerConnection->bytesAvailable());
     bytesReceived += bytesThisTransaction;
     QByteArray bytes = tcpServerConnection->readAll();
 

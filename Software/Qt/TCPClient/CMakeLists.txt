@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(TCP_IP_Server VERSION 0.1 LANGUAGES CXX)
+project(TCPClient VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -20,31 +21,32 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(TCP_IP_Server
+    qt_add_executable(TCPClient
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET TCP_IP_Server APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET TCPClient APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(TCP_IP_Server SHARED
+        add_library(TCPClient SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(TCP_IP_Server
+        add_executable(TCPClient
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(TCP_IP_Server PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(TCPClient PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(TCPClient PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 
-set_target_properties(TCP_IP_Server PROPERTIES
+set_target_properties(TCPClient PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -52,10 +54,10 @@ set_target_properties(TCP_IP_Server PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS TCP_IP_Server
+install(TARGETS TCPClient
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(TCP_IP_Server)
+    qt_finalize_executable(TCPClient)
 endif()
