@@ -23,6 +23,8 @@ MainWindow::~MainWindow()
 // ********************************* SERVER *********************************
 void MainWindow::on_listenButton_clicked()
 {
+    ui->payload->appendPlainText(tr("======>> on_listenButton_clicked() ======="));
+
     bytesReceived = 0;
 
     if (serverIsListening == false) {
@@ -40,40 +42,36 @@ void MainWindow::on_listenButton_clicked()
         ui->payload->appendPlainText(tr("Listening on port %1").arg(tcpServer.serverPort()));
         serverIsListening = true;
     } else {
-        ui->listenButton->setText("&LISTEN");
-
-        if (tcpServerConnection != nullptr) {
-            if (tcpServerConnection->isOpen()) {
-                ui->payload->appendPlainText(tr("Closing server connection"));
-                tcpServerConnection->close();
-            }
-        }
-        if (tcpServer.isListening()) {
-            ui->payload->appendPlainText(tr("Closing server"));
-            tcpServer.close();
-        }
-        serverIsListening = false;
+        tearDown();
     }
+    ui->payload->appendPlainText(tr("======<< on_listenButton_clicked() ======="));
 }
 
 void MainWindow::acceptConnection()
 {
+    ui->payload->appendPlainText(tr("======>> acceptConnection() ======="));
     tcpServerConnection = tcpServer.nextPendingConnection();
     if (!tcpServerConnection) {
-        ui->payload->appendPlainText(tr("Error: got invalid pending connection!"));
+        tearDown();
         return;
     }
 
+    //Hook up signals
     connect(tcpServerConnection, &QIODevice::readyRead, this, &MainWindow::updateServerProgress);
     connect(tcpServerConnection, &QAbstractSocket::errorOccurred,this, &MainWindow::displayError);
     connect(tcpServerConnection, &QTcpSocket::disconnected, tcpServerConnection, &QTcpSocket::deleteLater);
 
     ui->payload->appendPlainText(tr("Accepted connection"));
     //tcpServer.close();
+    ui->payload->appendPlainText(tr("======<< acceptConnection() ======="));
+
 }
+
+
 
 void MainWindow::updateServerProgress()
 {
+    ui->payload->appendPlainText(tr("======>> updateServerProgress() ======="));
     unsigned bytesThisTransaction = int(tcpServerConnection->bytesAvailable());
     bytesReceived += bytesThisTransaction;
     QByteArray bytes = tcpServerConnection->readAll();
@@ -83,18 +81,45 @@ void MainWindow::updateServerProgress()
         ui->payload->appendPlainText(tr("%1").arg(bytes[n]));
         std::cout << bytes[n];
     }
+    ui->payload->appendPlainText(tr("======<< updateServerProgress() ======="));
 }
 
 void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
+    ui->payload->appendPlainText(tr("======>> displayError() ======="));
+
+    tearDown();
+
     if (socketError == QTcpSocket::RemoteHostClosedError) {
         ui->payload->appendPlainText(tr("Remote Host Closed"));
-        return;
     }
-    tcpServer.close();
-    ui->payload->appendPlainText(tr("Server ready"));
-    ui->listenButton->setEnabled(true);
+
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
 #endif
+    ui->payload->appendPlainText(tr("======<< displayError() ======="));
+
+}
+
+void MainWindow::tearDown()
+{
+    disconnect(&tcpServer, nullptr, nullptr, nullptr);
+
+    if (tcpServerConnection) {
+        disconnect(tcpServerConnection, nullptr, nullptr, nullptr);
+        disconnect(tcpServerConnection, nullptr, nullptr, nullptr);
+        disconnect(tcpServerConnection, nullptr, nullptr, nullptr);
+
+        if (tcpServerConnection->isOpen()) {
+            tcpServerConnection->close();
+            ui->payload->appendPlainText(tr("Server connection closed"));
+        }
+    }
+    if (tcpServer.isListening()) {
+        tcpServer.close();
+        ui->payload->appendPlainText(tr("Server closed"));
+    }
+    ui->listenButton->setEnabled(true);
+    ui->listenButton->setText("&LISTEN");
+    serverIsListening = false;
 }

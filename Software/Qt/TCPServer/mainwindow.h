@@ -24,6 +24,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    void tearDown();
 
     //Server
     QTcpServer tcpServer;
