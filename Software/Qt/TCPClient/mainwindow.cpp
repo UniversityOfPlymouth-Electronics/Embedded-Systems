@@ -29,7 +29,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_sendButton_clicked()
 {
     if (clientIsSending == false) {
-        ui->listenButton->setEnabled(false);
         ui->sendButton->setEnabled(false);
         clientIsSending = true;
         connect(&tcpClient, &QAbstractSocket::connected, this, &MainWindow::startTransfer);
@@ -47,6 +46,8 @@ void MainWindow::on_sendButton_clicked()
 
     }
 }
+
+
 void MainWindow::startTransfer()
 {
     // called when the TCP client connected to the loopback server
@@ -56,6 +57,7 @@ void MainWindow::startTransfer()
     bytesToWrite = dat.size() - int(tcpClient.write(dat,dat.size()));
     ui->payload->appendPlainText(tr("Client Connected"));
 }
+
 void MainWindow::updateClientProgress(qint64 numBytes)
 {
     // called when the TCP client has written some bytes
@@ -71,84 +73,15 @@ void MainWindow::updateClientProgress(qint64 numBytes)
     ui->payload->appendPlainText(tr("bytesWritten: %1").arg(bytesWritten));
     ui->payload->appendPlainText(tr("tcpClient.bytesToWrite(): %1").arg(b2w));
     if (b2w == 0) {
-        ui->listenButton->setEnabled(true);
-        ui->sendButton->setEnabled(true);
-        clientIsSending = false;
-        tcpClient.close();
-        ui->payload->appendPlainText(tr("Client Disconnected"));
-    }
-}
-// ********************************* SERVER *********************************
-void MainWindow::on_listenButton_clicked()
-{
-    bytesWritten = 0;
-    bytesReceived = 0;
-
-    if (serverIsListening == false) {
-        ui->sendButton->setEnabled(false);
-        ui->listenButton->setText("&STOP");
-        connect(&tcpServer, &QTcpServer::newConnection, this, &MainWindow::acceptConnection);
-
-        while (!tcpServer.listen()) {
-            QMessageBox::StandardButton ret = QMessageBox::critical(this,tr("Loopback"),
-                                                                    tr("Unable to start the test: %1.").arg(tcpServer.errorString()),
-                                                                    QMessageBox::Retry | QMessageBox::Cancel);
-            if (ret == QMessageBox::Cancel)
-                return;
-        }
-
-        ui->payload->appendPlainText(tr("Listening on port %1").arg(tcpServer.serverPort()));
-        serverIsListening = true;
-    } else {
-        ui->listenButton->setText("&LISTEN");
-
-        if (tcpServerConnection != nullptr) {
-            if (tcpServerConnection->isOpen()) {
-                ui->payload->appendPlainText(tr("Closing server connection"));
-                tcpServerConnection->close();
-            }
-        }
-        if (tcpServer.isListening()) {
-            ui->payload->appendPlainText(tr("Closing server"));
-            tcpServer.close();
-        }
-        serverIsListening = false;
-    }
-}
-
-void MainWindow::acceptConnection()
-{
-    tcpServerConnection = tcpServer.nextPendingConnection();
-    if (!tcpServerConnection) {
-        ui->payload->appendPlainText(tr("Error: got invalid pending connection!"));
-        return;
-    }
-
-    connect(tcpServerConnection, &QIODevice::readyRead, this, &MainWindow::updateServerProgress);
-    connect(tcpServerConnection, &QAbstractSocket::errorOccurred,this, &MainWindow::displayError);
-    connect(tcpServerConnection, &QTcpSocket::disconnected, tcpServerConnection, &QTcpSocket::deleteLater);
-
-    ui->payload->appendPlainText(tr("Accepted connection"));
-    //tcpServer.close();
-}
-
-void MainWindow::updateServerProgress()
-{
-    unsigned bytesThisTransaction = int(tcpServerConnection->bytesAvailable());
-    bytesReceived += bytesThisTransaction;
-    QByteArray bytes = tcpServerConnection->readAll();
-
-    ui->payload->appendPlainText(tr("Received %1 Bytes, total %2").arg(bytesReceived).arg(bytesThisTransaction));
-    for (unsigned n=0; n<bytesThisTransaction; n++) {
-        ui->payload->appendPlainText(tr("%1").arg(bytes[n]));
-        std::cout << bytes[n];
+        ui->payload->appendPlainText(tr("Completed"));
+        tearDown();
     }
 }
 
 
-// ********************************* COMMON *********************************
 void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
+    ui->payload->appendPlainText(tr("Error"));
     if (socketError == QTcpSocket::RemoteHostClosedError) {
         ui->payload->appendPlainText(tr("Remote Host Closed"));
         return;
@@ -158,13 +91,22 @@ void MainWindow::displayError(QAbstractSocket::SocketError socketError)
                              tr("The following error occurred: %1.")
                              .arg(tcpClient.errorString()));
 
-    tcpClient.close();
-    tcpServer.close();
-    ui->payload->appendPlainText(tr("Client ready"));
-    ui->payload->appendPlainText(tr("Server ready"));
-    ui->sendButton->setEnabled(true);
-    ui->listenButton->setEnabled(true);
+    tearDown();
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
 #endif
+}
+
+
+void MainWindow::tearDown()
+{
+    ui->sendButton->setEnabled(true);
+    clientIsSending = false;
+    disconnect(&tcpClient, nullptr, nullptr, nullptr);
+    disconnect(&tcpClient, nullptr, nullptr, nullptr);
+    disconnect(&tcpClient, nullptr, nullptr, nullptr);
+    if (tcpClient.isOpen()) {
+        tcpClient.close();
+    }
+    ui->payload->appendPlainText(tr("Client Closed"));
 }

@@ -39,19 +39,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="listenButton">
-          <property name="maximumSize">
-           <size>
-            <width>128</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>LISTEN</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>
