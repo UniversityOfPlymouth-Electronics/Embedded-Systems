@@ -98,7 +98,7 @@ void MainWindow::updateServerProgress()
 void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
     ui->payload->appendPlainText(tr("======>> displayError() ======="));
-    ui->payload->appendPlainText(tr("Error: %s").arg(tcpServer.errorString()));
+    ui->payload->appendPlainText(tr("displayError: %s").arg(tcpServer.errorString()));
 
     if (socketError == QTcpSocket::RemoteHostClosedError) {
         ui->payload->appendPlainText(tr("Remote Host Closed"));
@@ -122,7 +122,7 @@ void MainWindow::tearDownTCPSocket()
         if (tcpServerConnection->isOpen()) {
             disconnect(tcpServerConnection, nullptr, nullptr, nullptr);
             tcpServerConnection->close();
-            tcpServerConnection = nullptr;
+            tcpServerConnection = nullptr; //IMPORTANT!
             ui->payload->appendPlainText(tr("Server connection closed"));
         }
     }
