@@ -30,13 +30,23 @@ void MainWindow::on_listenButton_clicked()
     if (serverIsListening == false) {
         ui->listenButton->setText("&STOP");
 
+        //Set port
+        bool parsedAsInt = false;
+        quint16 port = ui->port->text().toUInt(&parsedAsInt);
+        if (parsedAsInt == true) {
+            ui->payload->appendPlainText(tr("Settin port to %1").arg(port));
+        } else {
+            ui->payload->appendPlainText(tr("Cannot read port value: using server assigned."));
+            port = 0;
+        }
+
         //Hook up signals and slots for the server events
         connect(&tcpServer, &QTcpServer::newConnection, this, &MainWindow::acceptConnection);
         connect(&tcpServer, &QTcpServer::pendingConnectionAvailable, this, &MainWindow::pendingConnection);
         connect(&tcpServer, &QTcpServer::acceptError, this, &MainWindow::acceptError);
 
         //Non-blocking call to put server into listening state
-        while (!tcpServer.listen()) {
+        while (!tcpServer.listen(QHostAddress::Any, port)) {
             QMessageBox::StandardButton ret = QMessageBox::critical(this,tr("Loopback"), tr("Unable to start the test: %1.").arg(tcpServer.errorString()), QMessageBox::Retry | QMessageBox::Cancel);
             if (ret == QMessageBox::Cancel)
                 return;
