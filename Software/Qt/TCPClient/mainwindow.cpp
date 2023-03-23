@@ -47,7 +47,6 @@ void MainWindow::on_sendButton_clicked()
     }
 }
 
-
 void MainWindow::startTransfer()
 {
     // called when the TCP client connected to the loopback server
@@ -78,19 +77,14 @@ void MainWindow::updateClientProgress(qint64 numBytes)
     }
 }
 
-
 void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
-    ui->payload->appendPlainText(tr("Error"));
+    ui->payload->appendPlainText(tr("Error: %1").arg(tcpClient.errorString()));
     if (socketError == QTcpSocket::RemoteHostClosedError) {
         ui->payload->appendPlainText(tr("Remote Host Closed"));
-        return;
+    } else {
+        QMessageBox::information(this, tr("Network error"), tr("The following error occurred: %1.").arg(tcpClient.errorString()));
     }
-
-    QMessageBox::information(this, tr("Network error"),
-                             tr("The following error occurred: %1.")
-                             .arg(tcpClient.errorString()));
-
     tearDown();
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
