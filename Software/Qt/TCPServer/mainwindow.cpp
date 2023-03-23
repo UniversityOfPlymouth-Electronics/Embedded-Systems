@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// ********************************* SERVER *********************************
+// Button slot
 void MainWindow::on_listenButton_clicked()
 {
     ui->payload->appendPlainText(tr("======>> on_listenButton_clicked() ======="));
@@ -30,10 +30,12 @@ void MainWindow::on_listenButton_clicked()
     if (serverIsListening == false) {
         ui->listenButton->setText("&STOP");
 
+        //Hook up signals and slots for the server events
         connect(&tcpServer, &QTcpServer::newConnection, this, &MainWindow::acceptConnection);
         connect(&tcpServer, &QTcpServer::pendingConnectionAvailable, this, &MainWindow::pendingConnection);
         connect(&tcpServer, &QTcpServer::acceptError, this, &MainWindow::acceptError);
 
+        //Non-blocking call to put server into listening state
         while (!tcpServer.listen()) {
             QMessageBox::StandardButton ret = QMessageBox::critical(this,tr("Loopback"), tr("Unable to start the test: %1.").arg(tcpServer.errorString()), QMessageBox::Retry | QMessageBox::Cancel);
             if (ret == QMessageBox::Cancel)
@@ -49,10 +51,12 @@ void MainWindow::on_listenButton_clicked()
     ui->payload->appendPlainText(tr("======<< on_listenButton_clicked() ======="));
 }
 
+// slot for pendingConnectionAvailable signal
 void MainWindow::pendingConnection() {
     ui->payload->appendPlainText(tr("====== PENDING CONNECTION SIGNAL AVAILABLE ======="));
 }
 
+//slot for newConnection signal
 void MainWindow::acceptConnection()
 {
     ui->payload->appendPlainText(tr("======>> acceptConnection() ======="));
@@ -65,21 +69,22 @@ void MainWindow::acceptConnection()
         return;
     }
 
-    //Hook up signals for TCP/IP socket
+    //Hook up signals and slots for TCP/IP socket
     connect(tcpServerConnection, &QIODevice::readyRead, this, &MainWindow::updateServerProgress);
     connect(tcpServerConnection, &QAbstractSocket::errorOccurred,this, &MainWindow::displayError);
     connect(tcpServerConnection, &QTcpSocket::disconnected, tcpServerConnection, &QTcpSocket::deleteLater);
 
-    ui->payload->appendPlainText(tr("Accepted connection"));
     ui->payload->appendPlainText(tr("======<< acceptConnection() ======="));
 }
 
+// slot for case where accept did not succeed.
 void MainWindow::acceptError(QAbstractSocket::SocketError err)
 {
     ui->payload->appendPlainText(tr("====== ACCEPT ERROR ======="));
-    ui->payload->appendPlainText(tr("%d %s").arg(err).arg(tcpServer.errorString()));
+    ui->payload->appendPlainText(tr("%1 %2").arg(err).arg(tcpServer.errorString()));
 }
 
+// slot for handling incoming data
 void MainWindow::updateServerProgress()
 {
     ui->payload->appendPlainText(tr("======>> updateServerProgress() ======="));
@@ -95,10 +100,11 @@ void MainWindow::updateServerProgress()
     ui->payload->appendPlainText(tr("======<< updateServerProgress() ======="));
 }
 
+// slot for error handling, including the remote host closing
 void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
     ui->payload->appendPlainText(tr("======>> displayError() ======="));
-    ui->payload->appendPlainText(tr("displayError: %s").arg(tcpServer.errorString()));
+    ui->payload->appendPlainText(tr("displayError: %1").arg(tcpServer.errorString()));
 
     if (socketError == QTcpSocket::RemoteHostClosedError) {
         ui->payload->appendPlainText(tr("Remote Host Closed"));
@@ -106,6 +112,7 @@ void MainWindow::displayError(QAbstractSocket::SocketError socketError)
         return;
     }
 
+    //For all other errors, tear down everything
     tearDown();
 
 #ifndef QT_NO_CURSOR
