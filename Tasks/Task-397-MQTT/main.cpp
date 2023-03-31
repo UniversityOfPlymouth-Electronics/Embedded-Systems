@@ -10,6 +10,7 @@
 #include <string.h>
 #include <iostream>
 using namespace std;
+using namespace uop_msb;
 
 // Network interface
 EthernetInterface net;
@@ -22,6 +23,8 @@ char rbuffer[65];
 
 DigitalIn BlueButton(USER_BUTTON);
 AnalogIn pot(AN_POT_PIN);
+LCD_16X2_DISPLAY lcdDisp;
+DigitalOut backLight(LCD_BKL_PIN,1);
 
 // cedalo management center
 // http://<ip address>:8088
@@ -36,7 +39,7 @@ AnalogIn pot(AN_POT_PIN);
 int main()
 {
     // Bring up the ethernet interface
-    printf("Ethernet socket example\n");
+    printf("MQTT publisher example\n");
     net.connect();
     bool keepGoing = true;
  
@@ -44,12 +47,22 @@ int main()
         // Show the network address
         SocketAddress a;
         net.get_ip_address(&a);
-        printf("IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
+
+        SocketAddress gw;
+        net.get_gateway(&gw);
+        printf("Gateway: %s\n\r", gw.get_ip_address() ? gw.get_ip_address() : "None");
+
+        lcdDisp.cls();
+        lcdDisp.locate(0, 0);
+        lcdDisp.printf("P%s\n", a.get_ip_address() ? a.get_ip_address() : "None");
 
         // Open a socket on the network interface, and create a TCP connection to the TCP server
         TCPSocket socket;
         MQTTClient client(&socket);
         socket.open(&net);
+
+        //Set the TCP socket port
+        a.set_port(SOCKET_PORT);
 
         //Option 1. Look up IP address of remote machine on the Internet
         //net.gethostbyname("ifconfig.io", &a);
@@ -57,17 +70,20 @@ int main()
         //printf("Server IP address: %s\n", a.get_ip_address() ? a.get_ip_address() : "None");
 
         //Option 2. Manually set the address (In a Windows terminal, type ipconfig /all and look for the IPV4 Address for the network interface you are using)
-        a.set_ip_address(IPV4_BROKER_ADDRESS);
+        //a.set_ip_address(IPV4_BROKER_ADDRESS);
 
-        //Set the TCP socket port
-        a.set_port(SOCKET_PORT);
+        //Option 3. Automatically use the gateway address (the host PC if sharing a connection)
+        a.set_ip_address(gw.get_ip_address());
 
         //Connect to remote server
         cout << "Connect to socket" << endl;
         socket.connect(a);
 
         //Now to publish
-        cout << "Connect to server" << endl;
+        cout << "Connect to server: " << a.get_ip_address() << endl;
+        lcdDisp.locate(1, 0);
+        lcdDisp.printf("B:%s", a.get_ip_address());
+        
         MQTTPacket_connectData pcd = MQTTPacket_connectData_initializer;
         pcd.MQTTVersion = 3;
         pcd.clientID.cstring = (char*)"nucleo";
