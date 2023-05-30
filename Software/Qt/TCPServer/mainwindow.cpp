@@ -34,7 +34,7 @@ void MainWindow::on_listenButton_clicked()
         bool parsedAsInt = false;
         quint16 port = ui->port->text().toUInt(&parsedAsInt);
         if (parsedAsInt == true) {
-            ui->payload->appendPlainText(tr("Settin port to %1").arg(port));
+            ui->payload->appendPlainText(tr("Setting port to %1").arg(port));
         } else {
             ui->payload->appendPlainText(tr("Cannot read port value: using server assigned."));
             port = 0;
@@ -103,10 +103,12 @@ void MainWindow::updateServerProgress()
     QByteArray bytes = tcpServerConnection->readAll();
 
     ui->payload->appendPlainText(tr("Received %1 Bytes, total %2").arg(bytesReceived).arg(bytesThisTransaction));
-    for (unsigned n=0; n<bytesThisTransaction; n++) {
-        ui->payload->appendPlainText(tr("%1").arg(bytes[n]));
-        std::cout << bytes[n];
-    }
+
+    //Append received data to the textbox
+    QString qStrPayload = QString::fromUtf8(bytes);
+    ui->payload->appendPlainText(qStrPayload);
+
+    //Logging
     ui->payload->appendPlainText(tr("======<< updateServerProgress() ======="));
 }
 

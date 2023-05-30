@@ -50,8 +50,8 @@ void MainWindow::on_sendButton_clicked()
 void MainWindow::startTransfer()
 {
     // called when the TCP client connected to the loopback server
-//    QString strData = ui->payload->toPlainText();
-    QByteArray dat = QByteArray("Hello World");
+    QString strData = ui->payload->toPlainText();
+    QByteArray dat = QByteArray(strData.toUtf8());
 
     bytesToWrite = dat.size() - int(tcpClient.write(dat,dat.size()));
     ui->payload->appendPlainText(tr("Client Connected"));
