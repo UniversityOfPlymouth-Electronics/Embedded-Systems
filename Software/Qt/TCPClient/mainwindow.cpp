@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->port->setValidator(new QIntValidator(0,65536,this));
     ui->payload->setPlainText("Hello World!");
     qDebug() << "Client Started";
+    ui->textLog->appendPlainText("Client Started");
 }
 
 MainWindow::~MainWindow()
@@ -42,11 +43,11 @@ void MainWindow::on_sendButton_clicked()
         quint16 port = ui->port->text().toUInt(&parsedAsInt);
         if (parsedAsInt == true) {
             qDebug() << "Connecting";
+            ui->textLog->appendPlainText("Connecting");
             tcpClient.connectToHost(QHostAddress::LocalHost, port);
         } else {
             qWarning() << "Please provide a valid port value";
-
-            ui->payload->appendPlainText(tr("Please provide a valid port value"));
+            ui->textLog->appendPlainText("Please provide a valid port value");
         }
 
     }
@@ -60,6 +61,7 @@ void MainWindow::startTransfer()
 
     bytesToWrite = dat.size() - int(tcpClient.write(dat,dat.size()));
     qInfo() << "Client Connected";
+    ui->textLog->appendPlainText("Client Connected");
 }
 
 void MainWindow::updateClientProgress(qint64 numBytes)
@@ -71,6 +73,7 @@ void MainWindow::updateClientProgress(qint64 numBytes)
     qInfo() << "numBytes: " << numBytes;
     qInfo() << "bytesWritten: " << bytesWritten;
     qInfo() << "tcpClient.bytesToWrite: " << b2w;
+
     if (b2w == 0) {
         qInfo() << "Completed";
         tearDown();
