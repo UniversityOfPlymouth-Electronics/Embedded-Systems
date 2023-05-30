@@ -86,9 +86,9 @@ int main()
         
         MQTTPacket_connectData pcd = MQTTPacket_connectData_initializer;
         pcd.MQTTVersion = 3;
-        pcd.clientID.cstring = (char*)"nucleo";
+        pcd.clientID.cstring = (char*)"nucleo_1";
         pcd.username.cstring = (char*)"nucleo";
-        pcd.password.cstring = (char*)"1234";
+        pcd.password.cstring = (char*)"f429zi";
         client.connect(pcd);
 
         char strPayload[64];

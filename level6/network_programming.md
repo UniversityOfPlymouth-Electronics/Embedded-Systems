@@ -250,6 +250,43 @@ Sending back commands includes two variants. One which simply sends a message, a
 
 If you want to explore more of IoT Central, a good place is on Microsoft Learn - [Create your first Azure IoT Central app](https://docs.microsoft.com/learn/modules/create-your-first-iot-central-app/)
 
+## MQTT Publisher
+
+[MQTT](https://mqtt.org/) is a light-weight protocol associated with the Internet of Things (IoT). It is different to HTTP in that it is much more light-weight (less overhead) at the expense of not being human readable. It follows a *publisher-subscriber* model:
+
+* Devices "publish" their measured data to a broker
+    * Each device typically has a unique Device ID
+    * Data is categorised into *topics*
+    * Different Quality of Service (QoS) modes are available, which trade volume of data for resilience.
+* Subscribers are devices wanting to receive data from the publishers
+   * Each subscriber will subscribe to at least one topic (you can also use wildcards)
+   * Each subscriber will typically have a device ID
+
+MQTT requires a **broker** server that sits between the publishers and subscribers. A very popular broker is the open source [Eclipse Mosquitto<sup>TM</sup>](https://mosquitto.org/) server. We will be using the [open-source version of mosquitto](https://mosquitto.org/download/). We also recommend you use the open-source version of [Cedalo Management Center](https://docs.cedalo.com/management-center/installation/) to configure and secure this server. This uses [Docker containers](https://www.docker.com/resources/what-container/) to simplify the installation and maintenance.
+
+| Task-397 | MQTT with Mosquitto and Cedalo Management Center | | 
+| - | - | - |
+| 1 | Install Docker | If you do not already have it, download and install the binary installer for [Docker](https://www.docker.com/) for your computer |
+| 2 | Install Cedalo Management Center and Mosquitto | Follow the instructions on the [Cedalo page](https://docs.cedalo.com/management-center/installation/)  |
+| 3 | Start the server | See step 3 on https://docs.cedalo.com/management-center/installation/ |
+| 4 | Open the Management Page | Using your preferred web browser, open http://localhost:8088 and log in using the credentials listed on https://docs.cedalo.com/management-center/installation/ |
+| 5 | Create publisher and subscriber clients | Navigate to the Clients page, and add two clients |
+| - | i. | For the publisher, set the username, password, client id. Keep a note of these. You will need to specify them in the code. Set the client role to "client" |
+| - | ii. | Do the same for the subscriber. Make sure you use a different client id. |
+
+You web page should resemble something similar to the figure below:
+
+<figure>
+<img src="../img/cedalomc1.png" width="600px">
+<figcaption>Two clients added to the management panel. Note the client roles have been set to "client"</figcaption>
+</figure>
+
+Now are ready to send data from the Nucleo Board (publisher) to the host pc (subscriber).
+
+> For this task, it is assumed you have Nucleo board connected to a host PC via an ethernet connection, and that the Internet connection on the PC is shared with the Nucleo. You may have to adapt IP addresses in the code to adapt to your own setup. 
+
+
+
 ## Reflection
 
 This lab only begins the journey into IoT and networking. As networking infrastructure becomes more pervasive, so the Internet becomes available in more places. The current IoT term may fit the changes at the time of writing, and some might argue it's another 'fad'. However, the networked embedded systems and the benefits connectivity brings is likely to continue to evolve.
