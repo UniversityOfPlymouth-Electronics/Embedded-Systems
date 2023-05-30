@@ -57,7 +57,7 @@ public class serv
                 } else
                 {
                     //Echo received data to the console
-                    Console.WriteLine("Recieved...");
+                    Console.WriteLine("Received...");
                     for (int i = 0; i < k; i++)
                         Console.Write(Convert.ToChar(b[i]));
                 }
