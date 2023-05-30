@@ -70,11 +70,15 @@ void MainWindow::updateClientProgress(qint64 numBytes)
     bytesWritten += int(numBytes);
 
     auto b2w = tcpClient.bytesToWrite();
+    ui->textLog->appendPlainText(tr("numBytes: %1").arg(numBytes));
+    ui->textLog->appendPlainText(tr("bytesWritten: %1").arg(bytesWritten));
+    ui->textLog->appendPlainText(tr("tcpClient.bytesToWrite(): %1").arg(b2w));
     qInfo() << "numBytes: " << numBytes;
     qInfo() << "bytesWritten: " << bytesWritten;
     qInfo() << "tcpClient.bytesToWrite: " << b2w;
 
     if (b2w == 0) {
+        ui->textLog->appendPlainText("Completed");
         qInfo() << "Completed";
         tearDown();
     }
@@ -82,11 +86,15 @@ void MainWindow::updateClientProgress(qint64 numBytes)
 
 void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
-    ui->payload->appendPlainText(tr("Error: %1").arg(tcpClient.errorString()));
+    ui->textLog->appendPlainText(tr("Error: %1").arg(tcpClient.errorString()));
+    qWarning() << "Error: " << tcpClient.errorString();
+
     if (socketError == QTcpSocket::RemoteHostClosedError) {
+        ui->textLog->appendPlainText("Remote Host Closed");
         qInfo() << "Remote Host Closed";
     } else {
         QMessageBox::information(this, tr("Network error"), tr("The following error occurred: %1.").arg(tcpClient.errorString()));
+        qWarning() << "Network Error: " << tcpClient.errorString();
     }
     tearDown();
 #ifndef QT_NO_CURSOR
@@ -106,4 +114,5 @@ void MainWindow::tearDown()
         tcpClient.close();
     }
     qInfo() << "Client Closed";
+    ui->textLog->appendPlainText("Client Closed");
 }
