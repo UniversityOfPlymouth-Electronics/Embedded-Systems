@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 // Button slot
 void MainWindow::on_listenButton_clicked()
 {
-    ui->payload->appendPlainText(tr("======>> on_listenButton_clicked() ======="));
+    ui->textLog->appendPlainText(tr("======>> on_listenButton_clicked() ======="));
 
     bytesReceived = 0;
 
@@ -38,10 +38,10 @@ void MainWindow::on_listenButton_clicked()
         quint16 port = ui->port->text().toUInt(&parsedAsInt);
         if (parsedAsInt == true) {
             qInfo() << "Setting port to " << port;
-            ui->payload->appendPlainText(tr("Setting port to %1").arg(port));
+            ui->textLog->appendPlainText(tr("Setting port to %1").arg(port));
         } else {
             qWarning() << "Cannot read port value: using server assigned.";
-            ui->payload->appendPlainText(tr("Cannot read port value: using server assigned."));
+            ui->textLog->appendPlainText(tr("Cannot read port value: using server assigned."));
             port = 0;
         }
 
@@ -58,33 +58,33 @@ void MainWindow::on_listenButton_clicked()
         }
 
         qInfo() << "Listening on port " << tcpServer.serverPort();
-        ui->payload->appendPlainText(tr("Listening on port %1").arg(tcpServer.serverPort()));
+        ui->textLog->appendPlainText(tr("Listening on port %1").arg(tcpServer.serverPort()));
         serverIsListening = true;
     } else {
         //User clicked the disconnect button
         tearDown();
     }
     qDebug() << "======<< on_listenButton_clicked() =======";
-    ui->payload->appendPlainText(tr("======<< on_listenButton_clicked() ======="));
+    ui->textLog->appendPlainText(tr("======<< on_listenButton_clicked() ======="));
 }
 
 // slot for pendingConnectionAvailable signal
 void MainWindow::pendingConnection() {
     qInfo() << "====== PENDING CONNECTION SIGNAL AVAILABLE =======";
-    ui->payload->appendPlainText(tr("====== PENDING CONNECTION SIGNAL AVAILABLE ======="));
+    ui->textLog->appendPlainText(tr("====== PENDING CONNECTION SIGNAL AVAILABLE ======="));
 }
 
 //slot for newConnection signal
 void MainWindow::acceptConnection()
 {
     qInfo() << "======>> acceptConnection() =======";
-    ui->payload->appendPlainText(tr("======>> acceptConnection() ======="));
+    ui->textLog->appendPlainText(tr("======>> acceptConnection() ======="));
 
     //Get the TCP/IP socket (type QTcpSocket)
     tcpServerConnection = tcpServer.nextPendingConnection();
     if (!tcpServerConnection) {
         qWarning() << "======<< FAILED: acceptConnection() " << tcpServer.errorString() << "=======";
-        ui->payload->appendPlainText(tr("======<< FAILED: acceptConnection() %s =======").arg(tcpServer.errorString()));
+        ui->textLog->appendPlainText(tr("======<< FAILED: acceptConnection() %s =======").arg(tcpServer.errorString()));
         tearDown();
         return;
     }
@@ -94,7 +94,7 @@ void MainWindow::acceptConnection()
     connect(tcpServerConnection, &QAbstractSocket::errorOccurred,this, &MainWindow::displayError);
     connect(tcpServerConnection, &QTcpSocket::disconnected, tcpServerConnection, &QTcpSocket::deleteLater);
 
-    ui->payload->appendPlainText(tr("======<< acceptConnection() ======="));
+    ui->textLog->appendPlainText(tr("======<< acceptConnection() ======="));
     qInfo() << "======<< acceptConnection() =======";
 }
 
@@ -103,21 +103,21 @@ void MainWindow::acceptError(QAbstractSocket::SocketError err)
 {
     qWarning() << "====== ACCEPT ERROR =======";
     qWarning() << err << " " << tcpServer.errorString();
-    ui->payload->appendPlainText(tr("====== ACCEPT ERROR ======="));
-    ui->payload->appendPlainText(tr("%1 %2").arg(err).arg(tcpServer.errorString()));
+    ui->textLog->appendPlainText(tr("====== ACCEPT ERROR ======="));
+    ui->textLog->appendPlainText(tr("%1 %2").arg(err).arg(tcpServer.errorString()));
 }
 
 // slot for handling incoming data
 void MainWindow::updateServerProgress()
 {
     qInfo() << "======>> updateServerProgress() =======";
-    ui->payload->appendPlainText(tr("======>> updateServerProgress() ======="));
+    ui->textLog->appendPlainText(tr("======>> updateServerProgress() ======="));
     unsigned bytesThisTransaction = int(tcpServerConnection->bytesAvailable());
     bytesReceived += bytesThisTransaction;
     QByteArray bytes = tcpServerConnection->readAll();
 
     qInfo() << "Received " << bytesReceived << ", total " << bytesThisTransaction;
-    ui->payload->appendPlainText(tr("Received %1 Bytes, total %2").arg(bytesReceived).arg(bytesThisTransaction));
+    ui->textLog->appendPlainText(tr("Received %1 Bytes, total %2").arg(bytesReceived).arg(bytesThisTransaction));
 
     //Append received data to the textbox
     QString qStrPayload = QString::fromUtf8(bytes);
@@ -125,7 +125,7 @@ void MainWindow::updateServerProgress()
     qInfo() << "+" << qStrPayload;
 
     //Logging
-    ui->payload->appendPlainText(tr("======<< updateServerProgress() ======="));
+    ui->textLog->appendPlainText(tr("======<< updateServerProgress() ======="));
     qInfo() << "======<< updateServerProgress() =======";
 }
 
@@ -134,12 +134,12 @@ void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
     qInfo() << "======>> displayError() =======";
     qWarning() << tcpServer.errorString();
-    ui->payload->appendPlainText(tr("======>> displayError() ======="));
-    ui->payload->appendPlainText(tr("displayError: %1").arg(tcpServer.errorString()));
+    ui->textLog->appendPlainText(tr("======>> displayError() ======="));
+    ui->textLog->appendPlainText(tr("displayError: %1").arg(tcpServer.errorString()));
 
     if (socketError == QTcpSocket::RemoteHostClosedError) {
         qInfo() << "Remote Host Closed";
-        ui->payload->appendPlainText(tr("Remote Host Closed"));
+        ui->textLog->appendPlainText(tr("Remote Host Closed"));
         tearDownTCPSocket();
         return;
     }
@@ -150,7 +150,7 @@ void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
 #endif
-    ui->payload->appendPlainText(tr("======<< displayError() ======="));
+    ui->textLog->appendPlainText(tr("======<< displayError() ======="));
 
 }
 
@@ -163,7 +163,7 @@ void MainWindow::tearDownTCPSocket()
             tcpServerConnection->close();
             tcpServerConnection = nullptr; //IMPORTANT!
             qInfo() << "Server connection closed";
-            ui->payload->appendPlainText(tr("Server connection closed"));
+            ui->textLog->appendPlainText(tr("Server connection closed"));
         }
     }
 }
@@ -175,7 +175,7 @@ void MainWindow::tearDown()
     if (tcpServer.isListening()) {
         tcpServer.close();
         qInfo() << "Server closed";
-        ui->payload->appendPlainText(tr("Server closed"));
+        ui->textLog->appendPlainText(tr("Server closed"));
     }
     //Disconnect signals from slots
     disconnect(&tcpServer, nullptr, nullptr, nullptr);

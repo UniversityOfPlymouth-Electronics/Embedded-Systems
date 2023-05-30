@@ -45,6 +45,7 @@ void MainWindow::on_sendButton_clicked()
             tcpClient.connectToHost(QHostAddress::LocalHost, port);
         } else {
             qWarning() << "Please provide a valid port value";
+
             ui->payload->appendPlainText(tr("Please provide a valid port value"));
         }
 
