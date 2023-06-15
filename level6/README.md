@@ -60,7 +60,6 @@ The following changes are confirmed.
 
 * Introduction to the Standard Template Library (STL)
 * Dynamic Memory Allocation and Smart Pointers
-* Condition Variables
 * More content on Templates
 * Copy and Move Semantics, Constructors and Types
 * The `using` and `namespace` keyword - coming soon (now deferred until 2023)
