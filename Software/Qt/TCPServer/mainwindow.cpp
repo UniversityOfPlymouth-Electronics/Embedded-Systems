@@ -124,6 +124,11 @@ void MainWindow::updateServerProgress()
     ui->payload->appendPlainText(qStrPayload);
     qInfo() << "+" << qStrPayload;
 
+    //Respond and close
+    const char* strACK = "ACK";
+    tcpServerConnection->write(strACK, 3);
+    tcpServerConnection->close();
+
     //Logging
     ui->textLog->appendPlainText(tr("======<< updateServerProgress() ======="));
     qInfo() << "======<< updateServerProgress() =======";
