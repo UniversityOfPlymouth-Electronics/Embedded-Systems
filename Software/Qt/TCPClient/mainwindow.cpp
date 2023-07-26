@@ -41,10 +41,12 @@ void MainWindow::on_sendButton_clicked()
 
         bool parsedAsInt = false;
         quint16 port = ui->port->text().toUInt(&parsedAsInt);
+        QString ipAddress = ui->ip1->text() + "." + ui->ip2->text() + "." + ui->ip3->text() + "." + ui->ip4->text();
+        QHostAddress targetDeviceIP = QHostAddress(ipAddress);
         if (parsedAsInt == true) {
             qDebug() << "Connecting";
-            ui->textLog->appendPlainText("Connecting");
-            tcpClient.connectToHost(QHostAddress::LocalHost, port);
+            ui->textLog->appendPlainText(tr("Connecting to %1 : %2").arg(ipAddress).arg(port));
+            tcpClient.connectToHost(targetDeviceIP, port);
         } else {
             qWarning() << "Please provide a valid port value";
             ui->textLog->appendPlainText("Please provide a valid port value");
