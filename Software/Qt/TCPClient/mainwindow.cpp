@@ -39,6 +39,8 @@ void MainWindow::on_sendButton_clicked()
         connect(&tcpClient, &QIODevice::bytesWritten, this, &MainWindow::updateClientProgress);
         connect(&tcpClient, &QAbstractSocket::errorOccurred, this, &MainWindow::displayError);
 
+        //The call back to read a response
+        connect(&tcpClient, &QIODevice::readyRead, this, &MainWindow::updateResponseProgress);
         bool parsedAsInt = false;
         quint16 port = ui->port->text().toUInt(&parsedAsInt);
         QString ipAddress = ui->ip1->text() + "." + ui->ip2->text() + "." + ui->ip3->text() + "." + ui->ip4->text();
@@ -82,7 +84,8 @@ void MainWindow::updateClientProgress(qint64 numBytes)
     if (b2w == 0) {
         ui->textLog->appendPlainText("Completed");
         qInfo() << "Completed";
-        tearDown();
+        tcpClient.readAll();
+        //tearDown(); //Premature if waiting for a response
     }
 }
 
@@ -118,3 +121,31 @@ void MainWindow::tearDown()
     qInfo() << "Client Closed";
     ui->textLog->appendPlainText("Client Closed");
 }
+
+// slot for handling incoming data
+void MainWindow::updateResponseProgress()
+{
+    qInfo() << "======>> updateServerProgress() =======";
+    ui->textLog->appendPlainText(tr("======>> updateServerProgress() ======="));
+    unsigned bytesThisTransaction = int(tcpClient.bytesAvailable());
+    bytesReceived += bytesThisTransaction;
+    QByteArray bytes = tcpClient.readAll();
+
+    qInfo() << "Received " << bytesReceived << ", total " << bytesThisTransaction;
+    ui->textLog->appendPlainText(tr("Received %1 Bytes, total %2").arg(bytesReceived).arg(bytesThisTransaction));
+
+    //Append received data to the textbox
+    QString qStrPayload = QString::fromUtf8(bytes);
+    ui->textLog->appendPlainText(qStrPayload);
+    qInfo() << "Response: " << qStrPayload;
+
+    tcpClient.close();
+
+    //Logging
+    ui->textLog->appendPlainText(tr("======<< updateServerProgress() ======="));
+    qInfo() << "======<< updateServerProgress() =======";
+
+    //Sent and received - all done - tear down
+    tearDown();
+}
+

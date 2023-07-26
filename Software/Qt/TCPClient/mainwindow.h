@@ -22,6 +22,7 @@ private slots:
     void on_sendButton_clicked();
     void startTransfer();
     void updateClientProgress(qint64 numBytes);
+    void updateResponseProgress();
 
 private:
     Ui::MainWindow *ui;
