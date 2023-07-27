@@ -18,6 +18,17 @@ There are some options, and which you choose may depend on where your target boa
 
 Other sophisticated options may exist. For Plymouth students, option 2 is the recommended approach (USB adapters are provided).
 
+### New - Graphical Client and Server
+
+In the following tasks, you need to run a server or client application on your host computer. Graphical alternatives are provided via the "releases" page in this repository:
+
+https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems/releases
+
+![Releases](/img/releases_page.png)
+
+Download the zip file for your OS, unzip and run the executable.
+
+
 ## TCP/IP Client
 In this example, the target device will act as a simple TCP/IP client. This will send data to a  small server application running on the host PC (written in C#.NET).
 
@@ -62,7 +73,6 @@ Open a terminal, and change the directory where the server application is locate
 `TCP_Server.exe <ip address> 8080`
 
 where <ip address> is substituted with the IP address found above. The server is now waiting for connection on TCP port 8080.
-
 
 | Task-390-TCP-Client | - |
 | - | - |
