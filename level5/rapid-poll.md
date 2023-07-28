@@ -299,6 +299,6 @@ Next, we loop a more sophisticated solution, **hardware interrupts**.
 
 ---
 
-[NEXT - Lab5-Interrupts](interrupts.md)
+NEXT - [Interrupts](interrupts.md)
 
 

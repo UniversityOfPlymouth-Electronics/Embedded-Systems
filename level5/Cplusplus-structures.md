@@ -318,4 +318,4 @@ https://dle.plymouth.ac.uk/mod/quiz/view.php?id=985992
 
 ---
 
-[NEXT - Lab3-Serial Interfacing](SerialInterfacing.md)
+NEXT - [Rapid Polling](rapid-poll.md)
