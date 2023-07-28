@@ -19,6 +19,17 @@ The following changes are confirmed.
 * Back porting of topics on blocking, interrupts, rapid polling and state machines
 * Some content specific to C++
 
+**Changes for 2023:**
+
+* Introduction of PROJ200, replacing ELEC240 and ELEC241 (level 5)
+* Embedded Programming continues with Mbed OS in level 5
+   * Further C programming
+   * Rapid Polling
+   * Software State Machines
+   * Interrupts
+   * Interfacing
+* Bare metal programming has been rationalised and moved from level 5 to level 6
+
 # Level 5 Course
 This course covers a number of topics in embedded programming
 

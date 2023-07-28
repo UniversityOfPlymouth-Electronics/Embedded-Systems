@@ -13,9 +13,8 @@ This repository contains both lab materials and code examples for all the Electr
 ## Table of Contents
 
 1. [Getting Started](./getting_started/README.md)
-1. [ELEC143 Embedded Systems in Context (Level 4)](./level4/README.md)
-1. [ELEC240 Embedded Systems (Level 5)]
-1. [ELEC241 Real Time Systems (Level 5)](./level5/README.md)
+1. [PROJ100 Embedded Systems in Context (Level 4)](./level4/README.md)
+1. [PROJ200 Real Time Systems Project (Level 5)](./level5/README.md)
 1. [ELEC351 Advanced Embedded Programming (Level 6)](./level6/README.md)
 1. [Glossary](glossary/README.md)
 
