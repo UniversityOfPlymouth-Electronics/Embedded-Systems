@@ -9,7 +9,7 @@ using namespace std;
 #include "EthernetInterface.h"
 #include "TCPSocket.h"
 
-#define RESPONSE "Greetings"
+#define RESPONSE "AOK"
 #define FINALRESPONSE "Bye"
 
 EthernetInterface net;

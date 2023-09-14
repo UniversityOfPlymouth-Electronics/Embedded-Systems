@@ -19,21 +19,33 @@ The following changes are confirmed.
 * Back porting of topics on blocking, interrupts, rapid polling and state machines
 * Some content specific to C++
 
+**Changes for 2023:**
+
+* Introduction of PROJ200, replacing ELEC240 and ELEC241 (level 5)
+* Embedded Programming continues with Mbed OS in level 5
+   * Further C programming
+   * Rapid Polling
+   * Software State Machines
+   * Interrupts
+   * Interfacing
+* Bare metal programming has been rationalised and moved from level 5 to level 6
+
 # Level 5 Course
 This course covers a number of topics in embedded programming
 
-| Topic | Content | - | Weeks |
+| Topic | Content | - | Duration (Weeks) |
 | --- | --- | --- | --- |
-| 1. | Review | [Lab1-DigitalIO](DigitalIO.md), [Lab2-C and C++ Structures](Cplusplus-structures.md) | 1-5 |
-| 2. | Serial Interfacing | [Lab3-Serial Interfacing - Coming Soon](SerialInterfacing.md) | 6 |
-| 3. | Multi-tasking: Blocking, polling, interrupts | [Lab4-Rapid Polling](rapid-poll.md), [Lab5-Interrupts](interrupts.md) | 7-8 |
-| 4. | Group Project and Management | [Using Collaborative Tools](.), Coursework P1 | 9-13 | 
+| 0. | Revision | [DigitalIO](DigitalIO.md) | Self Study |
+| 1. | Further C Programming - Structures, Unions and Bitfields | [Further C Programming](Cplusplus-structures.md) | 1 |
+| 2. | Rapid Polling and Software State Machines | [Rapid Polling](rapid-poll.md) | 2 | 
+| 3. | Interrupts | [Interrupts](interrupts.md) | 2 |
+| 4. | Serial Interfacing | [Serial Interfacing - Coming Soon](SerialInterfacing.md) | 2 |
 | |
 
 ## Setting Expectation
 Remember that each student on the course may have a slightly a different background and levels of experience; others may be repeating then module. There are many variations.
 
-This module is designed on the assumption that you have some knowledge and experience of embedded C programming in stage-1, and some familiarity with Mbed.  However, the first lab will be a refresher on interfacing with Mbed and Mbed Studio. 
+This module is designed on the assumption that you have some knowledge and experience of embedded C programming in stage-1, and some familiarity with Mbed.  However, the first lab listed above can act as a refresher on writing C with Mbed and Mbed Studio. 
 
 We will then look at what we mean by **blocking hardware** and the problems it presents.
 
@@ -54,18 +66,16 @@ As a final remark, this is a fairly intensive course. Some of this will be new, 
 ## Your Kits
 Different students may already have some of the equipment needed, depending on the year you first enrolled. You will be provided additional components that enable you to work both in the lab and at home. 
 
-You may also be loaned other equipment, such as a "Picoscope" (assuming you don't already have one).
-
-
 ## Attending Labs
 Formal labs are scheduled at specific times in your timetable. Whether you are attending in person or doing some self-study, you can use the Teams channel for that lab to ask questions.
 
-Labs will also contain interactive elements. There will typically be a briefing at the start and a poll part way through. Participating in these is important.
+## Self Study
+It is expected that students spend time completing lab tasks as part of self-study. You are unlikely to complete all tasks in the timetabled lab time. **This is a critcal part of undergraduate study.**
 
 ## Lectures
-Each week there is a lecture, which often includes live recorded demo's. By the time you read this, the first lecture will have been delivered and recorded.
+Some of the timetabled time is dedicated to a form of lecture, which often includes live demo's. Not everything can be covered in lectures. Success in this module depends on engaging in both lectures and labs. Some of the finer details will only be found in lab sessions. 
 
-If you did not manage to attend the lecture for this week, please ensure you catch up via the video hosted on the [DLE](https://dle.plymouth.ac.uk).
+We do try to record all lectures, but this is not always possible.
 
 > On the right hand-side, locate the "Panopto Block"
 
@@ -78,7 +88,7 @@ There you will find links to recorded lectures. You can also subscribe to these 
 > Some videos are restricted to a specific cohort of students, where others may be public. Please do not distribute these videos elsewhere.  
 
 ---
-[NEXT - Lab1-DigitalIO](DigitalIO.md)
+NEXT - [Further C Programming](Cplusplus-structures.md)
 
 
 

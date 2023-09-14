@@ -18,6 +18,17 @@ There are some options, and which you choose may depend on where your target boa
 
 Other sophisticated options may exist. For Plymouth students, option 2 is the recommended approach (USB adapters are provided).
 
+### New - Graphical Client and Server
+
+In the following tasks, you need to run a server or client application on your host computer. Graphical alternatives are provided via the "releases" page in this repository:
+
+https://github.com/UniversityOfPlymouth-Electronics/Embedded-Systems/releases
+
+![Releases](/img/releases_page.png)
+
+Download the zip file for your OS, unzip and run the executable.
+
+
 ## TCP/IP Client
 In this example, the target device will act as a simple TCP/IP client. This will send data to a  small server application running on the host PC (written in C#.NET).
 
@@ -62,7 +73,6 @@ Open a terminal, and change the directory where the server application is locate
 `TCP_Server.exe <ip address> 8080`
 
 where <ip address> is substituted with the IP address found above. The server is now waiting for connection on TCP port 8080.
-
 
 | Task-390-TCP-Client | - |
 | - | - |
@@ -249,6 +259,43 @@ Sending back commands includes two variants. One which simply sends a message, a
 | 8 | Add a new rule to detect a large pressure drop (in theory, this might correlate with rain) |
 
 If you want to explore more of IoT Central, a good place is on Microsoft Learn - [Create your first Azure IoT Central app](https://docs.microsoft.com/learn/modules/create-your-first-iot-central-app/)
+
+## MQTT Publisher
+
+[MQTT](https://mqtt.org/) is a light-weight protocol associated with the Internet of Things (IoT). It is different to HTTP in that it is much more light-weight (less overhead) at the expense of not being human readable. It follows a *publisher-subscriber* model:
+
+* Devices "publish" their measured data to a broker
+    * Each device typically has a unique Device ID
+    * Data is categorised into *topics*
+    * Different Quality of Service (QoS) modes are available, which trade volume of data for resilience.
+* Subscribers are devices wanting to receive data from the publishers
+   * Each subscriber will subscribe to at least one topic (you can also use wildcards)
+   * Each subscriber will typically have a device ID
+
+MQTT requires a **broker** server that sits between the publishers and subscribers. A very popular broker is the open source [Eclipse Mosquitto<sup>TM</sup>](https://mosquitto.org/) server. We will be using the [open-source version of mosquitto](https://mosquitto.org/download/). We also recommend you use the open-source version of [Cedalo Management Center](https://docs.cedalo.com/management-center/installation/) to configure and secure this server. This uses [Docker containers](https://www.docker.com/resources/what-container/) to simplify the installation and maintenance.
+
+| Task-397 | MQTT with Mosquitto and Cedalo Management Center | | 
+| - | - | - |
+| 1 | Install Docker | If you do not already have it, download and install the binary installer for [Docker](https://www.docker.com/) for your computer |
+| 2 | Install Cedalo Management Center and Mosquitto | Follow the instructions on the [Cedalo page](https://docs.cedalo.com/management-center/installation/)  |
+| 3 | Start the server | See step 3 on https://docs.cedalo.com/management-center/installation/ |
+| 4 | Open the Management Page | Using your preferred web browser, open http://localhost:8088 and log in using the credentials listed on https://docs.cedalo.com/management-center/installation/ |
+| 5 | Create publisher and subscriber clients | Navigate to the Clients page, and add two clients |
+| - | i. | For the publisher, set the username, password, client id. Keep a note of these. You will need to specify them in the code. Set the client role to "client" |
+| - | ii. | Do the same for the subscriber. Make sure you use a different client id. |
+
+You web page should resemble something similar to the figure below:
+
+<figure>
+<img src="../img/cedalomc1.png" width="600px">
+<figcaption>Two clients added to the management panel. Note the client roles have been set to "client"</figcaption>
+</figure>
+
+Now are ready to send data from the Nucleo Board (publisher) to the host pc (subscriber).
+
+> For this task, it is assumed you have Nucleo board connected to a host PC via an ethernet connection, and that the Internet connection on the PC is shared with the Nucleo. You may have to adapt IP addresses in the code to adapt to your own setup. 
+
+
 
 ## Reflection
 

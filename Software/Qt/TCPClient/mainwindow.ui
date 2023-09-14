@@ -39,19 +39,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="listenButton">
-          <property name="maximumSize">
-           <size>
-            <width>128</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>LISTEN</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>
@@ -156,6 +143,9 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QPlainTextEdit" name="textLog"/>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -164,7 +154,7 @@
      <x>0</x>
      <y>0</y>
      <width>585</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

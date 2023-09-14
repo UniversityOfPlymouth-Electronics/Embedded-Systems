@@ -20,22 +20,16 @@ public:
 
 private slots:
     void on_sendButton_clicked();
-    void on_listenButton_clicked();
-    void acceptConnection();
-
     void startTransfer();
     void updateClientProgress(qint64 numBytes);
+    void updateResponseProgress();
 
 private:
     Ui::MainWindow *ui;
+    void tearDown();
 
-    //Server
-    QTcpServer tcpServer;
-    QTcpSocket *tcpServerConnection = nullptr;
-    void updateServerProgress();
     void displayError(QAbstractSocket::SocketError socketError);
     int bytesReceived = 0;
-    bool serverIsListening = false;
     bool clientIsSending = false;
 
     //Client

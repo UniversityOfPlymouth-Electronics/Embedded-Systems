@@ -4,6 +4,7 @@
 #include <QTcpSocket>
 #include <QMessageBox>
 #include <iostream>
+#include <QDebug>
 
 //Main window (there is only one)
 MainWindow::MainWindow(QWidget *parent)
@@ -18,10 +19,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->ip4->setValidator(v);
     ui->port->setValidator(new QIntValidator(0,65536,this));
     ui->payload->setPlainText("Hello World!");
+    qDebug() << "Client Started";
+    ui->textLog->appendPlainText("Client Started");
 }
 
 MainWindow::~MainWindow()
 {
+    qDebug() << "Main Destructor";
     delete ui;
 }
 
@@ -29,142 +33,119 @@ MainWindow::~MainWindow()
 void MainWindow::on_sendButton_clicked()
 {
     if (clientIsSending == false) {
-        ui->listenButton->setEnabled(false);
         ui->sendButton->setEnabled(false);
         clientIsSending = true;
         connect(&tcpClient, &QAbstractSocket::connected, this, &MainWindow::startTransfer);
         connect(&tcpClient, &QIODevice::bytesWritten, this, &MainWindow::updateClientProgress);
         connect(&tcpClient, &QAbstractSocket::errorOccurred, this, &MainWindow::displayError);
 
+        //The call back to read a response
+        connect(&tcpClient, &QIODevice::readyRead, this, &MainWindow::updateResponseProgress);
         bool parsedAsInt = false;
         quint16 port = ui->port->text().toUInt(&parsedAsInt);
+        QString ipAddress = ui->ip1->text() + "." + ui->ip2->text() + "." + ui->ip3->text() + "." + ui->ip4->text();
+        QHostAddress targetDeviceIP = QHostAddress(ipAddress);
         if (parsedAsInt == true) {
-            ui->payload->appendPlainText(tr("Connecting"));
-            tcpClient.connectToHost(QHostAddress::LocalHost, port);
+            qDebug() << "Connecting";
+            ui->textLog->appendPlainText(tr("Connecting to %1 : %2").arg(ipAddress).arg(port));
+            tcpClient.connectToHost(targetDeviceIP, port);
         } else {
-            ui->payload->appendPlainText(tr("Please provide a valid port value"));
+            qWarning() << "Please provide a valid port value";
+            ui->textLog->appendPlainText("Please provide a valid port value");
         }
 
     }
 }
+
 void MainWindow::startTransfer()
 {
     // called when the TCP client connected to the loopback server
-//    QString strData = ui->payload->toPlainText();
-    QByteArray dat = QByteArray("Hello World");
+    QString strData = ui->payload->toPlainText();
+    QByteArray dat = QByteArray(strData.toUtf8());
 
     bytesToWrite = dat.size() - int(tcpClient.write(dat,dat.size()));
-    ui->payload->appendPlainText(tr("Client Connected"));
+    qInfo() << "Client Connected";
+    ui->textLog->appendPlainText("Client Connected");
 }
+
 void MainWindow::updateClientProgress(qint64 numBytes)
 {
     // called when the TCP client has written some bytes
     bytesWritten += int(numBytes);
 
-    // only write more if not finished and when the Qt write buffer is below a certain size.
-
-//    if (bytesToWrite > 0 && tcpClient.bytesToWrite() <= 4 * PayloadSize)
-//        bytesToWrite -= tcpClient.write(QByteArray(qMin(bytesToWrite, PayloadSize), '@'));
-
     auto b2w = tcpClient.bytesToWrite();
-    ui->payload->appendPlainText(tr("numBytes: %1").arg(numBytes));
-    ui->payload->appendPlainText(tr("bytesWritten: %1").arg(bytesWritten));
-    ui->payload->appendPlainText(tr("tcpClient.bytesToWrite(): %1").arg(b2w));
+    ui->textLog->appendPlainText(tr("numBytes: %1").arg(numBytes));
+    ui->textLog->appendPlainText(tr("bytesWritten: %1").arg(bytesWritten));
+    ui->textLog->appendPlainText(tr("tcpClient.bytesToWrite(): %1").arg(b2w));
+    qInfo() << "numBytes: " << numBytes;
+    qInfo() << "bytesWritten: " << bytesWritten;
+    qInfo() << "tcpClient.bytesToWrite: " << b2w;
+
     if (b2w == 0) {
-        ui->listenButton->setEnabled(true);
-        ui->sendButton->setEnabled(true);
-        clientIsSending = false;
-        tcpClient.close();
-        ui->payload->appendPlainText(tr("Client Disconnected"));
-    }
-}
-// ********************************* SERVER *********************************
-void MainWindow::on_listenButton_clicked()
-{
-    bytesWritten = 0;
-    bytesReceived = 0;
-
-    if (serverIsListening == false) {
-        ui->sendButton->setEnabled(false);
-        ui->listenButton->setText("&STOP");
-        connect(&tcpServer, &QTcpServer::newConnection, this, &MainWindow::acceptConnection);
-
-        while (!tcpServer.listen()) {
-            QMessageBox::StandardButton ret = QMessageBox::critical(this,tr("Loopback"),
-                                                                    tr("Unable to start the test: %1.").arg(tcpServer.errorString()),
-                                                                    QMessageBox::Retry | QMessageBox::Cancel);
-            if (ret == QMessageBox::Cancel)
-                return;
-        }
-
-        ui->payload->appendPlainText(tr("Listening on port %1").arg(tcpServer.serverPort()));
-        serverIsListening = true;
-    } else {
-        ui->listenButton->setText("&LISTEN");
-
-        if (tcpServerConnection != nullptr) {
-            if (tcpServerConnection->isOpen()) {
-                ui->payload->appendPlainText(tr("Closing server connection"));
-                tcpServerConnection->close();
-            }
-        }
-        if (tcpServer.isListening()) {
-            ui->payload->appendPlainText(tr("Closing server"));
-            tcpServer.close();
-        }
-        serverIsListening = false;
+        ui->textLog->appendPlainText("Completed");
+        qInfo() << "Completed";
+        tcpClient.readAll();
+        //tearDown(); //Premature if waiting for a response
     }
 }
 
-void MainWindow::acceptConnection()
-{
-    tcpServerConnection = tcpServer.nextPendingConnection();
-    if (!tcpServerConnection) {
-        ui->payload->appendPlainText(tr("Error: got invalid pending connection!"));
-        return;
-    }
-
-    connect(tcpServerConnection, &QIODevice::readyRead, this, &MainWindow::updateServerProgress);
-    connect(tcpServerConnection, &QAbstractSocket::errorOccurred,this, &MainWindow::displayError);
-    connect(tcpServerConnection, &QTcpSocket::disconnected, tcpServerConnection, &QTcpSocket::deleteLater);
-
-    ui->payload->appendPlainText(tr("Accepted connection"));
-    //tcpServer.close();
-}
-
-void MainWindow::updateServerProgress()
-{
-    unsigned bytesThisTransaction = int(tcpServerConnection->bytesAvailable());
-    bytesReceived += bytesThisTransaction;
-    QByteArray bytes = tcpServerConnection->readAll();
-
-    ui->payload->appendPlainText(tr("Received %1 Bytes, total %2").arg(bytesReceived).arg(bytesThisTransaction));
-    for (unsigned n=0; n<bytesThisTransaction; n++) {
-        ui->payload->appendPlainText(tr("%1").arg(bytes[n]));
-        std::cout << bytes[n];
-    }
-}
-
-
-// ********************************* COMMON *********************************
 void MainWindow::displayError(QAbstractSocket::SocketError socketError)
 {
+    ui->textLog->appendPlainText(tr("Error: %1").arg(tcpClient.errorString()));
+    qWarning() << "Error: " << tcpClient.errorString();
+
     if (socketError == QTcpSocket::RemoteHostClosedError) {
-        ui->payload->appendPlainText(tr("Remote Host Closed"));
-        return;
+        ui->textLog->appendPlainText("Remote Host Closed");
+        qInfo() << "Remote Host Closed";
+    } else {
+        QMessageBox::information(this, tr("Network error"), tr("The following error occurred: %1.").arg(tcpClient.errorString()));
+        qWarning() << "Network Error: " << tcpClient.errorString();
     }
-
-    QMessageBox::information(this, tr("Network error"),
-                             tr("The following error occurred: %1.")
-                             .arg(tcpClient.errorString()));
-
-    tcpClient.close();
-    tcpServer.close();
-    ui->payload->appendPlainText(tr("Client ready"));
-    ui->payload->appendPlainText(tr("Server ready"));
-    ui->sendButton->setEnabled(true);
-    ui->listenButton->setEnabled(true);
+    tearDown();
 #ifndef QT_NO_CURSOR
     QGuiApplication::restoreOverrideCursor();
 #endif
 }
+
+
+void MainWindow::tearDown()
+{
+    ui->sendButton->setEnabled(true);
+    clientIsSending = false;
+    disconnect(&tcpClient, nullptr, nullptr, nullptr);
+    disconnect(&tcpClient, nullptr, nullptr, nullptr);
+    disconnect(&tcpClient, nullptr, nullptr, nullptr);
+    if (tcpClient.isOpen()) {
+        tcpClient.close();
+    }
+    qInfo() << "Client Closed";
+    ui->textLog->appendPlainText("Client Closed");
+}
+
+// slot for handling incoming data
+void MainWindow::updateResponseProgress()
+{
+    qInfo() << "======>> updateServerProgress() =======";
+    ui->textLog->appendPlainText(tr("======>> updateServerProgress() ======="));
+    unsigned bytesThisTransaction = int(tcpClient.bytesAvailable());
+    bytesReceived += bytesThisTransaction;
+    QByteArray bytes = tcpClient.readAll();
+
+    qInfo() << "Received " << bytesReceived << ", total " << bytesThisTransaction;
+    ui->textLog->appendPlainText(tr("Received %1 Bytes, total %2").arg(bytesReceived).arg(bytesThisTransaction));
+
+    //Append received data to the textbox
+    QString qStrPayload = QString::fromUtf8(bytes);
+    ui->textLog->appendPlainText(qStrPayload);
+    qInfo() << "Response: " << qStrPayload;
+
+    tcpClient.close();
+
+    //Logging
+    ui->textLog->appendPlainText(tr("======<< updateServerProgress() ======="));
+    qInfo() << "======<< updateServerProgress() =======";
+
+    //Sent and received - all done - tear down
+    tearDown();
+}
+

@@ -1,0 +1,10 @@
+{
+    "target_overrides": {
+        "NUCLEO_F429ZI": {
+            "target.printf_lib": "std",
+            "target.components_add": ["SD"],
+            "mbed-mqtt.max-connections": "5",
+            "mbed-mqtt.max-packet-size": "1024"
+        }
+    }
+}

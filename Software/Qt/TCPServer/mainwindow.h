@@ -21,9 +21,13 @@ public:
 private slots:
     void on_listenButton_clicked();
     void acceptConnection();
+    void pendingConnection();
+    void acceptError(QAbstractSocket::SocketError err);
 
 private:
     Ui::MainWindow *ui;
+    void tearDown();
+    void tearDownTCPSocket();
 
     //Server
     QTcpServer tcpServer;
