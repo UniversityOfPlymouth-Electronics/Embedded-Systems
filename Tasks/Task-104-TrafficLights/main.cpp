@@ -7,6 +7,7 @@ DigitalOut red(TRAF_RED1_PIN,1);         //Note the initial state
 DigitalOut amber(TRAF_YEL1_PIN,0);
 DigitalOut green(TRAF_GRN1_PIN,0);
 
+//Object for controlling the LCD
 LCD_16X2_DISPLAY lcd;
 
 int main()
