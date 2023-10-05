@@ -5,8 +5,7 @@
 
 #include "mbed.h"
 #include "F429_Mega_Shell_Header.h"
-#include "TextLCD/TextLCD.h"
-#include <cstdio>
+
 
 //prototypes
 
