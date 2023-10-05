@@ -15,6 +15,7 @@
 // Chris Tipney September 2020 V1.0
 
 // You need this to use the Module Support Board
+#include "mbed.h"
 #include "uop_msb.h"
 using namespace uop_msb;
  
@@ -53,12 +54,12 @@ void dot()
         // ON
         greenLED = 1;           // LED ON
         buzz.playTone("C");     // Play tone
-        wait_us(150000);        // Wait 150ms
+        wait_us(250000);        // Wait 250ms
 
         // OFF
         greenLED = 0;           // LED OFF
         buzz.rest();            // Stop tone
-        wait_us(150000);        // Wait 150ms
+        wait_us(250000);        // Wait 250ms
 }
 
 // Send one dash symbol
@@ -69,12 +70,12 @@ void dash()
         // ON
         greenLED = 1;           // LED ON
         buzz.playTone("C");     // Play tone
-        wait_us(450000);        // Wait 450ms
+        wait_us(550000);        // Wait 550ms
 
         // OFF
         greenLED = 0;           // LED OFF
         buzz.rest();            // Stop tone 
-        wait_us(150000);        // Wait 150ms
+        wait_us(550000);        // Wait 550ms
 }
 
 // Send letterspace 450 ms minus the 150 ms from the last symbol = 300 ms
