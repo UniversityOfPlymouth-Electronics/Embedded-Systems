@@ -54,7 +54,7 @@ void dot()
         // ON
         greenLED = 1;           // LED ON
         buzz.playTone("C");     // Play tone
-        wait_us(250000);        // Wait 250ms
+        wait_us(550000);        // Wait 250ms
 
         // OFF
         greenLED = 0;           // LED OFF
@@ -75,7 +75,7 @@ void dash()
         // OFF
         greenLED = 0;           // LED OFF
         buzz.rest();            // Stop tone 
-        wait_us(550000);        // Wait 550ms
+        wait_us(1000000);        // Wait 550ms
 }
 
 // Send letterspace 450 ms minus the 150 ms from the last symbol = 300 ms
