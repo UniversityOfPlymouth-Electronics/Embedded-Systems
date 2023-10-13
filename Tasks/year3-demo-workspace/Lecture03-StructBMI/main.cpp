@@ -1,4 +1,4 @@
-#include "mbed.h"
+#include <stdio.h>
 #include "Human.h"
 
 int main(int argc, const char * argv[]) {
@@ -12,7 +12,7 @@ int main(int argc, const char * argv[]) {
     person1.weight = 80.0;
     person1.height = 1.81;
 
-    //Caluclate BMI
+    //Calculate BMI
     person1.bmi = person1.weight / (person1.height * person1.height);
     
     //Display
