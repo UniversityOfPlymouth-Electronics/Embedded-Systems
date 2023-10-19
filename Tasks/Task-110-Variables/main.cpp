@@ -24,28 +24,52 @@ int main()
     printf("\nTASK-110\n");
 
     // Integer
-    int count = 0;
+    int count = 10; // initialse count to value 10
     printf("count = %d\n", count);
 
     // Add one to count
-    count = count + 1;
-    printf("New value of count = %d\n", count);
+    count = count + 2;
+    printf("New value of count = %d\n", count); // add 2 to the count
 
     // Char
     char character;
     character = 'A';
-    printf("The character %c has the ASCII code %d\n", character, character);
+   // character = 65;
+
+    //printf("The character %c has the ASCII code %d\n", character, character);
+    printf(R"(The character %c = %d\n)",character, character); // a=65
+
+        
 
     // Short
-    short shortCount = 32766;
-    printf("The value of shortCount is %hd\n", shortCount);
-    shortCount = shortCount + 1;
-    printf("add 1 and shortCount is %hd\n", shortCount);
+   /* short shortCount = 32766;
+    printf("The value of shortCount is %hd\n", shortCount); // h = half
+    shortCount = shortCount + 2; // value of short become negative number plus 2
+    printf(R"(add 1 and shortCount is %hd)", shortCount);*/
+
+      // unsigned
+    /* unsigned shortCount = 32766; // change the date type the value is positive
+    printf("The value of shortCount is %u\n", shortCount); // change %hd for %u
+    shortCount = shortCount + 2; // value of short become negative number plus 2
+    printf(R"(add 1 and shortCount is %u)", shortCount); // change %hd for %u*/
+
+     // int
+    unsigned intCount = 32766; // using unsigned intCount give the same result as  unsigned shortCount
+    printf(R"(The value of shortCount is %u)",intCount);
+    intCount = intCount + 2; 
+    printf(R"(add 1 and shortCount is %u)", intCount); 
+
+
+    
 
     // Long long
     long long NN = 0x12345678ABCD0001LL; //Literal in HEX
-    printf("A very large number %lld\n", NN);
+    
+     printf("A very large number %lld\n", NN);
+    // printf("A very large number %d\n", NN);//error
     printf("A very large number in hex %llX\n", NN);
+
+    
 
     // unsigned
     unsigned short p = 1; //16 bit
