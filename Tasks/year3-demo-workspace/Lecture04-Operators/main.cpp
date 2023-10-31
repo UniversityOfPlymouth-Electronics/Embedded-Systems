@@ -18,8 +18,8 @@ int main(int argc, const char * argv[]) {
     // C++ API
     ComplexNumber aa(2.0, 3.0);
     ComplexNumber bb(1.0, 4.0);
+    //ComplexNumber yy = aa.operator+(bb);
     ComplexNumber yy = aa + bb;
-    
     cout << yy << endl;
 
     yy[0] = 1.0;            //Set the real part to 0
