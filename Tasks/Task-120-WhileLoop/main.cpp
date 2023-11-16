@@ -12,7 +12,9 @@ int main()
 
     printf("\n\nPress Return to Start\n\n");
 
-    while (hits < 1) {
+
+    while ( (hits < 1) || (grade>=100) || (grade<0) ) {
+    //while (hits < 1) {
         //Clear out the serial port (keyboard)
         flushInputBuffer();
         //Prompt user
@@ -20,7 +22,7 @@ int main()
         //Read response
         hits = scanf("%d", &grade);
     }
-
+  
     //Write results
     printf("scanf found %d hits\n",hits);
     printf("Grade entered = %d\n", grade);
