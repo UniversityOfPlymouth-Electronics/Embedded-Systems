@@ -5,6 +5,7 @@ DigitalOut redLED(PC_2,0);
 DigitalOut yellowLED(PC_3,0);
 DigitalOut greenLED(PC_6,0);
 
+//Hopefully ok now!
 int main()
 {
     int grade=-1, hits=0;
