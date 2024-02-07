@@ -39,7 +39,6 @@ This course covers a number of topics in embedded programming
 | 1. | Further C Programming - Structures, Unions and Bitfields | [Further C Programming](Cplusplus-structures.md) | 1 |
 | 2. | Rapid Polling and Software State Machines | [Rapid Polling](rapid-poll.md) | 2 | 
 | 3. | Interrupts | [Interrupts](interrupts.md) | 2 |
-| 4. | Serial Interfacing | [Serial Interfacing - Coming Soon](SerialInterfacing.md) | 2 |
 | |
 
 ## Setting Expectation
