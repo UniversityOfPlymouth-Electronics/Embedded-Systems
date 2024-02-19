@@ -29,6 +29,7 @@ The following changes are confirmed.
    * Interrupts
    * Interfacing
 * Bare metal programming has been rationalised and moved from level 5 to level 6
+* Added Task-255 showing how to perform switch debounce using interrupts
 
 # Level 5 Course
 This course covers a number of topics in embedded programming
