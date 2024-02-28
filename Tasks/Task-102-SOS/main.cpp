@@ -23,17 +23,133 @@ int main()
         //On for 500ms
         greenLED = 1;
         buzz.playTone("C");
-        wait_us(WAIT_TIME_MS * 1000);  //500ms
+        wait_us(WAIT_TIME_MS * 150);  //500ms
 
 
         //Off for 500ms
         greenLED = 0;
         buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
-        wait_us(WAIT_TIME_MS * 1000);  //500ms
+        wait_us(WAIT_TIME_MS * 150);  //500ms
 
         //Pause
         buzz.rest();
-        wait_us(WAIT_TIME_MS * 1000);
+        wait_us(WAIT_TIME_MS * 500); // 1 DOT
 
+         //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+           //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500);  // 2 Dot
+
+         //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+         //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500); //3 dot
+
+         //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 450);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 450);  //500ms
+
+         //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500);  //1 dash
+     
+      
+      //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 450);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 450);  //500ms
+     //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500); //2 dash
+        //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 450);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 450);  //500ms
+     //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500); // 3 dash
+           //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+        //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500); // 1 DOT
+
+         //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+           //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500);  // 2 Dot
+
+         //On for 500ms
+        greenLED = 1;
+        buzz.playTone("C");
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+
+        //Off for 500ms
+        greenLED = 0;
+        buzz.playTone("C", Buzzer::HIGHER_OCTAVE);
+        wait_us(WAIT_TIME_MS * 150);  //500ms
+
+         //Pause
+        buzz.rest();
+        wait_us(WAIT_TIME_MS * 500); //3 dot
     }
 }

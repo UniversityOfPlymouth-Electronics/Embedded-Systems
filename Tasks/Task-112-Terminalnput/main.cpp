@@ -20,7 +20,14 @@ int main()
 
     printf("\n\nPress another key\n");
     c2 = getchar();
-    printf("You entered character %c which has the ASCII code %d\n", c2, c2);
+    printf("You entered character %c which has the ASCII code %d\n", c2, c2); 
+
+  
+
+
+
+
+
 
     //scanf
     printf("\n\nTo set the delay (in ms), type in an integer number and press return\n");

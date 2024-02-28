@@ -9,7 +9,7 @@ DigitalOut greenLED(PC_6,1);
 int main()
 {
     //1s pause to show all LEDs are working
-    wait_us(1000000);  
+    wait_us(2000000);  
 
     //Reset
     yellowLED = 0;
