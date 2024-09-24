@@ -18,7 +18,7 @@ For Plymouth students, the relevant lecture slides are here:
 
 | Lecture | Title |
 | - | - |
-| 01-01 | [01-01 - Introduction and block overview]([https://dle.plymouth.ac.uk/mod/url/view.php?id=1162250](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/yu_yao_plymouth_ac_uk/EQezQ_Ksx79Agb_Q7b_8OMUB1qzycARM9cXz6IFQ5ixSXA?e=dt72rx)) |
+| 01-01 | [01-01 - Introduction and block overview]([https://dle.plymouth.ac.uk/mod/url/view.php?id=1162250]) |
 | 01-02 | [01-02 - Digital Outputs and Terminal IO in mbed](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162252) |
 | 01-03 | [01-03 - Digital Inputs in Mbed](https://dle.plymouth.ac.uk/mod/url/view.php?id=1162253) |
 | |
