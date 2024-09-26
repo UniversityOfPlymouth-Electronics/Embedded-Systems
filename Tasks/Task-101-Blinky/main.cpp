@@ -20,12 +20,12 @@ int main()
         greenLED = 1; 
 
         // Wait 0.2 second (1 million microseconds)
-        wait_us(100000); 
+        wait_us(1000000); 
 
         // Turn LED OFF
         greenLED = 0;
 
         // Wait 0.2 second
-        wait_us(100000); 
+        wait_us(1000000); 
     }
 }

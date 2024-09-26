@@ -1,3 +1,4 @@
+//#include mbed.h
 #include "uop_msb.h"
 using namespace uop_msb;
 
@@ -33,20 +34,33 @@ int main()
 
     // This is a variable (not an oject as it has no functions) that stores a whole number (integer) in memory
     // (I used the keyword volatile to force it to use memory... long story and one for later)
-    volatile int counter = 0;
+    
+    //volatile int counter = 0;  // count from 0 to 4 and 0 to 10
+    volatile int counter = 10;   // count from 10 to 15
 
-    while (true)
+     while (counter <= 15)
+     //while (counter < 10)
+    // while (counter < 4 )
     {
         //Toggle the LED
         ledBlue = !ledBlue;
-
-        //Add 1 to the counter "variable"
-        counter = counter + 1;
 
         //Display in the terminal
         printf("Count: %d\n", counter);
 
         //Wait
         wait_us(WAIT_TIME_MS * 1000);
+
+        //Add 1 to the counter "variable"
+        counter = counter + 1;        
     }
-}
+
+    ledRed = 1;
+    ledGreen = 1;
+    ledBlue = 1;
+
+    wait_us(osWaitForever);
+    
+        
+    }
+
