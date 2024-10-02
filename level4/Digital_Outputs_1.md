@@ -10,7 +10,7 @@ The lectures for this week cover some basic programming concepts
 
 | Slides |
 | --- |
-| [Session 02+01 -  Computer Architecture and Number Systems](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EWx7TU3xAZJCsiP7IRQwRO0B4SmFZjx-_P15x9a2ErUPag) |
+| [Session 02+01 -  Computer Architecture and Number Systems](https://dle.plymouth.ac.uk/mod/url/view.php?id=1828015) |
 
 
 ## Topics Covered in Week 2
