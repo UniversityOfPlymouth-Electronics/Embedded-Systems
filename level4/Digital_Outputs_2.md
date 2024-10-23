@@ -2,7 +2,7 @@
 
 ---
 
-# Digital Outputs and Iteration (Weeks 3-4)
+# Digital Outputs and Iteration (Weeks 4-6)
 We continue from last week still focusing on digital output and more aspects of the C/C++ programming language.
 
 ## Lectures
@@ -13,7 +13,7 @@ The lectures for this week cover some basic programming concepts
 | [Session 03+01 - Variables + printf + scanf](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/ET-lZkT0siJEp6p10C06lxYBYltE1AaFuhY6dRLyHyBcTg?e=uJ3PK4) |
 | [Session 03+02 - Iteration](https://liveplymouthac-my.sharepoint.com/:p:/g/personal/nicholas_outram_plymouth_ac_uk/EehKTtTJ5ahPg7nl395kuuEBnFX4gvgVrEQLRLGAeVRn5A) |
 
-## Topics Covered in Weeks 3-4
+## Topics Covered in Weeks 4-6
 
 | Topic |
 | --- |
@@ -24,7 +24,6 @@ The lectures for this week cover some basic programming concepts
 | do-while loops |
 | while loops |
 | for loops |
-
 
 
 ## Tasks
