@@ -24,7 +24,7 @@ Next, we are going to take the idea above and extend it to something closer to a
 || 
 
 <figure>
-<img src="../img/sos.png" width=300>
+<img src="../img/SOS.png" width=300>
 <figcaption>SOS in morse code. Short beeps are called "dots"; long tones are called "dashes". Note also the pauses between tones</figcaption>
 </figure>
 
