@@ -363,8 +363,9 @@ The good news is that most platforms do this for you so you can always know the 
 
 | TASK | Details |
 | --- | --- |
-| 1 | Modify the code and use `sizeof` to verify the size of the  |
-| 2 | Change the data type to signed by deleting the keyword `unsigned` |
+| 1 | Modify the code by adding a `typedef` for each type. Use `sizeof` to verify their sizes|
+| 2 | Build and run |
+| 3 | Add `unsigned` to each valid type and a `u` prefix to each `typedef`. Take note of how the sizes are unchanged, and how doubles and floats can't be unsigned (more on this later) |
 
 ---
 
